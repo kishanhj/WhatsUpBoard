@@ -49,16 +49,14 @@ public class QualityFeedbackDAO {
 
 	public static boolean exists(int feedbackId) {
 		try {
-			System.out.println("in quality feedback dao exists");
+			//System.out.println("in quality feedback dao exists");
 			con = ConnectionUtils.getConnection();
 			PreparedStatement stmt = con.prepareStatement(Constant.DOES_QUALITY_FEEDBACK_EXIST_QUERY);
 			stmt.setInt(1, feedbackId);
 			ResultSet rs = stmt.executeQuery();
 			if(rs.next()){
-				System.out.println("query pass");
 				return false;
 			}else{
-				System.out.println("query fail");
 				return true;
 			}
 

@@ -23,7 +23,7 @@ public class MonthValidator implements Validator {
 	@Override
 	public void validate(Object value) throws InvalidValueException {
         int feedbackId=FeedbackDAO.getFeedbackId(employeeId.getValue(),(String)month.getValue());
-        System.out.println("in month validator:"+feedbackId);
+       // System.out.println("in month validator:"+feedbackId);
         if(!QualityFeedbackDAO.exists(feedbackId))
           throw new InvalidValueException(errorMsg);
 	}
