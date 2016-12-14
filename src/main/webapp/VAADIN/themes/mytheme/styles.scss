@@ -1,0 +1,30 @@
+@import "mytheme.scss";
+@import "addons.scss";
+
+// This file prefixes all rules with the theme name to avoid causing conflicts with other themes.
+// The actual styles should be defined in mytheme.scss
+
+.mytheme {
+  @include addons;
+  @include mytheme;
+
+   .v-table-cell-wrapper {
+    white-space: normal;
+    }
+
+    .backgroundColor{
+    background-color: #444d50;
+    }
+
+    .title{
+    width: 40%;
+    color: white;
+    padding-top: 20px;
+    }
+
+    .v-table-header .size{
+    font-size:30;
+    }
+
+}
+
