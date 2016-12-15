@@ -76,7 +76,7 @@ public class FeedbackFormView extends VerticalLayout implements View{
 	Map<String, Button> qualityButtons=new HashMap<String, Button>();
 
 	/**
-	 * Map of all quality comments
+	 * Map of all quality comment TextAreas
 	 */
 	Map<String, TextArea> qualityReason=new HashMap<String, TextArea>();
 
@@ -109,15 +109,16 @@ public class FeedbackFormView extends VerticalLayout implements View{
 	 * @return Horizontal Layout
 	 */
 	private HorizontalLayout buildLogoBar() {
+		HorizontalLayout logoBar=new HorizontalLayout();
 		Image brillioLogo=new Image(null,new ThemeResource("brillio.jpg"));
 		Label title=new Label("WhatsUp Board Survey");
 
 		title.addStyleName(ValoTheme.LABEL_H2);
 		title.addStyleName(ValoTheme.LABEL_BOLD);
+
 		brillioLogo.setHeight("80px");
 		brillioLogo.setWidth("120px");
 
-		HorizontalLayout logoBar=new HorizontalLayout();
 		logoBar.setWidth("100%");
 		logoBar.setHeight("80px");
 		logoBar.addStyleName("backgroundColor");
@@ -126,6 +127,7 @@ public class FeedbackFormView extends VerticalLayout implements View{
 		logoBar.setExpandRatio(title, 80);
 		logoBar.setExpandRatio(brillioLogo, 20);
 		logoBar.setComponentAlignment(title, Alignment.BOTTOM_CENTER);
+
 		return logoBar;
 	}
 
@@ -178,7 +180,6 @@ public class FeedbackFormView extends VerticalLayout implements View{
 	private void validateAllFields() {
 		employeeId.validate();
 		month.validate();
-		//emailId.validate();
 		project.validate();
 		   for(QualityVO key : qualities ){
 	        	TextArea reason = qualityReason.get(key.getQualityName());
@@ -259,14 +260,14 @@ public class FeedbackFormView extends VerticalLayout implements View{
 	 */
 	private void ConfigButtonAndText(Button button, TextArea text) {
 
-		//text.setEnabled(false);
 		text.setWidth(390, Unit.PIXELS);
 		//button.setStyleName(ValoTheme.BUTTON_FRIENDLY);
 		//button.setIcon(FontAwesome.SMILE_O);
 		button.setIcon(new ThemeResource("em.jpg"));
 		button.addStyleName(ValoTheme.BUTTON_BORDERLESS);
 		button.addStyleName(ValoTheme.BUTTON_ICON_ONLY);
-		button.addClickListener(e -> Utils.imageToggle(button, text));
+		button.addStyleName(ValoTheme.BUTTON_HUGE);
+		button.addClickListener(e -> Utils.imageToggler(button, text));
 
 
 	}
@@ -315,7 +316,6 @@ public class FeedbackFormView extends VerticalLayout implements View{
 		employeeId.setStyleName(ValoTheme.TEXTFIELD_INLINE_ICON);
 		employeeId.setRequired(true);
 		employeeId.addValidator(new EmployeeIdValidator("Please Enter a valid ID",employeeId));
-		//employeeId.setValidationVisible(false);
 
 		emailId = new TextField("Email ID");
 		emailId.setIcon(FontAwesome.ENVELOPE);
@@ -332,9 +332,11 @@ public class FeedbackFormView extends VerticalLayout implements View{
 		month.setRequired(true);
 		month.addItem("January 2017");
 		month.addItem("february 2017");
+		month.setNullSelectionAllowed(false);
 
 	    project = new ComboBox("Project");
 	    project.setRequired(true);
+	    project.setNullSelectionAllowed(false);
 	  //  project.setIcon(FontAwesome.LAPTOP);
 	  // project.setStyleName(ValoTheme.TEXTFIELD_INLINE_ICON);
 	    List<String> projects=ProjectDAO.getAllProjects();

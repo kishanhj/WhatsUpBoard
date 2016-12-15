@@ -24,8 +24,11 @@ public class MonthValidator implements Validator {
 	public void validate(Object value) throws InvalidValueException {
         int feedbackId=FeedbackDAO.getFeedbackId(employeeId.getValue(),(String)month.getValue());
        // System.out.println("in month validator:"+feedbackId);
+        if(feedbackId == 0)
+        	 throw new InvalidValueException("Please select current Month");
         if(!QualityFeedbackDAO.exists(feedbackId))
-          throw new InvalidValueException(errorMsg);
+            throw new InvalidValueException(errorMsg);
+
 	}
 
 }
