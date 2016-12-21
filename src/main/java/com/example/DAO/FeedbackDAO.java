@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import com.example.Helpers.ConnectionUtils;
 import com.example.VO.FeedbackVO;
-import com.example.constants.Constant;
+import com.example.constants.QueryConstant;
 import com.vaadin.server.Page;
 import com.vaadin.ui.Notification;
 
@@ -26,7 +26,7 @@ public class FeedbackDAO {
 		try {
 			con = ConnectionUtils.getConnection();
 			int isSuccessful;
-			PreparedStatement stmt = con.prepareStatement(Constant.INSERT_FEEDBACK_QUERY);
+			PreparedStatement stmt = con.prepareStatement(QueryConstant.INSERT_FEEDBACK_QUERY);
 			stmt.setString(1, feedback.getEmployeeId());
 			stmt.setString(2, feedback.getEmployeeEmailId());
 			stmt.setString(3, feedback.getEmployeeName());
@@ -65,7 +65,7 @@ public class FeedbackDAO {
 		//Connection con = null;
 		try {
 			con = ConnectionUtils.getConnection();
-			PreparedStatement stmt = con.prepareStatement(Constant.GET_FEEDBACK_ID_QUERY);
+			PreparedStatement stmt = con.prepareStatement(QueryConstant.GET_FEEDBACK_ID_QUERY);
 			stmt.setString(1, employee_id);
 			stmt.setString(2, feedback_month);
 			ResultSet rs = stmt.executeQuery();
@@ -93,7 +93,7 @@ public class FeedbackDAO {
 		//Connection con = null;
 		try {
 			con = ConnectionUtils.getConnection();
-			PreparedStatement stmt = con.prepareStatement(Constant.EMPLOYEEID_VALIDATOR_QUERY);
+			PreparedStatement stmt = con.prepareStatement(QueryConstant.EMPLOYEEID_VALIDATOR_QUERY);
 			stmt.setString(1, employee_id);
 			ResultSet rs = stmt.executeQuery();
 			if (rs.next()) {
@@ -120,7 +120,7 @@ public class FeedbackDAO {
 		//Connection con = null;
 		try {
 			con = ConnectionUtils.getConnection();
-			PreparedStatement stmt = con.prepareStatement(Constant.GET_FEEDBACK_PROJECT_QUERY);
+			PreparedStatement stmt = con.prepareStatement(QueryConstant.GET_FEEDBACK_PROJECT_QUERY);
 			stmt.setString(1, employeeId);
 			ResultSet rs = stmt.executeQuery();
 			if (rs.next()) {

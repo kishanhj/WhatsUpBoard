@@ -5,23 +5,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.example.DAO.EmployeeDAO;
 import com.example.DAO.FeedbackDAO;
 import com.example.DAO.ProjectDAO;
 import com.example.DAO.QualityDAO;
 import com.example.DAO.QualityFeedbackDAO;
 import com.example.Helpers.Utils;
 import com.example.VO.QualityVO;
+import com.example.VO.EmployeeVO;
 import com.example.VO.QualityFeedbackVO;
 import com.example.WhatsUpApp.WhatsUpUI;
-import com.example.validators.EmployeeIdValidator;
-import com.example.validators.MonthValidator;
-import com.example.validators.ProjectValidator;
-import com.vaadin.data.validator.EmailValidator;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FontAwesome;
+import com.vaadin.server.Resource;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -38,6 +37,8 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.Reindeer;
 import com.vaadin.ui.themes.ValoTheme;
 import com.vaadin.ui.Table.Align;
+import com.vaadin.ui.Table.ColumnResizeEvent;
+import com.vaadin.ui.Table.ColumnResizeListener;
 
 public class FeedbackFormView extends VerticalLayout implements View{
 
@@ -57,13 +58,19 @@ public class FeedbackFormView extends VerticalLayout implements View{
 
 	Navigator navigator;
 
-	TextField employeeId;
+	TextField employeeIdTextField;
 
 	TextField emailId;
 
-	ComboBox month;
+	ComboBox monthField;
 
 	ComboBox project;
+
+	EmployeeVO employee = new EmployeeVO();
+
+	String employeeId;
+
+	String month;
 
 	/**
 	 * holds the list of all the QualityVO's
@@ -80,6 +87,11 @@ public class FeedbackFormView extends VerticalLayout implements View{
 	 */
 	Map<String, TextArea> qualityReason=new HashMap<String, TextArea>();
 
+	/**
+	 * Map of all quality Images
+	 */
+	Map<String, Resource> qualityImage=new HashMap<String ,Resource>();
+
 	public FeedbackFormView(WhatsUpUI ui) {
         this.ui = ui;
         navigator=ui.getNavigator();
@@ -89,7 +101,20 @@ public class FeedbackFormView extends VerticalLayout implements View{
 		setComponentAlignment(feedBackForm, Alignment.MIDDLE_CENTER);
 	}
 
-    /**
+    public FeedbackFormView(WhatsUpUI ui, String employeeId, String month) {
+    	this.employee=EmployeeDAO.getEmployee(employeeId);
+    	this.month=month;
+    	this.employeeId=employeeId;
+		this.ui = ui;
+        navigator=ui.getNavigator();
+        qualities = QualityDAO.getAllQualities();
+		Component feedBackForm=BuildForm();
+		addComponents(feedBackForm);
+		setComponentAlignment(feedBackForm, Alignment.MIDDLE_CENTER);
+	}
+
+
+	/**
      * Builds the primary layout and adds components to it
      * @return Component : which is the MainLayout
      */
@@ -160,7 +185,7 @@ public class FeedbackFormView extends VerticalLayout implements View{
 		});
 
 		clear.addClickListener(e ->{
-			ui.setContent(new FeedbackFormView(ui));
+			ui.setContent(new FeedbackFormView(ui,employeeId,month));
 			});
 
 		HorizontalLayout buttons = new HorizontalLayout(submit, clear);
@@ -178,8 +203,8 @@ public class FeedbackFormView extends VerticalLayout implements View{
      * Invokes Validations on all fields
      */
 	private void validateAllFields() {
-		employeeId.validate();
-		month.validate();
+		employeeIdTextField.validate();
+		monthField.validate();
 		project.validate();
 		   for(QualityVO key : qualities ){
 	        	TextArea reason = qualityReason.get(key.getQualityName());
@@ -194,7 +219,7 @@ public class FeedbackFormView extends VerticalLayout implements View{
 	 * @throws ClassNotFoundException
 	 */
 	private List<QualityFeedbackVO> generateQualityWiseFeedback() throws ClassNotFoundException {
-		int feedbackId=FeedbackDAO.getFeedbackId(employeeId.getValue(),(String)month.getValue());
+		int feedbackId=FeedbackDAO.getFeedbackId(employeeIdTextField.getValue(),(String)monthField.getValue());
 		//System.out.println("In generateQualityWiseFeedback,feedbackid:"+feedbackId);
 		List<QualityFeedbackVO> qualityWiseFeedbacks=new ArrayList<QualityFeedbackVO>();
 		QualityFeedbackVO qualityFeedback;
@@ -237,6 +262,33 @@ public class FeedbackFormView extends VerticalLayout implements View{
 	        }
 	}
 
+//	private void setImageresources() {
+//		List<Resource> Images = new ArrayList<Resource>();
+//
+//		Resource LeadershipTouch=new ThemeResource("leadership.jpg");
+//		Resource Communication=new ThemeResource("communication.jpg");
+//		Resource TimelyRecognition=new ThemeResource("timlyrecognition2.jpg");
+//		Resource Learning=new ThemeResource("learning.jpg");
+//		Resource FeedForward=new ThemeResource("feedforward1.jpg");
+//		Resource HRResponsiveness=new ThemeResource("HR.jpg");
+//
+//
+//	Images.add( LeadershipTouch);
+//	Images.add(Communication);
+//	Images.add(TimelyRecognition);
+//	Images.add(Learning);
+//	Images.add(FeedForward);
+//	Images.add(HRResponsiveness);
+//
+//	int count=1;
+//
+//	for(QualityVO quality:qualities){
+//		qualityImage.put(quality.getQualityName(), Images.get(count++));
+//    }
+//
+//
+//}
+
     /**
      * creates components to be added to the table
      * @param feedbackTable
@@ -261,9 +313,7 @@ public class FeedbackFormView extends VerticalLayout implements View{
 	private void ConfigButtonAndText(Button button, TextArea text) {
 
 		text.setWidth(390, Unit.PIXELS);
-		//button.setStyleName(ValoTheme.BUTTON_FRIENDLY);
-		//button.setIcon(FontAwesome.SMILE_O);
-		button.setIcon(new ThemeResource("em.jpg"));
+		button.setIcon(new ThemeResource("bad.png"));
 		button.addStyleName(ValoTheme.BUTTON_BORDERLESS);
 		button.addStyleName(ValoTheme.BUTTON_ICON_ONLY);
 		button.addStyleName(ValoTheme.BUTTON_HUGE);
@@ -292,6 +342,21 @@ public class FeedbackFormView extends VerticalLayout implements View{
 		feedbackTable.setColumnAlignment("Satisfied", Align.CENTER);
 		feedbackTable.setColumnAlignment("Reason", Align.CENTER);
 
+		feedbackTable.setColumnReorderingAllowed(false);
+		feedbackTable.addColumnResizeListener(new ColumnResizeListener() {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void columnResize(ColumnResizeEvent event) {
+
+				feedbackTable.setColumnWidth(event.getPropertyId(),
+						event.getPreviousWidth());
+
+			}
+		});
+
+
 		feedbackTable.setColumnHeaders("Area","Description","Feedback","Reason");
 		feedbackTable.addStyleName(ValoTheme.TABLE_COMPACT);
 		feedbackTable.addStyleName(Reindeer.TABLE_STRONG);
@@ -307,45 +372,50 @@ public class FeedbackFormView extends VerticalLayout implements View{
 		fieldLayout.setSpacing(true);
 
 		name = new TextField("Name");
+		name.setValue(employee.getEmployeeName());
 		name.setIcon(FontAwesome.USER);
 		name.setStyleName(ValoTheme.TEXTFIELD_INLINE_ICON);
 		name.setRequired(true);
 
-		employeeId = new TextField("EmployeeID");
-		employeeId.setIcon(FontAwesome.OPENID);
-		employeeId.setStyleName(ValoTheme.TEXTFIELD_INLINE_ICON);
-		employeeId.setRequired(true);
-		employeeId.addValidator(new EmployeeIdValidator("Please Enter a valid ID",employeeId));
+		employeeIdTextField = new TextField("EmployeeID");
+		employeeIdTextField.setValue(employee.getEmployeeId());
+		employeeIdTextField.setIcon(FontAwesome.OPENID);
+		employeeIdTextField.setStyleName(ValoTheme.TEXTFIELD_INLINE_ICON);
+		employeeIdTextField.setRequired(true);
+		//employeeIdTextField.addValidator(new EmployeeIdValidator("Please Enter a valid ID",employeeIdTextField));
 
 		emailId = new TextField("Email ID");
+		emailId.setValue(employee.getEmployeeEmailId());
 		emailId.setIcon(FontAwesome.ENVELOPE);
 		emailId.setStyleName(ValoTheme.TEXTFIELD_INLINE_ICON);
 		emailId.setRequired(true);
-		emailId.addValidator(new EmailValidator("Please Enter a valid EmailID"));
+		//emailId.addValidator(new EmailValidator("Please Enter a valid EmailID"));
 		emailId.setValidationVisible(true);
 
 
-		month = new ComboBox("Month");
+		monthField = new ComboBox("Month");
 		//month.setIcon(FontAwesome.CALENDAR);
 		//month.setStyleName(ValoTheme.TEXTFIELD_INLINE_ICON);
-		month.addValidator(new MonthValidator("Feedback for this month is already captured",employeeId,month));
-		month.setRequired(true);
-		month.addItem("January 2017");
-		month.addItem("february 2017");
-		month.setNullSelectionAllowed(false);
+		//monthField.addValidator(new MonthValidator("Feedback for this month is already captured",employeeIdTextField,monthField));
+		monthField.setRequired(true);
+		monthField.addItem(month);
+		monthField.setValue(month);
+		monthField.setNullSelectionAllowed(false);
 
 	    project = new ComboBox("Project");
 	    project.setRequired(true);
 	    project.setNullSelectionAllowed(false);
+	    String projectName=ProjectDAO.getProjectName(employee.getProjectId());
 	  //  project.setIcon(FontAwesome.LAPTOP);
 	  // project.setStyleName(ValoTheme.TEXTFIELD_INLINE_ICON);
 	    List<String> projects=ProjectDAO.getAllProjects();
 	    for(String projectname:projects){
 	    	project.addItem(projectname);
 	    }
-	    project.addValidator(new ProjectValidator("Select the correct project", employeeId, project));
+	    project.setValue(projectName);
+	   // project.addValidator(new ProjectValidator("Select the correct project", employeeIdTextField, project));
 
-		fieldLayout.addComponents(employeeId,month,project);
+		fieldLayout.addComponents(name,employeeIdTextField,monthField,project);
 		fieldLayout.setMargin(true);
 		fieldLayout.setSpacing(true);
 

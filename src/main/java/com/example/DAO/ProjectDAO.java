@@ -9,7 +9,7 @@ import java.util.List;
 
 import com.example.Helpers.ConnectionUtils;
 import com.example.VO.ProjectVO;
-import com.example.constants.Constant;
+import com.example.constants.QueryConstant;
 
 public class ProjectDAO {
 
@@ -18,7 +18,7 @@ public class ProjectDAO {
 	/**
 	 * Returns the list of all project
 	 *
-	 * @return List<ProjectVO> :
+	 * @return List :
 	 *             list of projectVO's
 	 */
 	public static List<ProjectVO> getAllProjectDetails() {
@@ -27,7 +27,7 @@ public class ProjectDAO {
 		try {
 			con = ConnectionUtils.getConnection();
 
-			PreparedStatement stmt = con.prepareStatement(Constant.GET_PROJECT_QUERY);
+			PreparedStatement stmt = con.prepareStatement(QueryConstant.GET_PROJECT_QUERY);
 			ResultSet rs = stmt.executeQuery();
 			project_details = new ArrayList<ProjectVO>();
 			while (rs.next()) {
@@ -53,7 +53,7 @@ public class ProjectDAO {
 	/**
 	 * Returns the list of all project names
 	 *
-	 * @return List<String> :
+	 * @return List:
 	 *             list of project names
 	 */
 	public static List<String> getAllProjects() {
@@ -61,7 +61,7 @@ public class ProjectDAO {
 		try {
 			con = ConnectionUtils.getConnection();
 
-			PreparedStatement stmt = con.prepareStatement(Constant.GET_PROJECT_NAMES_QUERY);
+			PreparedStatement stmt = con.prepareStatement(QueryConstant.GET_PROJECT_NAMES_QUERY);
 			ResultSet rs = stmt.executeQuery();
 			project_names = new ArrayList<String>();
 			while (rs.next()) {
@@ -92,7 +92,7 @@ public class ProjectDAO {
 		try {
 			con = ConnectionUtils.getConnection();
 			ProjectVO projectvo = new ProjectVO();
-			PreparedStatement stmt = con.prepareStatement(Constant.GET_PROJECT_QUERY);
+			PreparedStatement stmt = con.prepareStatement(QueryConstant.GET_PROJECT_QUERY);
 			stmt.setString(1, projectName);
 			ResultSet rs = stmt.executeQuery();
 			if (rs.next()) {
@@ -101,6 +101,26 @@ public class ProjectDAO {
 				projectvo.setActiveStatus(rs.getBoolean(3));
 			}
 			return projectvo;
+
+		} catch (SQLException e) {
+			System.out.println("exception");
+			e.printStackTrace();
+		} finally {
+			ConnectionUtils.closeConnection(con);
+		}
+		return null;
+	}
+
+	public static String getProjectName(int projectId) {
+		//Connection con = null;
+		try {
+			con = ConnectionUtils.getConnection();
+			PreparedStatement stmt = con.prepareStatement(QueryConstant.GET_PROJECT_NAME_QUERY);
+			stmt.setInt(1, projectId);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				return rs.getString(1);
+			}
 
 		} catch (SQLException e) {
 			System.out.println("exception");

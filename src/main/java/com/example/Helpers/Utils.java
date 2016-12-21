@@ -33,11 +33,11 @@ public class Utils {
 
 		if (button.getCaption().equalsIgnoreCase("satisfied")) {
 			button.setCaption("Not Satisfied");
-			button.setIcon(new ThemeResource("em1.png"));
+			button.setIcon(new ThemeResource("sad.png"));
 			text.addValidator(new StringLengthValidator("Please enter a valid Reason", 10, 100, false));
 		} else {
 			button.setCaption("Satisfied");
-			button.setIcon(new ThemeResource("em.jpg"));
+			button.setIcon(new ThemeResource("bad.png"));
 			text.removeAllValidators();
 		}
 

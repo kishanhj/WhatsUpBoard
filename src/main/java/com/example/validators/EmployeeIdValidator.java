@@ -1,6 +1,7 @@
 package com.example.validators;
 
 import com.example.DAO.FeedbackDAO;
+import com.example.constants.ValidationConstants;
 import com.vaadin.data.Validator;
 import com.vaadin.ui.TextField;
 
@@ -9,6 +10,8 @@ public class EmployeeIdValidator implements Validator {
 	private static final long serialVersionUID = 1L;
 
 	String errorMsg;
+
+	String emptyStringMsg=ValidationConstants.EMPTY_STRING_MSG;
 
 	TextField employeeId;
 
@@ -35,6 +38,8 @@ public class EmployeeIdValidator implements Validator {
 
 	@Override
 	public void validate(Object value) throws InvalidValueException {
+		if(employeeId.getValue().equals(""))
+			throw new InvalidValueException(emptyStringMsg);
 		if (!validityChecker()) {
 			employeeId.setValidationVisible(true);
 			throw new InvalidValueException(errorMsg);
