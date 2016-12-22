@@ -16,39 +16,36 @@ public class Encoding {
 		String codedEmpId;
 		String codedMonth = randomCodeGenerator(130);
 		updateCodeList();
-		if(codeList==null || !codeList.containsKey(month))
-		LinkCodesDAO.addCode(month, codedMonth);
+		if (codeList == null || !codeList.containsKey(month))
+			LinkCodesDAO.addCode(month, codedMonth);
 		for (String empid : empIds) {
 			codedEmpId = randomCodeGenerator(130);
-			if(codeList==null || !codeList.containsKey(empid))
-			LinkCodesDAO.addCode(empid, codedEmpId);
+			if (codeList == null || !codeList.containsKey(empid))
+				LinkCodesDAO.addCode(empid, codedEmpId);
 		}
 
 	}
 
-	private static void updateCodeList(){
+	private static void updateCodeList() {
 		codeList = LinkCodesDAO.getCodes();
-		return ;
+		return;
 	}
 
-	public static String getCode(String employeeId) {
+	public static String getCode(String code) {
 		updateCodeList();
-		System.out.println(codeList.size());
-		return codeList.get(employeeId);
+		return codeList.get(code);
 
 	}
-
 
 	public static void generatecodes(String empId, String month) {
 		String codedEmpId;
 		String codedMonth = randomCodeGenerator(130);
 		updateCodeList();
-		if(codeList==null || !codeList.containsKey(month))
-		LinkCodesDAO.addCode(month, codedMonth);
+		if (codeList == null || !codeList.containsKey(month))
+			LinkCodesDAO.addCode(month, codedMonth);
 		codedEmpId = randomCodeGenerator(130);
-		System.out.println(codedEmpId + "," + codedMonth);
-		if(codeList==null || !codeList.containsKey(empId))
-		LinkCodesDAO.addCode(empId, codedEmpId);
+		if (codeList == null || !codeList.containsKey(empId))
+			LinkCodesDAO.addCode(empId, codedEmpId);
 
 	}
 
@@ -57,9 +54,8 @@ public class Encoding {
 
 	}
 
-
-
 	public static String getCodeValue(String empIdCode) {
+		updateCodeList();
 		for (Entry<String, String> entry : codeList.entrySet()) {
 			if (entry.getValue().equals(empIdCode)) {
 				return entry.getKey();
@@ -83,12 +79,10 @@ public class Encoding {
 		return codeList;
 	}
 
-
-
 	public static boolean isEmpty() {
 		updateCodeList();
-		if(codeList.isEmpty())
-		return false;
+		if (codeList.isEmpty())
+			return false;
 		else
 			return true;
 	}

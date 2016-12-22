@@ -4,11 +4,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.example.Helpers.ConnectionUtils;
 import com.example.VO.QualityFeedbackVO;
 import com.example.constants.QueryConstant;
+import com.vaadin.ui.ComboBox;
 
 public class QualityFeedbackDAO {
 
@@ -71,5 +73,34 @@ public class QualityFeedbackDAO {
 			ConnectionUtils.closeConnection(con);
 		}
 		return false;
+	}
+
+	public static List<QualityFeedbackVO> getMonthWiseFeedbacks(ComboBox feedback_month) {
+		List<QualityFeedbackVO> feedbacks = new ArrayList<QualityFeedbackVO>();
+		QualityFeedbackVO quality;
+		String month=(String) feedback_month.getValue();
+		List<Integer> feedbackIdsOfThisMonth=FeedbackDAO.getAllFeedbackId(month);
+		try {
+			con = ConnectionUtils.getConnection();
+			PreparedStatement stmt = con.prepareStatement(QueryConstant.GET_FEEDBACKS);
+			for(int feedbackId:feedbackIdsOfThisMonth){
+			stmt.setInt(1, feedbackId);
+			ResultSet rs = stmt.executeQuery();
+			while(rs.next()){
+				quality= new QualityFeedbackVO();
+				quality.setSatisfyIndicator(rs.getBoolean(2));
+				quality.setComment(rs.getString(3));
+				quality.setFeedbackId(rs.getInt(4));
+				quality.setQualityId(rs.getInt(5));
+				feedbacks.add(quality);
+			}}
+			return feedbacks;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			ConnectionUtils.closeConnection(con);
+		}
+		return null;
+
 	}
 }

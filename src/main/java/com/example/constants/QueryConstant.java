@@ -8,7 +8,11 @@ public interface QueryConstant {
 
      String GET_FEEDBACK_ID_QUERY="select FEEDBACK_ID from T_FEEDBACK where EMPLOYEE_ID=? and FEEDBACK_MONTH=? ";
 
+     String GET_FEEDBACK_ID_MONTH_QUERY="select FEEDBACK_ID from T_FEEDBACK where FEEDBACK_MONTH=? ";
+
      String GET_FEEDBACK_PROJECT_QUERY="select PROJECT_ID_FEEDBACK_FK from T_FEEDBACK where EMPLOYEE_ID=? ";
+
+     String GET_EMPLOYEE_NAME_QUERY="select employee_name from T_FEEDBACK where feedback_ID=? ";
 
      String EMPLOYEEID_VALIDATOR_QUERY="select FEEDBACK_ID from T_FEEDBACK where EMPLOYEE_ID=? ";
 
@@ -33,4 +37,8 @@ public interface QueryConstant {
     String INSERT_CODE_QUERY="insert into t_link_codes(code_key,code_value)values(?,?)";
 
     String GET_CODE_QUERY="Select * from t_link_codes";
+
+    String GET_FEEDBACKS="select * from  t_feedback_quality where feedback_id_fk=?";
+
+    String GET_QUALITY_NAME="select quality_name from t_quality where quality_id=?";
 }

@@ -23,7 +23,7 @@ public class MailUtils {
             String urlString= "http://172.16.94.85:8080/start/?a="+empid+"&b="+month;
 			uri = new URI(urlString);
 			url = uri.toURL();
-			System.out.println(url);
+			//System.out.println(url);
 		} catch (MalformedURLException | URISyntaxException e) {
 			e.printStackTrace();
 		}

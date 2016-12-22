@@ -176,7 +176,7 @@ public class FeedbackFormView extends VerticalLayout implements View{
 				boolean flag= QualityFeedbackDAO.addFeedbacks(qualityWiseFeedbacks);
 				System.out.println("succesful?:"+flag);
 				Notification.show("Feedback was captured succesfully");
-				navigator.navigateTo(LoginView.NAME);
+				ui.setContent(new SuccessView());
 			} catch (ClassNotFoundException e1) {
 				e1.printStackTrace();
 			}
@@ -375,22 +375,24 @@ public class FeedbackFormView extends VerticalLayout implements View{
 		name.setValue(employee.getEmployeeName());
 		name.setIcon(FontAwesome.USER);
 		name.setStyleName(ValoTheme.TEXTFIELD_INLINE_ICON);
-		name.setRequired(true);
+		name.setReadOnly(true);
 
 		employeeIdTextField = new TextField("EmployeeID");
 		employeeIdTextField.setValue(employee.getEmployeeId());
 		employeeIdTextField.setIcon(FontAwesome.OPENID);
 		employeeIdTextField.setStyleName(ValoTheme.TEXTFIELD_INLINE_ICON);
-		employeeIdTextField.setRequired(true);
+		//employeeIdTextField.setRequired(true);
+		employeeIdTextField.setReadOnly(true);
 		//employeeIdTextField.addValidator(new EmployeeIdValidator("Please Enter a valid ID",employeeIdTextField));
 
 		emailId = new TextField("Email ID");
 		emailId.setValue(employee.getEmployeeEmailId());
 		emailId.setIcon(FontAwesome.ENVELOPE);
 		emailId.setStyleName(ValoTheme.TEXTFIELD_INLINE_ICON);
-		emailId.setRequired(true);
+		//emailId.setRequired(true);
 		//emailId.addValidator(new EmailValidator("Please Enter a valid EmailID"));
 		emailId.setValidationVisible(true);
+		emailId.setReadOnly(true);
 
 
 		monthField = new ComboBox("Month");
@@ -401,6 +403,7 @@ public class FeedbackFormView extends VerticalLayout implements View{
 		monthField.addItem(month);
 		monthField.setValue(month);
 		monthField.setNullSelectionAllowed(false);
+		monthField.setReadOnly(true);
 
 	    project = new ComboBox("Project");
 	    project.setRequired(true);
@@ -413,6 +416,7 @@ public class FeedbackFormView extends VerticalLayout implements View{
 	    	project.addItem(projectname);
 	    }
 	    project.setValue(projectName);
+	   project.setReadOnly(true);
 	   // project.addValidator(new ProjectValidator("Select the correct project", employeeIdTextField, project));
 
 		fieldLayout.addComponents(name,employeeIdTextField,monthField,project);

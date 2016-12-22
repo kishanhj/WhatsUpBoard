@@ -7,24 +7,38 @@
 .mytheme {
   @include addons;
   @include mytheme;
-
-   .v-table-cell-wrapper {
+  .v-table-cell-wrapper {
     white-space: normal;
     }
+    .v-table-header {
+    color: 		#89CFF0;
+    background: #4455aa;
+    font-weight: bold;
+    text-align: center;
+  }
 
-    .backgroundColor{
-    background-color: #444d50;
-    }
+  .v-table {
+    background: #99afff;
+  }
 
-    .title{
-    width: 40%;
-    color: white;
-    padding-top: 20px;
-    }
+  .v-table-row:hover{
+    color:#FF3355;
+    background:#DFDFC4;
+   // background: #FFFFFF;
+  }
+  .v-table-row-odd:hover {
+    color: #fff;
+    background: #6475ca;
+}
+.v-icon{
+font-size:40px;
+  }
+  .v-logo{
+  color:#ffffff;
+}
 
-    .v-table-header .size{
-    font-size:30;
-    }
-
+.v-table-resizer {
+  display: none;
+}
 }
 

@@ -96,7 +96,7 @@ public class LoginView extends VerticalLayout implements View {
 	            public void buttonClick(final ClickEvent event) {
 	            	if(username.getValue().equalsIgnoreCase("")&& password.getValue().equalsIgnoreCase("")){
                       Navigator nav=ui.getNavigator();
-                      nav.navigateTo(FeedbackFormView.NAME);
+                      nav.navigateTo(AdminView.NAME);
 	            }
 	            	else {
 	            			password.setValue("");
