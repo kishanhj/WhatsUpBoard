@@ -103,4 +103,34 @@ public class QualityFeedbackDAO {
 		return null;
 
 	}
+
+	public static List<QualityFeedbackVO> getQualiyWiseFeedbacks(ComboBox feedback_month, String qualityName) {
+		List<QualityFeedbackVO> feedbacks = new ArrayList<QualityFeedbackVO>();
+		QualityFeedbackVO quality;
+		String month=(String) feedback_month.getValue();
+		List<Integer> feedbackIdsOfThisMonth=FeedbackDAO.getAllFeedbackId(month);
+		int qualityId=QualityDAO.getQualityID(qualityName);
+		try {
+			con = ConnectionUtils.getConnection();
+			PreparedStatement stmt = con.prepareStatement(QueryConstant.GET_QUALITY_FEEDBACKS);
+			for(int feedbackId:feedbackIdsOfThisMonth){
+			stmt.setInt(1, feedbackId);
+			stmt.setInt(2, qualityId);
+			ResultSet rs = stmt.executeQuery();
+			while(rs.next()){
+				quality= new QualityFeedbackVO();
+				quality.setSatisfyIndicator(rs.getBoolean(2));
+				quality.setComment(rs.getString(3));
+				quality.setFeedbackId(rs.getInt(4));
+				quality.setQualityId(rs.getInt(5));
+				feedbacks.add(quality);
+			}}
+			return feedbacks;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			ConnectionUtils.closeConnection(con);
+		}
+		return null;
+	}
 }

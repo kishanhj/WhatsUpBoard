@@ -40,5 +40,9 @@ public interface QueryConstant {
 
     String GET_FEEDBACKS="select * from  t_feedback_quality where feedback_id_fk=?";
 
+    String GET_QUALITY_FEEDBACKS="select * from  t_feedback_quality where feedback_id_fk=? and quality_id_fk=?";
+
     String GET_QUALITY_NAME="select quality_name from t_quality where quality_id=?";
+
+    String GET_QUALITY_ID="select quality_id from t_quality where quality_name=?";
 }

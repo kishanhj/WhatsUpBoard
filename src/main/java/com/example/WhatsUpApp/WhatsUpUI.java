@@ -2,6 +2,7 @@ package com.example.WhatsUpApp;
 
 import javax.servlet.annotation.WebServlet;
 
+import com.example.Helpers.PropertyUtils;
 import com.example.Mailer.Encoding;
 import com.example.Views.AdminView;
 import com.example.Views.ErrorView;
@@ -41,7 +42,7 @@ public class WhatsUpUI extends UI {
 			setContent(new FeedbackFormView(this,employeeId,month));
 		}
 		else
-			setContent(new AdminView(this));
+			setContent(new LoginView(this));
 		//	setContent(new ErrorView());
 
 	}

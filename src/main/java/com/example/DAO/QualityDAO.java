@@ -70,4 +70,21 @@ public static String getQualityName(int qualityId) {
 	}
 	return null;
 }
+
+public static int getQualityID(String qualityName) {
+	try {
+		con = ConnectionUtils.getConnection();
+		PreparedStatement stmt = con.prepareStatement(QueryConstant.GET_QUALITY_ID);
+		stmt.setString(1, qualityName);
+		ResultSet rs = stmt.executeQuery();
+        if(rs.next())
+        	return rs.getInt(1);
+	} catch (SQLException e) {
+		Notification.show("Failed to close connection");
+		Page.getCurrent().reload();
+	} finally {
+		ConnectionUtils.closeConnection(con);
+	}
+	return 0;
+}
 }

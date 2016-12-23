@@ -5,20 +5,25 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.Page;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import com.example.DAO.EmployeeDAO;
 import com.example.DAO.FeedbackDAO;
 import com.example.DAO.ProjectDAO;
 import com.example.DAO.QualityDAO;
 import com.example.DAO.QualityFeedbackDAO;
+import com.example.Helpers.PropertyUtils;
 import com.example.Mailer.Encoding;
 import com.example.Mailer.MailUtils;
 import com.example.Mailer.SendMail;
 import com.example.VO.EmployeeVO;
 import com.example.VO.QualityFeedbackVO;
+import com.example.VO.QualityVO;
 import com.example.WhatsUpApp.WhatsUpUI;
 import com.example.constants.ValidationConstants;
+import com.example.report.ExcelReportGenerator;
 import com.example.validators.MonthValidator;
 import com.vaadin.data.util.IndexedContainer;
 import com.vaadin.navigator.Navigator;
@@ -84,41 +89,41 @@ private VerticalLayout init() {
 		Content.setSizeUndefined();
 		Content.setComponentAlignment(month, Alignment.MIDDLE_RIGHT);
 
-		Table employee_list = new Table("Employee List");
-		employee_list.setWidth("800px");
-		employee_list.setHeight("800px");
+		Table employeelListTable = new Table("Employee List");
+		employeelListTable.setWidth("800px");
+		employeelListTable.setHeight("800px");
 
 		IndexedContainer container = new IndexedContainer();
 
-		employee_list.addStyleName("SliderBar");
-		employee_list.setCaption("Employee List");
+		employeelListTable.addStyleName("SliderBar");
+		employeelListTable.setCaption("Employee List");
 
 		container.addContainerProperty("Employee Name", String.class, null);
 		container.addContainerProperty("Employee Id", String.class, null);
 		container.addContainerProperty("Project", String.class, null);
 		container.addContainerProperty("Email Id", String.class, null);
 
-		employee_list.setContainerDataSource(container);
+		employeelListTable.setContainerDataSource(container);
 
-		employee_list.setColumnExpandRatio("Employee Name", 40);
-		employee_list.setColumnExpandRatio("Employee Id", 30);
-		employee_list.setColumnExpandRatio("Project", 30);
-		employee_list.setColumnExpandRatio("Email Id", 80);
+		employeelListTable.setColumnExpandRatio("Employee Name", 40);
+		employeelListTable.setColumnExpandRatio("Employee Id", 30);
+		employeelListTable.setColumnExpandRatio("Project", 30);
+		employeelListTable.setColumnExpandRatio("Email Id", 80);
 
 
 
-		Content.addComponent(employee_list);
-		Content.setComponentAlignment(employee_list, Alignment.MIDDLE_CENTER);
+		Content.addComponent(employeelListTable);
+		Content.setComponentAlignment(employeelListTable, Alignment.MIDDLE_CENTER);
 
 		List<EmployeeVO> employees=EmployeeDAO.getEmployeeDetails();
         int i=1;
         String projectName;
         for(EmployeeVO employee:employees){
         	projectName=ProjectDAO.getProjectName(employee.getProjectId());
-        	employee_list.addItem(new Object[] { employee.getEmployeeName(), employee.getEmployeeId(), projectName, employee.getEmployeeEmailId() }, i++);
+        	employeelListTable.addItem(new Object[] { employee.getEmployeeName(), employee.getEmployeeId(), projectName, employee.getEmployeeEmailId() }, i++);
         }
-		Content.addComponent(employee_list);
-		Content.setComponentAlignment(employee_list, Alignment.MIDDLE_CENTER);
+		Content.addComponent(employeelListTable);
+		Content.setComponentAlignment(employeelListTable, Alignment.MIDDLE_CENTER);
 
 		Button startSurvey = new Button("Start Survey");
 
@@ -141,33 +146,61 @@ private VerticalLayout init() {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-         ComboBox feedback_month=new ComboBox();
+         ComboBox feedbackMonth=new ComboBox();
 
-		feedback_month.setCaption("Month");
-		feedback_month.addItem("January");
-		feedback_month.addItem("February");
-		feedback_month.addItem("March");
+		feedbackMonth.setCaption("Month");
+		feedbackMonth.addItem("January");
+		feedbackMonth.addItem("February");
+		feedbackMonth.addItem("March");
 
-		Content.addComponent(feedback_month);
-		Content.setComponentAlignment(feedback_month, Alignment.MIDDLE_CENTER);
+		Content.addComponent(feedbackMonth);
+		Content.setComponentAlignment(feedbackMonth, Alignment.MIDDLE_CENTER);
 		rootLayout.addComponent(Content);
 
-		Table view_feedback=new Table();
+		Table viewFeedbackTable=new Table();
 
-		view_feedback.setWidth("900px");
-		view_feedback.setHeight("275px");
+		viewFeedbackTable.setWidth("900px");
+		viewFeedbackTable.setHeight("275px");
 
 		IndexedContainer container1 = new IndexedContainer();
 
-		view_feedback.addStyleName("SliderBar");
-		view_feedback.setCaption("View Feedback");
-		view_feedback.setSelectable(true);
+		viewFeedbackTable.addStyleName("SliderBar");
+		viewFeedbackTable.setCaption("View Feedback");
+		viewFeedbackTable.setSelectable(true);
 
+		Button generateReport =new Button("Generate Report");
 
-		feedback_month.addValueChangeListener(e ->{
-			view_feedback.removeAllItems();
-			showFeedbacks(view_feedback, feedback_month);
-			//Page.getCurrent().reload();
+		generateReport.addClickListener(e ->{
+			ExcelReportGenerator excelReport=new ExcelReportGenerator(feedbackMonth);
+			List<QualityVO> qualities=QualityDAO.getAllQualities();
+			Properties prop=new PropertyUtils().getConfigProperties();
+			float satisfactoryPercentage=Float.parseFloat((String)prop.get("SatisfactoryPercentage"))/100;
+			for(QualityVO quality:qualities){
+				float positiveResponses=0;
+				float negetiveResponses=0;
+			 List<QualityFeedbackVO> feedbacks=QualityFeedbackDAO.getQualiyWiseFeedbacks(feedbackMonth,quality.getQualityName());
+			 for(QualityFeedbackVO qualityfeedback:feedbacks){
+				 if(qualityfeedback.getSatisfyIndicator())
+					 positiveResponses++;
+				 else
+					 negetiveResponses++;
+			 }
+			 float percentage=(positiveResponses/(positiveResponses+negetiveResponses));
+			 if(percentage < satisfactoryPercentage){
+				excelReport.addRow(quality.getQualityName(), "Not Satisfactory", percentage);
+				 System.out.println("Negative"+(positiveResponses/(positiveResponses+negetiveResponses)));
+			 }
+			 else {
+				 excelReport.addRow(quality.getQualityName(), " Satisfactory", percentage);
+				 System.out.println("Positive"+(positiveResponses/(positiveResponses+negetiveResponses)));
+			 }
+			}
+			excelReport.generateReport();
+			});
+
+		feedbackMonth.addValueChangeListener(e ->{
+			viewFeedbackTable.removeAllItems();
+			showFeedbacks(viewFeedbackTable, feedbackMonth);
 		});
 
 		container1.addContainerProperty("Employee Name", String.class, null);
@@ -175,28 +208,28 @@ private VerticalLayout init() {
 		container1.addContainerProperty("Satisfied or Not Satisfied", String.class, null);
 		container1.addContainerProperty("Comments", String.class, null);
 
-		view_feedback.setColumnExpandRatio("Employee Name", 40);
-		view_feedback.setColumnExpandRatio("Quality Name", 40);
-		view_feedback.setColumnExpandRatio("Satisfied or Not Satisfied", 50);
-		view_feedback.setColumnExpandRatio("Comments", 80);
+		viewFeedbackTable.setColumnExpandRatio("Employee Name", 40);
+		viewFeedbackTable.setColumnExpandRatio("Quality Name", 40);
+		viewFeedbackTable.setColumnExpandRatio("Satisfied or Not Satisfied", 50);
+		viewFeedbackTable.setColumnExpandRatio("Comments", 80);
 
 
 
-			view_feedback.setContainerDataSource(container1);
-			Content.addComponent(view_feedback);
-
-		rootLayout.addComponent(Content);
-		Content.setComponentAlignment(view_feedback, Alignment.MIDDLE_CENTER);
-
-
-
-			view_feedback.setContainerDataSource(container1);
-
-		Content.addComponent(view_feedback);
-
+			viewFeedbackTable.setContainerDataSource(container1);
+			Content.addComponent(viewFeedbackTable);
 
 		rootLayout.addComponent(Content);
-		Content.setComponentAlignment(view_feedback, Alignment.MIDDLE_CENTER);
+		Content.setComponentAlignment(viewFeedbackTable, Alignment.MIDDLE_CENTER);
+
+
+
+			viewFeedbackTable.setContainerDataSource(container1);
+
+		Content.addComponents(viewFeedbackTable,generateReport);
+
+
+		rootLayout.addComponent(Content);
+		Content.setComponentAlignment(viewFeedbackTable, Alignment.MIDDLE_CENTER);
 
 		MenuView menu = new MenuView();
 		menu.setSizeUndefined();
@@ -211,7 +244,6 @@ private VerticalLayout init() {
 
 	private void showFeedbacks(Table view_feedback,ComboBox feedback_month ){
 		 List<QualityFeedbackVO> feedbacks=QualityFeedbackDAO.getMonthWiseFeedbacks(feedback_month);
-		 System.out.println(feedbacks.size());
          String employeeName;
          String qualityName;
          String feedbackType;
@@ -221,8 +253,17 @@ private VerticalLayout init() {
 	            qualityName=QualityDAO.getQualityName(feedback.getQualityId());
 	            feedbackType =feedback.getSatisfyIndicator()?"Satisfied":"Not Satisfied";
 	        	view_feedback.addItem(new Object[] { employeeName, qualityName,feedbackType ,feedback.getComment() }, i++);
+	        	ArrayList<String> varialble = new ArrayList<String>();
+	        	if(varialble.size()!=0){
+	        		if(!varialble.contains(employeeName)){
+	        		varialble.add(employeeName);
+	        	}}
+
+
 	        }
 	}
+
+
 
 	@Override
 	public void enter(ViewChangeEvent event) {
