@@ -40,5 +40,10 @@ font-size:40px;
 .v-table-resizer {
   display: none;
 }
+
+.v-splitpanel-hsplitter-mainramhsplitpanel,
+.v-splitpanel-hsplitter-mainramhsplitpanel div  {
+    width: 0px;
+}
 }
 

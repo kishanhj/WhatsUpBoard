@@ -38,6 +38,8 @@ public interface QueryConstant {
 
     String GET_CODE_QUERY="Select * from t_link_codes";
 
+    String DELETE_CODE_QUERY="delete from t_link_codes where code_key=?";
+
     String GET_FEEDBACKS="select * from  t_feedback_quality where feedback_id_fk=?";
 
     String GET_QUALITY_FEEDBACKS="select * from  t_feedback_quality where feedback_id_fk=? and quality_id_fk=?";

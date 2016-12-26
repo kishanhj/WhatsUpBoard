@@ -10,6 +10,7 @@ import com.example.Helpers.ConnectionUtils;
 import com.example.constants.QueryConstant;
 import com.vaadin.server.Page;
 import com.vaadin.ui.Notification;
+import com.vaadin.ui.TextField;
 
 public class LinkCodesDAO {
 
@@ -51,11 +52,27 @@ public class LinkCodesDAO {
           return codeList;
 		} catch (SQLException e) {
 			Notification.show("Failed to Update");
-			Page.getCurrent().reload();
 		} finally {
 			ConnectionUtils.closeConnection(con);
 		}
 
 		return null;
+	}
+
+	public static void deleteCode(TextField employeeIdTextField) {
+		Connection con = null;
+		try {
+			 con = ConnectionUtils.getConnection();
+			PreparedStatement stmt = con.prepareStatement(QueryConstant.DELETE_CODE_QUERY);
+			stmt.setString(1, employeeIdTextField.getValue());
+             stmt.executeUpdate();
+		} catch (SQLException e) {
+			Notification.show("Failed to Update");
+			e.printStackTrace();
+			System.out.println("Fail");
+		} finally {
+			ConnectionUtils.closeConnection(con);
+		}
+
 	}
 }

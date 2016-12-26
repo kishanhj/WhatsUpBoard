@@ -1,5 +1,6 @@
 package com.example.Views;
 
+import com.vaadin.navigator.Navigator;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.shared.ui.label.ContentMode;
@@ -48,14 +49,14 @@ public final class MenuView extends VerticalLayout {
     private Component buildContent() {
         final VerticalLayout menuContent = new VerticalLayout();
         menuContent.addStyleName("sidebar");
-        menuContent.addStyleName(ValoTheme.MENU_PART);
-        menuContent.addStyleName("no-vertical-drag-hints");
-        menuContent.addStyleName("no-horizontal-drag-hints");
+       menuContent.addStyleName(ValoTheme.MENU_PART);
+//        menuContent.addStyleName("no-vertical-drag-hints");
+//        menuContent.addStyleName("no-horizontal-drag-hints");
        // menuContent.setWidth("70px");
-        menuContent.setHeight("100%");
-        menuContent.setStyleName(ValoTheme.LAYOUT_CARD);
-        menuContent.setSizeFull();
-        menuContent.setSpacing(true);
+      //  menuContent.setHeight("100%");
+     //   menuContent.setStyleName(ValoTheme.LAYOUT_CARD);
+    //    menuContent.setSizeFull();
+       menuContent.setSpacing(true);
         menuContent.setMargin(true);
 
         menuContent.addComponent(buildTitle());
@@ -76,59 +77,58 @@ public final class MenuView extends VerticalLayout {
 
 	private Component buildUserLink2() {
 
-Button button3 = new Button();
+Button generateReport = new Button();
 
-		button3.setCaption("Generate Report");
-		//button3.setSizeUndefined();
+		generateReport.setCaption("Generate Report");
 		VerticalLayout layy2 = new VerticalLayout();
-		layy2.addComponent(button3);
-		 //button3.setWidth("30px");
-		button3.setSizeFull();
-		layy2.setComponentAlignment(button3, Alignment.MIDDLE_CENTER);
-		return button3;
+		layy2.addComponent(generateReport);
+		generateReport.setSizeFull();
+		layy2.setComponentAlignment(generateReport, Alignment.MIDDLE_CENTER);
+		generateReport.addClickListener(e -> {
+			Navigator nav = getUI().getNavigator();
+            nav.navigateTo(GenreateReportView.NAME);
+		});
+		return generateReport;
 
 	}
 
 	private Component buildUserLink1() {
 
-       Button button2 = new Button();
+       Button viewFeedback = new Button();
 
-		button2.setCaption("View Feedback");
-		button2.setSizeUndefined();
+		viewFeedback.setCaption("View Feedback");
+		viewFeedback.setSizeUndefined();
 		VerticalLayout layy1 = new VerticalLayout();
-		layy1.addComponent(button2);
-		button2.setSizeFull();
-		layy1.setComponentAlignment(button2, Alignment.MIDDLE_CENTER);
-		return button2;
+		layy1.addComponent(viewFeedback);
+		viewFeedback.setSizeFull();
+		layy1.setComponentAlignment(viewFeedback, Alignment.MIDDLE_CENTER);
+		viewFeedback.addClickListener(e -> {
+			Navigator nav = getUI().getNavigator();
+            nav.navigateTo(ViewFeedbackView.NAME);
+		});
+		return viewFeedback;
 	}
 
 	private Component buildUserLink() {
-		Button button1 = new Button();
+		Button startSurvey = new Button();
 
-		button1.setCaption("Start   Survey");
+		startSurvey.setCaption("Start Survey");
 		//button1.setSizeUndefined();
-		button1.setSizeFull();
+		startSurvey.setSizeFull();
 	    //button1.setWidth("30px");
-		button1.setSizeFull();
+		startSurvey.setSizeFull();
 		VerticalLayout layy = new VerticalLayout();
-		layy.addComponent(button1);
+		layy.addComponent(startSurvey);
 
-		layy.setComponentAlignment(button1, Alignment.MIDDLE_CENTER);
+		layy.setComponentAlignment(startSurvey, Alignment.MIDDLE_CENTER);
 
-//		button1.addClickListener(e -> {
-//			Navigator nav = getUI().getNavigator();
-//
-//			nav.navigateTo ("init()");
-//			//nav.navigateTo ("AdminView");
-//
-//			// rootLayout.removeAllComponents();
-//			// rootLayout.addComponent(new FeedbackFormView(rootLayout));
-//
-//
-//			});
+		startSurvey.addClickListener(e -> {
+			Navigator nav = getUI().getNavigator();
+            nav.navigateTo(StartSurveyView.NAME);
+			});
 
 
-			return button1;
+			return startSurvey;
 	}
 
 	private Component buildTitle() {
@@ -145,15 +145,8 @@ Button button3 = new Button();
     private Component buildUserMenu() {
         final MenuBar settings = new MenuBar();
         settings.addStyleName("user-menu");
-//        settingsItem = settings.addItem("",
-//                new ThemeResource("image_dp.jpg"), null);
         settingsItem = settings.addItem("",
                 new ThemeResource("user_image.png"), null);
-
-
-
-
-
         settingsItem.addItem("Sign Out", new Command() {
             /**
 			 *

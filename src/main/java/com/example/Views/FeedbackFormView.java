@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.example.DAO.EmployeeDAO;
 import com.example.DAO.FeedbackDAO;
+import com.example.DAO.LinkCodesDAO;
 import com.example.DAO.ProjectDAO;
 import com.example.DAO.QualityDAO;
 import com.example.DAO.QualityFeedbackDAO;
@@ -20,6 +21,7 @@ import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FontAwesome;
+import com.vaadin.server.Page;
 import com.vaadin.server.Resource;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.Alignment;
@@ -175,8 +177,11 @@ public class FeedbackFormView extends VerticalLayout implements View{
 				qualityWiseFeedbacks = generateQualityWiseFeedback();
 				boolean flag= QualityFeedbackDAO.addFeedbacks(qualityWiseFeedbacks);
 				System.out.println("succesful?:"+flag);
+				if(flag){
+				LinkCodesDAO.deleteCode(employeeIdTextField);
 				Notification.show("Feedback was captured succesfully");
 				ui.setContent(new SuccessView());
+				}
 			} catch (ClassNotFoundException e1) {
 				e1.printStackTrace();
 			}
@@ -220,7 +225,6 @@ public class FeedbackFormView extends VerticalLayout implements View{
 	 */
 	private List<QualityFeedbackVO> generateQualityWiseFeedback() throws ClassNotFoundException {
 		int feedbackId=FeedbackDAO.getFeedbackId(employeeIdTextField.getValue(),(String)monthField.getValue());
-		//System.out.println("In generateQualityWiseFeedback,feedbackid:"+feedbackId);
 		List<QualityFeedbackVO> qualityWiseFeedbacks=new ArrayList<QualityFeedbackVO>();
 		QualityFeedbackVO qualityFeedback;
 		for(QualityVO quality:qualities){
@@ -381,24 +385,17 @@ public class FeedbackFormView extends VerticalLayout implements View{
 		employeeIdTextField.setValue(employee.getEmployeeId());
 		employeeIdTextField.setIcon(FontAwesome.OPENID);
 		employeeIdTextField.setStyleName(ValoTheme.TEXTFIELD_INLINE_ICON);
-		//employeeIdTextField.setRequired(true);
 		employeeIdTextField.setReadOnly(true);
-		//employeeIdTextField.addValidator(new EmployeeIdValidator("Please Enter a valid ID",employeeIdTextField));
 
 		emailId = new TextField("Email ID");
 		emailId.setValue(employee.getEmployeeEmailId());
 		emailId.setIcon(FontAwesome.ENVELOPE);
 		emailId.setStyleName(ValoTheme.TEXTFIELD_INLINE_ICON);
-		//emailId.setRequired(true);
-		//emailId.addValidator(new EmailValidator("Please Enter a valid EmailID"));
 		emailId.setValidationVisible(true);
 		emailId.setReadOnly(true);
 
 
 		monthField = new ComboBox("Month");
-		//month.setIcon(FontAwesome.CALENDAR);
-		//month.setStyleName(ValoTheme.TEXTFIELD_INLINE_ICON);
-		//monthField.addValidator(new MonthValidator("Feedback for this month is already captured",employeeIdTextField,monthField));
 		monthField.setRequired(true);
 		monthField.addItem(month);
 		monthField.setValue(month);
@@ -409,15 +406,12 @@ public class FeedbackFormView extends VerticalLayout implements View{
 	    project.setRequired(true);
 	    project.setNullSelectionAllowed(false);
 	    String projectName=ProjectDAO.getProjectName(employee.getProjectId());
-	  //  project.setIcon(FontAwesome.LAPTOP);
-	  // project.setStyleName(ValoTheme.TEXTFIELD_INLINE_ICON);
 	    List<String> projects=ProjectDAO.getAllProjects();
 	    for(String projectname:projects){
 	    	project.addItem(projectname);
 	    }
 	    project.setValue(projectName);
 	   project.setReadOnly(true);
-	   // project.addValidator(new ProjectValidator("Select the correct project", employeeIdTextField, project));
 
 		fieldLayout.addComponents(name,employeeIdTextField,monthField,project);
 		fieldLayout.setMargin(true);
