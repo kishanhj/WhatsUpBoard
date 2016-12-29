@@ -103,6 +103,25 @@ public class EmployeeDAO {
 		}
 		return null;
 	}
+
+	public static int getEmployeeCount(int tProject) {
+		try {
+			con = ConnectionUtils.getConnection();
+			PreparedStatement stmt = con.prepareStatement(QueryConstant.GET_EMPLOYEE_COUNT_QUERY);
+			stmt.setInt(1, tProject);
+		    ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				return rs.getInt(1);
+			}
+
+
+		} catch (SQLException e) {
+			Notification.show("Failed to close connection");
+		} finally {
+			ConnectionUtils.closeConnection(con);
+		}
+		return 0;
+	}
 	}
 
 

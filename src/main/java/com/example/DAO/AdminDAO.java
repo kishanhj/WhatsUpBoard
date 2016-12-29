@@ -14,7 +14,6 @@ import com.example.constants.IntegerConstants;
 import com.example.constants.QueryConstant;
 import com.vaadin.server.Page;
 import com.vaadin.ui.Notification;
-import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
 
 public class AdminDAO {

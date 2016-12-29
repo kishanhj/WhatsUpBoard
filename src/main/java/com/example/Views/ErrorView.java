@@ -1,5 +1,6 @@
 package com.example.Views;
 
+import com.example.constants.StringConstants;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.ThemeResource;
@@ -9,36 +10,44 @@ import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 
+/**
+ * Error view for Invalid URL
+ *
+ * @author kishan.j
+ *
+ */
 public class ErrorView extends VerticalLayout implements View {
 
 	private static final long serialVersionUID = 1L;
+
 	public ErrorView() {
-		VerticalLayout error = errorPage();
+		setSizeFull();
+		VerticalLayout error = BuildErrorLayout();
 		addComponent(error);
 		setComponentAlignment(error, Alignment.MIDDLE_CENTER);
-		setSizeFull();
+
 	}
 
-		private VerticalLayout errorPage() {
+    /**
+     * Builds the error layout
+     * @return VerticalLayout
+     */
+	private VerticalLayout BuildErrorLayout() {
 
-			VerticalLayout errorPage=new VerticalLayout();
-            Image Logo=new Image(null,new ThemeResource("srry.png"));
-	  		Label title1=new Label("<center>You have already submitted this form<center>");
-	  		title1.setContentMode(ContentMode.HTML);
-	  		errorPage.addComponents(Logo,title1);
-	  		errorPage.setComponentAlignment(Logo, Alignment.BOTTOM_CENTER);
-	  		errorPage.setComponentAlignment(title1, Alignment.TOP_CENTER);
-	  		errorPage.setSizeFull();
-	  		return errorPage;
-	  	}
+		VerticalLayout errorLayout = new VerticalLayout();
+		Image Logo = new Image(null, new ThemeResource(StringConstants.ERROR_IMG));
+		Label title = new Label(StringConstants.ERROR_MSG);
+		title.setContentMode(ContentMode.HTML);
+		errorLayout.addComponents(Logo, title);
+		errorLayout.setComponentAlignment(Logo, Alignment.BOTTOM_CENTER);
+		errorLayout.setComponentAlignment(title, Alignment.TOP_CENTER);
+		errorLayout.setSizeFull();
+		return errorLayout;
+	}
+
 	@Override
 	public void enter(ViewChangeEvent event) {
-		// TODO Auto-generated method stub
 
 	}
 
-
-
 }
-
-

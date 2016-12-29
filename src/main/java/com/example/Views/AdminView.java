@@ -5,69 +5,88 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.example.WhatsUpApp.WhatsUpUI;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.ui.HorizontalSplitPanel;
-import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 
+/**
+ * Admin's view
+ */
 public class AdminView extends VerticalLayout implements View {
 
-	public static final String NAME="AdminView";
+	/**
+	 * Name of this view in the Navigator
+	 */
+	public static final String NAME = "AdminView";
 
 	private static final long serialVersionUID = 1L;
 
-	Table FeedbackDisp;
+	/**
+	 * Navigator for navigations within AdminView
+	 */
+	Navigator navigator;
 
-	Navigator nav;
-
+	/**
+	 * Copy of Main Whatsup UI instance
+	 */
 	WhatsUpUI ui;
+
+	/**
+	 * Main Layout
+	 */
 	private VerticalLayout rootLayout = new VerticalLayout();
-	private VerticalLayout navLayout = new VerticalLayout();
 
+	/**
+	 * Layout whose content changes on navigation
+	 */
+	private VerticalLayout navgationLayout = new VerticalLayout();
 
-	private HorizontalSplitPanel hSplitPanel;
+	/**
+	 * SplitPanel containing Menu and Navigation Layout
+	 */
+	private HorizontalSplitPanel menuAndContainerPanel;
 
-
+	/**
+	 * Constructor with ui instance as parameter
+	 */
 	public AdminView(WhatsUpUI ui) {
-		this.ui=ui;
-		hSplitPanel = new HorizontalSplitPanel();
-		hSplitPanel.setSizeFull();
-		hSplitPanel.setSplitPosition(20);
-		rootLayout.addComponents(hSplitPanel);
+		this.ui = ui;
 
-		nav=new Navigator(ui,navLayout);
-		nav.addView(StartSurveyView.NAME, new StartSurveyView(ui));
-		nav.addView(ViewFeedbackView.NAME, new ViewFeedbackView(ui));
-		nav.addView(GenreateReportView.NAME, new GenreateReportView(ui));
-		nav.addView(SuperAdminView.NAME, new SuperAdminView(ui));
-		nav.navigateTo(StartSurveyView.NAME);
+		menuAndContainerPanel = new HorizontalSplitPanel();
+		menuAndContainerPanel.setSizeFull();
+		menuAndContainerPanel.setSplitPosition(20);
 
+		rootLayout.setSizeFull();
+		rootLayout.addComponent(menuAndContainerPanel);
 
-		addComponent(init());
+		navigator = new Navigator(ui, navgationLayout);
+		navigator.addView(StartSurveyView.NAME, new StartSurveyView(ui));
+		navigator.addView(ViewFeedbackView.NAME, new ViewFeedbackView(ui));
+		navigator.addView(GenreateReportView.NAME, new GenreateReportView(ui));
+		navigator.addView(SuperAdminView.NAME, new SuperAdminView(ui));
+		navigator.navigateTo(StartSurveyView.NAME);
+
+		setSizeFull();
+		addComponent(buildLayout());
 		ui.setContent(this);
 
 	}
 
-private VerticalLayout init() {
+	/**
+	 * Intialize split panel and adds it to mainlayout
+	 * @return VerticalLayout
+	 */
+	private VerticalLayout buildLayout() {
 
 		MenuView menu = new MenuView(ui);
-		FeedbackDisp = new Table();
-		menu.addComponent(FeedbackDisp);
 
-         menu.setHeight("150");
+		menuAndContainerPanel.setFirstComponent(menu);
+		menuAndContainerPanel.setSecondComponent(navgationLayout);
+		menuAndContainerPanel.addStyleName("mainramhsplitpanel");
+		menuAndContainerPanel.setLocked(true);
 
-		menu.setSizeUndefined();
-		hSplitPanel.setFirstComponent(menu);
-		hSplitPanel.setSecondComponent(navLayout);
-		hSplitPanel.addStyleName("mainramhsplitpanel");
-		hSplitPanel.setLocked(true);
-
-
-		rootLayout.addComponents(hSplitPanel);
+		rootLayout.addComponent(menuAndContainerPanel);
 
 		return rootLayout;
 	}
-
-
-
 
 	@Override
 	public void enter(ViewChangeEvent event) {

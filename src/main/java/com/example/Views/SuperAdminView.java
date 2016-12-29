@@ -6,10 +6,10 @@ import com.example.DAO.AdminDAO;
 import com.example.DAO.EmployeeDAO;
 import com.example.DAO.ProjectDAO;
 import com.example.Helpers.Utils;
-import com.example.Mailer.Encoding;
 import com.example.VO.AdminVO;
 import com.example.VO.ProjectVO;
 import com.example.WhatsUpApp.WhatsUpUI;
+import com.example.constants.IntegerConstants;
 import com.example.validators.EmployeeIdValidator;
 import com.vaadin.data.util.IndexedContainer;
 import com.vaadin.navigator.View;
@@ -100,8 +100,10 @@ public class SuperAdminView extends VerticalLayout implements View {
 		Button ok_button = new Button();
 		ok_button.setCaption("OK");
 		ok_button.addClickListener(e -> {
-            ProjectDAO.addProject(project.getValue()) ;
+            if(ProjectDAO.addProject(project.getValue()) != IntegerConstants.ZERO)
 			Notification.show("Succesfull added");
+            else
+            Notification.show("Project with this Name already exist");
 			window.close();
 			loadProjectTable(projectListTable);
 		});
@@ -225,8 +227,10 @@ public class SuperAdminView extends VerticalLayout implements View {
 		ok_button.setCaption("OK");
 		ok_button.addClickListener(e -> {
 			AdminVO admin = getAdminVo(adminId, password, isSuperAdmin);
-			AdminDAO.addAdmin(admin);
+			if(AdminDAO.addAdmin(admin) != IntegerConstants.ZERO)
 			Notification.show("Succesfull added");
+			else
+			Notification.show("Admin with this ID alredy exist");
 			window.close();
 			loadAdminTable(adminListTable);
 		});

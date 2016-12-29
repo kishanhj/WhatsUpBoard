@@ -2,6 +2,8 @@ package com.example.Views;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.example.DAO.EmployeeDAO;
 import com.example.DAO.FeedbackDAO;
 import com.example.DAO.QualityDAO;
 import com.example.DAO.QualityFeedbackDAO;
@@ -13,6 +15,8 @@ import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.Notification;
+import com.vaadin.ui.ProgressBar;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 
@@ -27,6 +31,7 @@ public class ViewFeedbackView extends VerticalLayout implements View {
 		this.ui=ui;
 		 user=(AdminVO) ui.getSession().getAttribute("user");
 		addComponent(init());
+
 	}
 
 	private VerticalLayout init() {
@@ -51,6 +56,17 @@ public class ViewFeedbackView extends VerticalLayout implements View {
 
 		IndexedContainer feedbackContainer = new IndexedContainer();
 
+
+		ProgressBar completedFeedbacks = new ProgressBar(viewFeedbackTable.size());
+		completedFeedbacks.setWidth("900px");
+
+		completedFeedbacks.addContextClickListener(e -> {
+			float count = completedFeedbacks.getValue() * 100;
+			int employeesLeft = (int) (EmployeeDAO.getEmployeeCount(user.getTProject())
+					* (1 - completedFeedbacks.getValue()));
+			Notification.show(count + "% completed,Number of employees left: " + employeesLeft);
+		});
+
 		viewFeedbackTable.addStyleName("SliderBar");
 		viewFeedbackTable.setSelectable(true);
 
@@ -58,6 +74,8 @@ public class ViewFeedbackView extends VerticalLayout implements View {
 			viewFeedbackTable.removeAllItems();
 			showFeedbacks(viewFeedbackTable, feedbackMonth);
 			viewFeedbackTable.setPageLength(Math.min(feedbackContainer.size(), 10));
+			int employeeCount = EmployeeDAO.getEmployeeCount(user.getTProject());
+			completedFeedbacks.setValue((float) feedbackContainer.size()/(employeeCount * 6));
 		});
 
 		feedbackContainer.addContainerProperty("Employee Name", String.class, null);
@@ -74,7 +92,8 @@ public class ViewFeedbackView extends VerticalLayout implements View {
 
 		viewFeedbackTable.setContainerDataSource(feedbackContainer);
 
-		content.addComponent(viewFeedbackTable);
+
+		content.addComponents(viewFeedbackTable,completedFeedbacks);
 		return content;
 
 	}

@@ -2,26 +2,20 @@ package com.example.Views;
 
 import com.example.DAO.AdminDAO;
 import com.example.DAO.EmployeeDAO;
-import com.example.DAO.ProjectDAO;
 import com.example.Helpers.Utils;
 import com.example.VO.AdminVO;
 import com.example.WhatsUpApp.WhatsUpUI;
 import com.vaadin.navigator.Navigator;
-import com.vaadin.server.FontAwesome;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
-import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.PasswordField;
-import com.vaadin.ui.TextField;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.MenuBar.Command;
 import com.vaadin.ui.MenuBar.MenuItem;
 import com.vaadin.ui.VerticalLayout;
@@ -37,7 +31,7 @@ public final class MenuView extends VerticalLayout {
 	public static final String ID = "dashboard-menu";
 	public static final String REPORTS_BADGE_ID = "dashboard-menu-reports-badge";
 	public static final String NOTIFICATIONS_BADGE_ID = "dashboard-menu-notifications-badge";
-	private static final String STYLE_VISIBLE = "valo-menu-visible";
+	//private static final String STYLE_VISIBLE = "valo-menu-visible";
 	private MenuItem settingsItem;
 	WhatsUpUI ui;
 	AdminVO user;
@@ -47,32 +41,28 @@ public final class MenuView extends VerticalLayout {
 		user = (AdminVO) ui.getSession().getAttribute("user");
 		setPrimaryStyleName("valo-menu");
 		setId(ID);
-		setSizeFull();
 
 		addStyleName("panelcolor");
+		setSizeFull();
 		addComponent(buildContent());
-		this.setSizeFull();
-		this.setHeight("100%");
+
 	}
 
-	private Component buildContent() {
+	private VerticalLayout buildContent() {
 		final VerticalLayout menuContent = new VerticalLayout();
 		menuContent.addStyleName("sidebar");
 		menuContent.addStyleName(ValoTheme.MENU_PART);
 		menuContent.setSpacing(true);
 		menuContent.setMargin(true);
 
-		menuContent.addComponent(buildTitle());
 		Component menu =  buildUserMenu();
-		menuContent.addComponent(menu);
-		menuContent.addComponents(buildUserLink());
-		menuContent.addComponents(buildUserLink1());
-		menuContent.addComponents(buildUserLink2());
+
+		menuContent.addComponents(buildTitle(),menu,buildUserLink(),buildUserLink1(),buildUserLink2());
 		if (user.getIsSuperAdmin()){
 			menuContent.addComponents(buildUserLink4());
 		}
-		menuContent.addComponent(buildToggleButton());
-		menuContent.addComponent(buildMenuItems());
+//		menuContent.addComponent(buildToggleButton());
+//		menuContent.addComponent(buildMenuItems());
 
 		menuContent.setComponentAlignment(menu, Alignment.MIDDLE_CENTER);
 
@@ -175,6 +165,8 @@ public final class MenuView extends VerticalLayout {
 		});
 		settingsItem.addItem("Change Password", new Command() {
 
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public void menuSelected(MenuItem selectedItem) {
 				Window window = new Window("Change password");
@@ -232,33 +224,28 @@ public final class MenuView extends VerticalLayout {
 
 
 
-	private Component buildToggleButton() {
-		Button valoMenuToggleButton = new Button("Menu", new ClickListener() {
-			/**
-			 *
-			 */
-			private static final long serialVersionUID = 1L;
+//	private Component buildToggleButton() {
+//		Button valoMenuToggleButton = new Button("Menu", new ClickListener() {
+//			/**
+//			 *
+//			 */
+//			private static final long serialVersionUID = 1L;
+//
+//			@Override
+//			public void buttonClick(final ClickEvent event) {
+//				if (getStyleName().contains(STYLE_VISIBLE)) {
+//					removeStyleName(STYLE_VISIBLE);
+//				} else {
+//					addStyleName(STYLE_VISIBLE);
+//				}
+//			}
+//		});
+//		valoMenuToggleButton.setIcon(FontAwesome.ANDROID);
+//		valoMenuToggleButton.addStyleName("valo-menu-toggle");
+//		valoMenuToggleButton.addStyleName(ValoTheme.BUTTON_BORDERLESS);
+//		valoMenuToggleButton.addStyleName(ValoTheme.BUTTON_SMALL);
+//		return valoMenuToggleButton;
+//	}
 
-			@Override
-			public void buttonClick(final ClickEvent event) {
-				if (getStyleName().contains(STYLE_VISIBLE)) {
-					removeStyleName(STYLE_VISIBLE);
-				} else {
-					addStyleName(STYLE_VISIBLE);
-				}
-			}
-		});
-		valoMenuToggleButton.setIcon(FontAwesome.ANDROID);
-		valoMenuToggleButton.addStyleName("valo-menu-toggle");
-		valoMenuToggleButton.addStyleName(ValoTheme.BUTTON_BORDERLESS);
-		valoMenuToggleButton.addStyleName(ValoTheme.BUTTON_SMALL);
-		return valoMenuToggleButton;
-	}
 
-	private Component buildMenuItems() {
-		CssLayout menuItemsLayout = new CssLayout();
-		menuItemsLayout.addStyleName("valo-menuitems");
-
-		return menuItemsLayout;
-	}
 }

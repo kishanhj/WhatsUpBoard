@@ -16,8 +16,8 @@ import com.example.VO.QualityVO;
 import com.example.VO.EmployeeVO;
 import com.example.VO.QualityFeedbackVO;
 import com.example.WhatsUpApp.WhatsUpUI;
+import com.example.constants.StringConstants;
 import com.vaadin.event.ShortcutAction.KeyCode;
-import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.Resource;
@@ -43,6 +43,12 @@ import com.vaadin.ui.Table.Align;
 import com.vaadin.ui.Table.ColumnResizeEvent;
 import com.vaadin.ui.Table.ColumnResizeListener;
 
+/**
+ * Feedback form view which is sent to employees
+ *
+ * @author kishan.j
+ *
+ */
 public class FeedbackFormView extends VerticalLayout implements View {
 
 	private static final long serialVersionUID = 1L;
@@ -57,22 +63,39 @@ public class FeedbackFormView extends VerticalLayout implements View {
 	 */
 	WhatsUpUI ui;
 
-	TextField name;
+	/**
+	 * TextField which is filled with the name of the employee
+	 */
+	TextField nameTextField;
 
-	Navigator navigator;
-
+	/**
+	 * TextField which is filled with the employeeID of the employee
+	 */
 	TextField employeeIdTextField;
 
-	TextField emailId;
-
+	/**
+	 * TextField which is filled with the current month
+	 */
 	ComboBox monthField;
 
-	ComboBox project;
+	/**
+	 * TextField which is filled with the project of the employee
+	 */
+	ComboBox projectField;
 
+	/**
+	 * Employee which contains all the details of the employee
+	 */
 	EmployeeVO employee = new EmployeeVO();
 
+	/**
+	 * employeeID of the employee
+	 */
 	String employeeId;
 
+	/**
+	 * current month
+	 */
 	String month;
 
 	/**
@@ -95,9 +118,12 @@ public class FeedbackFormView extends VerticalLayout implements View {
 	 */
 	Map<String, Resource> qualityImage = new HashMap<String, Resource>();
 
+	/**
+	 *  Constructor with ui instance as parameter
+	 * @param WhatsUpUI ui
+	 */
 	public FeedbackFormView(WhatsUpUI ui) {
 		this.ui = ui;
-		navigator = ui.getNavigator();
 		qualities = QualityDAO.getAllQualities();
 		setSizeUndefined();
 		Component feedBackForm = BuildForm();
@@ -105,12 +131,17 @@ public class FeedbackFormView extends VerticalLayout implements View {
 		setComponentAlignment(feedBackForm, Alignment.MIDDLE_CENTER);
 	}
 
+	/**
+	 *  Constructor
+	 * @param ui WhatsUpUI
+	 * @param employeeId employeeId obtained from URL
+	 * @param month month obtained from URL
+	 */
 	public FeedbackFormView(WhatsUpUI ui, String employeeId, String month) {
 		this.employee = EmployeeDAO.getEmployee(employeeId);
 		this.month = month;
 		this.employeeId = employeeId;
 		this.ui = ui;
-		navigator = ui.getNavigator();
 		qualities = QualityDAO.getAllQualities();
 		Component feedBackForm = BuildForm();
 		setSizeFull();
@@ -130,15 +161,15 @@ public class FeedbackFormView extends VerticalLayout implements View {
 
 		final HorizontalLayout headerLayout = new HorizontalLayout();
 		HorizontalLayout logoBar = buildLogoBar();
-		headerLayout.addStyleName("titlepanel");
+		headerLayout.addStyleName(StringConstants.STYLE_TITLE_PANEL);
 		headerLayout.setSizeFull();
-		headerLayout.setWidth("100%");
-		headerLayout.setHeight("40px");
+		headerLayout.setWidth(StringConstants.HUNDRED_PERCENT);
+		headerLayout.setHeight(StringConstants.FORTY_PERCENT);
 		headerLayout.addComponents(logoBar);
 		headerLayout.setExpandRatio(logoBar, 1);
 
 		HorizontalLayout textFields = buildTextFields();
-		textFields.addStyleName("textStyle");
+		textFields.addStyleName(StringConstants.STYLE_TEXT);
 
 		VerticalLayout vlayout = new VerticalLayout();
 		vlayout.addComponents(headerLayout, textFields);
@@ -166,9 +197,9 @@ public class FeedbackFormView extends VerticalLayout implements View {
 	 */
 	private HorizontalLayout buildLogoBar() {
 		HorizontalLayout logoBar = new HorizontalLayout();
-		Image brillioLogo = new Image(null, new ThemeResource("B1.png"));
+		Image brillioLogo = new Image(null, new ThemeResource(StringConstants.IMAGE_B1));
 
-		Label title = new Label("<center>WhatsUp Board Survey<center>");
+		Label title = new Label(StringConstants.TITLE_WHATSUP_BOARD);
 		title.setContentMode(ContentMode.HTML);
 		title.addStyleName(ValoTheme.LABEL_H2);
 		title.addStyleName(ValoTheme.LABEL_BOLD);
@@ -205,7 +236,7 @@ public class FeedbackFormView extends VerticalLayout implements View {
 				boolean flag = QualityFeedbackDAO.addFeedbacks(qualityWiseFeedbacks);
 				if (flag) {
 					LinkCodesDAO.deleteCode(employeeIdTextField);
-					Notification.show("Feedback was captured succesfully");
+					Notification.show(StringConstants.FEEDBACK_SUCCESS);
 					ui.setContent(new SuccessView());
 				}
 			} catch (ClassNotFoundException e1) {
@@ -235,7 +266,7 @@ public class FeedbackFormView extends VerticalLayout implements View {
 	private void validateAllFields() {
 		employeeIdTextField.validate();
 		monthField.validate();
-		project.validate();
+		projectField.validate();
 		for (QualityVO key : qualities) {
 			TextArea reason = qualityReason.get(key.getQualityName());
 			reason.validate();
@@ -333,7 +364,7 @@ public class FeedbackFormView extends VerticalLayout implements View {
 	 * @param rowNumber
 	 */
 	private void createFields(Table feedbackTable, String qualityName, String qualityDesc, int rowNumber) {
-		Button qualityButton = new Button("Satisfied");
+		Button qualityButton = new Button(StringConstants.SATISFIED);
 		TextArea reason = new TextArea();
 		ConfigButtonAndText(qualityButton, reason);
 		qualityButtons.put(qualityName, qualityButton);
@@ -350,7 +381,7 @@ public class FeedbackFormView extends VerticalLayout implements View {
 	private void ConfigButtonAndText(Button button, TextArea text) {
 
 		text.setWidth(390, Unit.PIXELS);
-		button.setIcon(new ThemeResource("bad.png"));
+		button.setIcon(new ThemeResource(StringConstants.IMAGE_BAD));
 		button.addStyleName(ValoTheme.BUTTON_BORDERLESS);
 		button.addStyleName(ValoTheme.BUTTON_ICON_ONLY);
 		button.addStyleName(ValoTheme.BUTTON_HUGE);
@@ -364,25 +395,25 @@ public class FeedbackFormView extends VerticalLayout implements View {
 	 * @param feedbackTable
 	 */
 	private void ConfigTable(Table feedbackTable) {
-		feedbackTable.addContainerProperty("Area", String.class, null);
-		feedbackTable.addContainerProperty("Description", String.class, null);
-		feedbackTable.addContainerProperty("Satisfied", Button.class, null);
-		feedbackTable.addContainerProperty("Reason", TextArea.class, null);
+		feedbackTable.addContainerProperty(StringConstants.AREA, String.class, null);
+		feedbackTable.addContainerProperty(StringConstants.DESCRIPTION, String.class, null);
+		feedbackTable.addContainerProperty(StringConstants.SATISFIED, Button.class, null);
+		feedbackTable.addContainerProperty(StringConstants.REASON, TextArea.class, null);
 
-		feedbackTable.setColumnWidth("Area", 250);
-		feedbackTable.setColumnWidth("Description", 490);
-		feedbackTable.setColumnWidth("Satisfied", 190);
-		feedbackTable.setColumnWidth("Reason", 400);
+		feedbackTable.setColumnWidth(StringConstants.AREA, 250);
+		feedbackTable.setColumnWidth(StringConstants.DESCRIPTION, 490);
+		feedbackTable.setColumnWidth(StringConstants.SATISFIED, 190);
+		feedbackTable.setColumnWidth(StringConstants.REASON, 400);
 
-		feedbackTable.setColumnAlignment("Area", Align.CENTER);
-		feedbackTable.setColumnAlignment("Description", Align.CENTER);
-		feedbackTable.setColumnAlignment("Satisfied", Align.CENTER);
-		feedbackTable.setColumnAlignment("Reason", Align.CENTER);
+		feedbackTable.setColumnAlignment(StringConstants.AREA, Align.CENTER);
+		feedbackTable.setColumnAlignment(StringConstants.DESCRIPTION, Align.CENTER);
+		feedbackTable.setColumnAlignment(StringConstants.SATISFIED, Align.CENTER);
+		feedbackTable.setColumnAlignment(StringConstants.REASON, Align.CENTER);
 
-		feedbackTable.setColumnExpandRatio("Area", 9);
-		feedbackTable.setColumnExpandRatio("Description", 20);
-		feedbackTable.setColumnExpandRatio("Satisfied",8);
-		feedbackTable.setColumnExpandRatio("Reason", 20);
+		feedbackTable.setColumnExpandRatio(StringConstants.AREA, 9);
+		feedbackTable.setColumnExpandRatio(StringConstants.DESCRIPTION, 20);
+		feedbackTable.setColumnExpandRatio(StringConstants.SATISFIED,8);
+		feedbackTable.setColumnExpandRatio(StringConstants.REASON, 20);
 		feedbackTable.setColumnReorderingAllowed(false);
 
 
@@ -398,14 +429,14 @@ public class FeedbackFormView extends VerticalLayout implements View {
 			}
 		});
 
-		feedbackTable.setColumnHeaders("Area", "Description", "Feedback", "Reason");
+		feedbackTable.setColumnHeaders(StringConstants.AREA, StringConstants.DESCRIPTION,StringConstants.FEEDBACK , StringConstants.REASON);
 		feedbackTable.addStyleName(ValoTheme.TABLE_COMPACT);
 		feedbackTable.addStyleName(Reindeer.TABLE_STRONG);
 
 	}
 
 	/**
-	 * Builds the name,employee,email,month,project textfields
+	 * Builds the Name,EmployeeID,Month,Project textfields
 	 *
 	 * @return Horizontal Layout
 	 */
@@ -413,33 +444,33 @@ public class FeedbackFormView extends VerticalLayout implements View {
 		HorizontalLayout fieldLayout = new HorizontalLayout();
 		fieldLayout.setSpacing(true);
 
-		name = new TextField("Name");
-		name.setValue(employee.getEmployeeName());
-		name.setReadOnly(true);
+		nameTextField = new TextField(StringConstants.NAME);
+		nameTextField.setValue(employee.getEmployeeName());
+		nameTextField.setReadOnly(true);
 
-		employeeIdTextField = new TextField("EmployeeID");
+		employeeIdTextField = new TextField(StringConstants.EMPLOYEEID);
 		employeeIdTextField.setValue(employee.getEmployeeId());
 		employeeIdTextField.setReadOnly(true);
 
-		monthField = new ComboBox("Month");
+		monthField = new ComboBox(StringConstants.MONTH);
 		monthField.setRequired(true);
 		monthField.addItem(month);
 		monthField.setValue(month);
 		monthField.setNullSelectionAllowed(false);
 		monthField.setReadOnly(true);
 
-		project = new ComboBox("Project");
-		project.setRequired(true);
-		project.setNullSelectionAllowed(false);
+		projectField = new ComboBox(StringConstants.PROJECT);
+		projectField.setRequired(true);
+		projectField.setNullSelectionAllowed(false);
 		String projectName = ProjectDAO.getProjectName(employee.getProjectId());
 		List<String> projects = ProjectDAO.getAllProjects();
 		for (String projectname : projects) {
-			project.addItem(projectname);
+			projectField.addItem(projectname);
 		}
-		project.setValue(projectName);
-		project.setReadOnly(true);
+		projectField.setValue(projectName);
+		projectField.setReadOnly(true);
 
-		fieldLayout.addComponents(name, employeeIdTextField, monthField, project);
+		fieldLayout.addComponents(nameTextField, employeeIdTextField, monthField, projectField);
 		fieldLayout.setMargin(true);
 		fieldLayout.setSpacing(true);
 

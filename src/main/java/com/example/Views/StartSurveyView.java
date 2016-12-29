@@ -14,6 +14,7 @@ import com.example.Mailer.SendMail;
 import com.example.VO.AdminVO;
 import com.example.VO.EmployeeVO;
 import com.example.WhatsUpApp.WhatsUpUI;
+import com.example.constants.StringConstants;
 import com.example.constants.ValidationConstants;
 import com.example.validators.MonthValidator;
 import com.vaadin.data.util.IndexedContainer;
@@ -26,27 +27,52 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
 
+/**
+ * Start survey view
+ */
 public class StartSurveyView extends HorizontalLayout implements View {
 
 	private static final long serialVersionUID = 1L;
+
+	/**
+	 * Name of this view in the Navigator
+	 */
 	public static final String NAME = "StartSurveyView";
+
+	/**
+	 * Holds the instance of current UI
+	 */
 	private WhatsUpUI ui;
+
+	/**
+	 * Holds information of currently Loggedin User
+	 */
 	private AdminVO user;
 
+	/**
+	 * Constructor with ui instance as parameter
+	 *
+	 * @param ui
+	 *            WhatsUpUI
+	 */
 	public StartSurveyView(WhatsUpUI ui) {
-		this.ui=ui;
-		 user=(AdminVO) ui.getSession().getAttribute("user");
-		addComponent(init());
+		this.ui = ui;
+		user = (AdminVO) ui.getSession().getAttribute("user");
+		addComponent(buildLayout());
 
 	}
 
-	private VerticalLayout init() {
+	/**
+	 * builds the layout
+	 * @return VerticalLayout
+	 */
+	private VerticalLayout buildLayout() {
 
 		VerticalLayout content = new VerticalLayout();
-		ComboBox feedbackMonth = new ComboBox("Month");
+		ComboBox feedbackMonth = new ComboBox(StringConstants.MONTH);
 		Properties prop1 = new PropertyUtils().getConfigProperties();
 		String year = prop1.getProperty("year");
-		addItems(feedbackMonth,year);
+		addItems(feedbackMonth, year);
 
 		feedbackMonth.setNullSelectionAllowed(false);
 		feedbackMonth.setRequired(true);
@@ -68,7 +94,6 @@ public class StartSurveyView extends HorizontalLayout implements View {
 		employeelListTable.addStyleName("SliderBar");
 		employeelListTable.setCaption("Employee List");
 
-
 		container.addContainerProperty("Employee Name", String.class, null);
 		container.addContainerProperty("Employee Id", String.class, null);
 		container.addContainerProperty("Project", String.class, null);
@@ -89,11 +114,12 @@ public class StartSurveyView extends HorizontalLayout implements View {
 		int i = 1;
 		String projectName;
 		for (EmployeeVO employee : employees) {
-			if(user.getTProject() == employee.getProjectId()){
-			projectName = ProjectDAO.getProjectName(employee.getProjectId());
-			employeelListTable.addItem(new Object[] { employee.getEmployeeName(), employee.getEmployeeId(), projectName,
-					employee.getEmployeeEmailId() }, i++);
-		}}
+			if (user.getTProject() == employee.getProjectId()) {
+				projectName = ProjectDAO.getProjectName(employee.getProjectId());
+				employeelListTable.addItem(new Object[] { employee.getEmployeeName(), employee.getEmployeeId(),
+						projectName, employee.getEmployeeEmailId() }, i++);
+			}
+		}
 		content.addComponent(employeelListTable);
 		content.setComponentAlignment(employeelListTable, Alignment.MIDDLE_CENTER);
 
@@ -102,16 +128,17 @@ public class StartSurveyView extends HorizontalLayout implements View {
 		startSurvey.addClickListener(e -> {
 			feedbackMonth.validate();
 			for (EmployeeVO employee : employees) {
-				AdminVO user=(AdminVO) ui.getSession().getAttribute("user");
-				if(user.getTProject() == employee.getProjectId()){
-				Encoding.generatecodes(employee.getEmployeeId(), (String) feedbackMonth.getValue());
-				FeedbackDAO.addFeedbackEntry(employee, (String) feedbackMonth.getValue());
-				URL url = MailUtils.getUrl(employee.getEmployeeId(), (String) feedbackMonth.getValue());
-				String mailBody = "Please complete the survey by clicking the below link<br><br>" + "<a href="
-						+ url.toString() + ">here</a>";
-				SendMail mailer = new SendMail(employee.getEmployeeEmailId(), mailBody);
-				mailer.sendMail();
-			}}
+				AdminVO user = (AdminVO) ui.getSession().getAttribute("user");
+				if (user.getTProject() == employee.getProjectId()) {
+					Encoding.generatecodes(employee.getEmployeeId(), (String) feedbackMonth.getValue());
+					FeedbackDAO.addFeedbackEntry(employee, (String) feedbackMonth.getValue());
+					URL url = MailUtils.getUrl(employee.getEmployeeId(), (String) feedbackMonth.getValue());
+					String mailBody = "Please complete the survey by clicking the below link<br><br>" + "<a href="
+							+ url.toString() + ">here</a>";
+					SendMail mailer = new SendMail(employee.getEmployeeEmailId(), mailBody);
+					mailer.sendMail();
+				}
+			}
 		});
 
 		content.addComponent(startSurvey);
@@ -119,6 +146,14 @@ public class StartSurveyView extends HorizontalLayout implements View {
 		return content;
 	}
 
+	/**
+	 * Adds items to month ComboBox
+	 *
+	 * @param feedbackMonth
+	 *            ComboBox
+	 * @param year
+	 *            Year from Properties file
+	 */
 	private void addItems(ComboBox feedbackMonth, String year) {
 		feedbackMonth.setPageLength(12);
 		feedbackMonth.addItem("January " + year);
@@ -138,7 +173,6 @@ public class StartSurveyView extends HorizontalLayout implements View {
 
 	@Override
 	public void enter(ViewChangeEvent event) {
-		// TODO Auto-generated method stub
 
 	}
 

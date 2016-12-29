@@ -38,7 +38,6 @@ public class LoginView extends VerticalLayout implements View {
 
 	public LoginView(WhatsUpUI ui) {
 		this.ui=ui;
-		//buildNotification();
 		Component loginForm = buildLoginForm();
 
 		Panel p=new Panel();
