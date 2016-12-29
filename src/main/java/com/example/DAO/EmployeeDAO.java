@@ -70,12 +70,34 @@ public class EmployeeDAO {
 				empDetails.setEmployeeEmailId(rs.getString(2));
 				empDetails.setEmployeeName(rs.getString(3));
 				empDetails.setProjectId(rs.getInt(4));
+				return empDetails;
 			}
-          return empDetails;
+
 
 		} catch (SQLException e) {
 			Notification.show("Failed to close connection");
 			Page.getCurrent().reload();
+		} finally {
+			ConnectionUtils.closeConnection(con);
+		}
+		return null;
+	}
+
+	public static String getEmployeeName(String employeeId) {
+
+		try {
+			con = ConnectionUtils.getConnection();
+			PreparedStatement stmt = con.prepareStatement(QueryConstant.GET_EMPLOYEE_QUERY);
+			stmt.setString(1, employeeId);
+		    ResultSet rs = stmt.executeQuery();
+
+			if (rs.next()) {
+				return rs.getString(3);
+			}
+
+
+		} catch (SQLException e) {
+			Notification.show("Failed to close connection");
 		} finally {
 			ConnectionUtils.closeConnection(con);
 		}

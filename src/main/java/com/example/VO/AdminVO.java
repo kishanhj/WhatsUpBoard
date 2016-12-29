@@ -9,10 +9,13 @@ public class AdminVO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 
-	private int adminId;
+	private String adminId;
 
 
 	private boolean isActive;
+
+	private String password;
+
 
 
 	private String adminEmailId;
@@ -26,13 +29,22 @@ public class AdminVO implements Serializable {
 	public AdminVO() {
 	}
 
-	public int getAdminId() {
+	public String getAdminId() {
 		return this.adminId;
 	}
 
-	public void setAdminId(int adminId) {
+	public void setAdminId(String adminId) {
 		this.adminId = adminId;
 	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
 
 	public boolean getActiveStatus() {
 		return this.isActive;

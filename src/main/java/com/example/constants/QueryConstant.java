@@ -8,9 +8,15 @@ public interface QueryConstant {
 
      String GET_FEEDBACK_ID_QUERY="select FEEDBACK_ID from T_FEEDBACK where EMPLOYEE_ID=? and FEEDBACK_MONTH=? ";
 
-     String GET_FEEDBACK_ID_MONTH_QUERY="select FEEDBACK_ID from T_FEEDBACK where FEEDBACK_MONTH=? ";
+     String GET_FEEDBACK_ID_MONTH_AND_PROJECT_QUERY="select FEEDBACK_ID from T_FEEDBACK where FEEDBACK_MONTH=?  and project_id_feedback_fk=?";
+
+     String GET_FEEDBACK_ID_MONTH_QUERY="select FEEDBACK_ID from T_FEEDBACK where FEEDBACK_MONTH=?";
+
+     String GET_MONTH_LIST_QUERY="select distinct FEEDBACK_MONTH from T_FEEDBACK  ";
 
      String GET_FEEDBACK_PROJECT_QUERY="select PROJECT_ID_FEEDBACK_FK from T_FEEDBACK where EMPLOYEE_ID=? ";
+
+     String GET_FEEDBACK_PROJECT_ID_QUERY="select PROJECT_ID_FEEDBACK_FK from T_FEEDBACK where feedback_ID=? ";
 
      String GET_EMPLOYEE_NAME_QUERY="select employee_name from T_FEEDBACK where feedback_ID=? ";
 
@@ -30,7 +36,23 @@ public interface QueryConstant {
 
     String GET_PROJECT_NAME_QUERY="select project_name from t_project where project_id=?";
 
+    String ADD_PROJECT_QUERY="insert into t_project(project_name) values(?)";
+
     String GET_ALL_EMPLOYEE_QUERY="select * from t_employee";
+
+    String GET_ADMIN_DETAILS_QUERY="select * from t_admin where admin_id=?";
+
+    String ADD_ADMIN_QUERY="insert into t_admin(ADMIN_ID,PASSWORD,ADMIN_EMAIL_ID,IS_SUPER_ADMIN,PROJECT_ID_ADMIN_FK) values(?,?,?,?,?); ";
+
+    String GET_ALL_ADMIN_DETAILS_QUERY="select * from t_admin";
+
+    String ADMIN_AUTHENTICATION_QUERY="select * from t_admin where admin_id=? and password=?";
+
+    String EMAIL_EXIST_QUERY="select * from t_admin where admin_email_id=? ";
+
+    String PASSWORD_RESET_QUERY="update t_admin set password =? where admin_email_id=? ";
+
+    String PASSWORD_CHANGE_QUERY="update t_admin set password =? where password=? and admin_id=? ";
 
     String GET_EMPLOYEE_QUERY="select * from t_employee where employee_id=?";
 

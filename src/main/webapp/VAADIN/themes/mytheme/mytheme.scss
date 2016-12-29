@@ -29,14 +29,12 @@
 // For more information, see: https://vaadin.com/book/-/page/themes.valo.html
 // Example variants can be copy/pasted from https://vaadin.com/wiki/-/wiki/Main/Valo+Examples
 
-$v-app-loading-text: "WhatsUp Survey";
+$v-app-loading-text: "Flat Valo";
 
 $v-font-family: "Roboto", sans-serif;
 $v-font-weight: 400;
 $v-font-weight--header: 400;
-//$v-background-color: #fff;
-	$v-background-color:	#A1CAF1;
-
+$v-background-color: #EBFAEB;
 $v-focus-color: rgb(150,190,90);
 $v-luminance-threshold: 180;
 $v-border: 2px solid v-shade;
@@ -55,40 +53,63 @@ $valo-menu-background-color: #eee;
 
 @import "../valo/valo";
 
+.valo-test {
+  .v-button-primary.v-button-primary {
+    background:#fff;
+    border-color: $v-focus-color;
+    color: $v-focus-color;
+  }
+
+  .v-button-danger.v-button-danger {
+    background: #fff;
+    border-color: $v-error-indicator-color;
+    color: $v-error-indicator-color;
+  }
+
+  .v-slider-base:before,
+  .v-slider-base:after {
+    border: none !important;
+  }
+}
+
+
+.titlepanel {
+background:#93B81D;
+color: #FFFFFF;
+font:  white;
+line-height: normal;
+border-radius: 0px;
+font-family: arial;
+font-size: 15px;
+font-weight: bold;
+text-align: center;
+text-decoration: none;
+
+}
+
+.panelcolor {
+background:#93B81D;
+}
+
+.textStyle {
+background:#93B81D;
+color: #FFFFFF;
+font:  white;
+line-height: normal;
+border-radius: 0px;
+font-family: arial;
+font-size: 15px;
+font-weight: bold;
+text-align: center;
+text-decoration: none;
+width:100%
+}
+
 
 @import "../valo/valo.scss";
 
-
 @mixin mytheme {
   @include valo;
-  .v-table-cell-wrapper {
-    white-space: normal;
-    }
-   .v-table-header {
-    color: 		#89CFF0;
-    background: #4455aa;
-    font-weight: bold;
-    text-align: center;
-  }
 
-  .v-table {
-    background: #99afff;
-  }
-
-  .v-table-row:hover{
-    color: #ffbf00;
-    background:#DFDFC4;
-   // background: #6475ca;
-  }
-  .v-table-row-odd:hover {
-    color: #fff;
-    background: #6475ca;
-}
-
-.v-table-resizer {
-  display: none;
-}
-.v-icon{
-font-size:40px;
-  }// Insert your own theme rules here
+  // Insert your own theme rules here
 }

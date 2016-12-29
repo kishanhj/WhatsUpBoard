@@ -75,11 +75,11 @@ public class QualityFeedbackDAO {
 		return false;
 	}
 
-	public static List<QualityFeedbackVO> getMonthWiseFeedbacks(ComboBox feedback_month) {
+	public static List<QualityFeedbackVO> getMonthWiseFeedbacks(ComboBox feedback_month,int projectId) {
 		List<QualityFeedbackVO> feedbacks = new ArrayList<QualityFeedbackVO>();
 		QualityFeedbackVO quality;
 		String month=(String) feedback_month.getValue();
-		List<Integer> feedbackIdsOfThisMonth=FeedbackDAO.getAllFeedbackId(month);
+		List<Integer> feedbackIdsOfThisMonth=FeedbackDAO.getAllFeedbackId(month,projectId);
 		try {
 			con = ConnectionUtils.getConnection();
 			PreparedStatement stmt = con.prepareStatement(QueryConstant.GET_FEEDBACKS);
@@ -104,11 +104,11 @@ public class QualityFeedbackDAO {
 
 	}
 
-	public static List<QualityFeedbackVO> getQualiyWiseFeedbacks(ComboBox feedback_month, String qualityName) {
+	public static List<QualityFeedbackVO> getQualiyWiseFeedbacks(ComboBox feedback_month, String qualityName,int projectId) {
 		List<QualityFeedbackVO> feedbacks = new ArrayList<QualityFeedbackVO>();
 		QualityFeedbackVO quality;
 		String month=(String) feedback_month.getValue();
-		List<Integer> feedbackIdsOfThisMonth=FeedbackDAO.getAllFeedbackId(month);
+		List<Integer> feedbackIdsOfThisMonth=FeedbackDAO.getAllFeedbackId(month,projectId);
 		int qualityId=QualityDAO.getQualityID(qualityName);
 		try {
 			con = ConnectionUtils.getConnection();

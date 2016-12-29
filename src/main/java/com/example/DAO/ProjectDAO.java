@@ -27,7 +27,7 @@ public class ProjectDAO {
 		try {
 			con = ConnectionUtils.getConnection();
 
-			PreparedStatement stmt = con.prepareStatement(QueryConstant.GET_PROJECT_QUERY);
+			PreparedStatement stmt = con.prepareStatement(QueryConstant.GET_PROJECT_DETAILS_QUERY);
 			ResultSet rs = stmt.executeQuery();
 			project_details = new ArrayList<ProjectVO>();
 			while (rs.next()) {
@@ -41,7 +41,6 @@ public class ProjectDAO {
 
 		} catch (SQLException e) {
 
-			System.out.println("exception");
 			e.printStackTrace();
 		} finally {
 			ConnectionUtils.closeConnection(con);
@@ -70,7 +69,6 @@ public class ProjectDAO {
 			return project_names;
 
 		} catch (SQLException e) {
-			System.out.println("exception");
 			e.printStackTrace();
 		} finally {
 			ConnectionUtils.closeConnection(con);
@@ -103,7 +101,6 @@ public class ProjectDAO {
 			return projectvo;
 
 		} catch (SQLException e) {
-			System.out.println("exception");
 			e.printStackTrace();
 		} finally {
 			ConnectionUtils.closeConnection(con);
@@ -123,13 +120,28 @@ public class ProjectDAO {
 			}
 
 		} catch (SQLException e) {
-			System.out.println("exception");
 			e.printStackTrace();
 		} finally {
 			ConnectionUtils.closeConnection(con);
 		}
 		return null;
 	}
+
+	public static int addProject(String projectName) {
+		//Connection con = null;
+		try {
+			con = ConnectionUtils.getConnection();
+			PreparedStatement stmt = con.prepareStatement(QueryConstant.ADD_PROJECT_QUERY);
+			stmt.setString(1, projectName);
+			return stmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			ConnectionUtils.closeConnection(con);
+		}
+		return 0;
+	}
+
 
 
 }

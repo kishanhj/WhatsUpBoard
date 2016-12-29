@@ -1,9 +1,13 @@
 package com.example.Views;
 
 
+import com.example.DAO.AdminDAO;
+import com.example.Helpers.Utils;
+import com.example.Mailer.ForgotPassword;
+import com.example.VO.AdminVO;
 import com.example.WhatsUpApp.WhatsUpUI;
+import com.example.constants.StringConstants;
 import com.vaadin.event.ShortcutAction.KeyCode;
-import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FontAwesome;
@@ -20,6 +24,7 @@ import com.vaadin.ui.Panel;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Window;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.themes.ValoTheme;
@@ -61,10 +66,53 @@ public class LoginView extends VerticalLayout implements View {
 	        final Button forgotpw= new Button("Forgot password ?");
             forgotpw.setStyleName(ValoTheme.BUTTON_LINK);
 
+            forgotpw.addClickListener(e -> {
+            	Window window = new Window("Forgot Password");
+            	window.setContent(buildForgotPWLayout(window));
+            	window.center();
+            	ui.addWindow(window);
+            });
+
 	        loginPanel.addComponent(forgotpw);
 	        loginPanel.setComponentAlignment(forgotpw, Alignment.TOP_RIGHT);
 
 	        return loginPanel;
+	}
+
+	private Component buildForgotPWLayout(Window window) {
+		VerticalLayout addProject = new VerticalLayout();
+		addProject.setSpacing(true);
+		addProject.setMargin(true);
+
+		TextField emailId =new TextField("Email ID");
+
+		Button ok_button = new Button();
+		ok_button.setCaption("OK");
+		ok_button.addClickListener(e -> {
+			if(AdminDAO.exist(emailId)){
+			String passwordHash=Utils.encode(StringConstants.NEW_PASSWORD);
+			 AdminDAO.setpassword(emailId,passwordHash)	;
+             ForgotPassword.sendMail(emailId);
+			window.close();
+			Notification.show("Password has been mailed");
+			}
+		});
+
+		Button cancel = new Button();
+		cancel.setCaption("Cancel");
+		cancel.addClickListener(e -> {
+			window.close();
+		});
+
+		HorizontalLayout buttons = new HorizontalLayout();
+		buttons.setSpacing(true);
+		buttons.addComponents(ok_button,cancel);
+		buttons.setComponentAlignment(cancel, Alignment.BOTTOM_RIGHT);
+		buttons.setComponentAlignment(ok_button, Alignment.BOTTOM_LEFT);
+
+       addProject.addComponents(emailId,buttons);
+
+		return addProject;
 	}
 
 	private Component buildFields() {
@@ -75,10 +123,12 @@ public class LoginView extends VerticalLayout implements View {
 	        final TextField username = new TextField("Username");
 	        username.setIcon(FontAwesome.USER);
 	        username.addStyleName(ValoTheme.TEXTFIELD_INLINE_ICON);
+	        username.setValue("113157");
 
 	        final PasswordField password = new PasswordField("Password");
 	        password.setIcon(FontAwesome.LOCK);
 	        password.addStyleName(ValoTheme.TEXTFIELD_INLINE_ICON);
+	        password.setValue("password");
 
 	        final Button signin = new Button("Sign In");
 	        signin.addStyleName(ValoTheme.BUTTON_PRIMARY);
@@ -94,10 +144,11 @@ public class LoginView extends VerticalLayout implements View {
 
 				@Override
 	            public void buttonClick(final ClickEvent event) {
-	            	if(username.getValue().equalsIgnoreCase("")&& password.getValue().equalsIgnoreCase("")){
-                      Navigator nav=ui.getNavigator();
+					String passwordHash = Utils.encode(password.getValue());
+	            	if(AdminDAO.adminAuthentication(username, passwordHash)){
+	            	  AdminVO admin = AdminDAO.getAdmin(username);
+	            	  ui.getSession().setAttribute("user", admin);
                       ui.setContent(new AdminView(ui));
-                      // nav.navigateTo(AdminView.NAME);
 	            }
 	            	else {
 	            			password.setValue("");

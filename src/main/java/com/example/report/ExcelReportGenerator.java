@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Properties;
 
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.ss.usermodel.Cell;
@@ -14,6 +15,8 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTTable;
+
+import com.example.Helpers.PropertyUtils;
 import com.vaadin.ui.ComboBox;
 
 public class ExcelReportGenerator {
@@ -78,10 +81,15 @@ public class ExcelReportGenerator {
 		style.setAlignment(HSSFCellStyle.ALIGN_CENTER);
 		style.setFont(font);
 
-		Cell NameCell =  row.createCell(++cellCount);
+		Cell nameCell =  row.createCell(++cellCount);
 		sheet.autoSizeColumn(cellCount);
-		NameCell.setCellStyle(style);
-		NameCell.setCellValue("Employee Name");
+		nameCell.setCellStyle(style);
+		nameCell.setCellValue("Employee Name");
+
+		Cell projectNameCell =  row.createCell(++cellCount);
+		sheet.autoSizeColumn(cellCount);
+		projectNameCell.setCellStyle(style);
+		projectNameCell.setCellValue("Project");
 
 		Cell satisfactionIndicatorCell = row.createCell(++cellCount);
 		sheet.autoSizeColumn(cellCount);
@@ -96,7 +104,7 @@ public class ExcelReportGenerator {
 
 	}
 
-	public void addRow(String employeeName, String satisfactionIndicator, String comment) {
+	public void addRow(String employeeName,String project,String satisfactionIndicator, String comment) {
 		int cellCount = 0;
 		CellStyle style = workbook.createCellStyle();
 		style.setBorderBottom(HSSFCellStyle.BORDER_MEDIUM);
@@ -110,6 +118,11 @@ public class ExcelReportGenerator {
 		sheet.autoSizeColumn(cellCount);
 		qualityNameCell.setCellStyle(style);
 		qualityNameCell.setCellValue(employeeName);
+
+		Cell projectNameCell = row.createCell(++cellCount);
+		sheet.autoSizeColumn(cellCount);
+		projectNameCell.setCellStyle(style);
+		projectNameCell.setCellValue(project);
 
 		Cell satisfactionIndicatorCell = row.createCell(++cellCount);
 		sheet.autoSizeColumn(cellCount);
@@ -185,9 +198,13 @@ public class ExcelReportGenerator {
 
 
 	public void generateReport() {
+		Properties prop=new PropertyUtils().getConfigProperties();
+		String reportLocation=prop.getProperty("ReportLocation");
+		StringBuilder report = new StringBuilder(reportLocation);
+		report.append(reportMonth).append("_report.xlsx");
 		try (FileOutputStream outputStream = new FileOutputStream(
-				new File("C:\\Users\\kishan.j\\Desktop\\" + reportMonth + "_report.xlsx"))) {
-			System.out.println("After write");
+				new File(report.toString()))) {
+			//System.out.println("After write "+report.toString());
 			workbook.write(outputStream);
 
 		} catch (FileNotFoundException e) {

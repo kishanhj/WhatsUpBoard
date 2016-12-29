@@ -106,6 +106,27 @@ public class FeedbackDAO {
 		return 0;
 	}
 
+	public static List<Integer> getAllFeedbackId(String feedback_month,int projectId) {
+		 Connection con = null;
+		try {
+			con = ConnectionUtils.getConnection();
+			PreparedStatement stmt = con.prepareStatement(QueryConstant.GET_FEEDBACK_ID_MONTH_AND_PROJECT_QUERY);
+			stmt.setString(1, feedback_month);
+			stmt.setInt(2, projectId);
+			ResultSet rs = stmt.executeQuery();
+			List<Integer> feedbackIds = new ArrayList<Integer>();
+			while (rs.next()) {
+				feedbackIds.add(rs.getInt(1));
+			}
+			return feedbackIds;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			ConnectionUtils.closeConnection(con);
+		}
+		return null;
+	}
+
 	public static List<Integer> getAllFeedbackId(String feedback_month) {
 		 Connection con = null;
 		try {
@@ -206,7 +227,7 @@ public class FeedbackDAO {
 		return false;
 	}
 
-	public static String getemployeeName(int feedbackId) {
+	public static String getEmployeeName(int feedbackId) {
 		try {
 			con = ConnectionUtils.getConnection();
 			PreparedStatement stmt = con.prepareStatement(QueryConstant.GET_EMPLOYEE_NAME_QUERY);
@@ -216,6 +237,44 @@ public class FeedbackDAO {
 				return rs.getString(1);
 			} else
 				return null;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			ConnectionUtils.closeConnection(con);
+		}
+		return null;
+	}
+
+	public static List<String> getMonthList() {
+		Connection con = null;
+		try {
+			con = ConnectionUtils.getConnection();
+			PreparedStatement stmt = con.prepareStatement(QueryConstant.GET_MONTH_LIST_QUERY);
+			ResultSet rs = stmt.executeQuery();
+			List<String> monthList = new ArrayList<String>();
+			while (rs.next()) {
+				monthList.add(rs.getString(1));
+			}
+			return monthList;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			ConnectionUtils.closeConnection(con);
+		}
+		return null;
+	}
+
+	public static String getProjectName(int feedbackId) {
+		try {
+			con = ConnectionUtils.getConnection();
+			PreparedStatement stmt = con.prepareStatement(QueryConstant.GET_FEEDBACK_PROJECT_ID_QUERY);
+			stmt.setInt(1, feedbackId);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				return ProjectDAO.getProjectName(rs.getInt(1)) ;
+			} else
+				return null;
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {

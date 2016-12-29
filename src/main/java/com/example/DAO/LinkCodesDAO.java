@@ -69,7 +69,6 @@ public class LinkCodesDAO {
 		} catch (SQLException e) {
 			Notification.show("Failed to Update");
 			e.printStackTrace();
-			System.out.println("Fail");
 		} finally {
 			ConnectionUtils.closeConnection(con);
 		}

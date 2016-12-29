@@ -12,7 +12,6 @@ public class PropertyUtils {
 	public Properties getConfigProperties() {
 		if (configProperties.size() == 0)
 			loadProperties();
-		System.out.println(configProperties);
 		return configProperties;
 	}
 
@@ -20,7 +19,6 @@ public class PropertyUtils {
 		InputStream input = getClass().getClassLoader().getResourceAsStream(filename);
 		try {
 			configProperties.load(input);
-			System.out.println(configProperties);
 		} catch (IOException e) {
 			System.out.println("Input stream fail ");
 			e.printStackTrace();
@@ -29,7 +27,6 @@ public class PropertyUtils {
 	}
 
 	public  String getproperty(String name) {
-		System.out.println(configProperties);
 		return configProperties.getProperty(name);
 
 	}

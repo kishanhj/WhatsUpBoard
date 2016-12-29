@@ -1,6 +1,6 @@
 package com.example.validators;
 
-import com.example.DAO.FeedbackDAO;
+import com.example.DAO.EmployeeDAO;
 import com.example.constants.ValidationConstants;
 import com.vaadin.data.Validator;
 import com.vaadin.ui.TextField;
@@ -20,7 +20,6 @@ public class EmployeeIdValidator implements Validator {
 	int maxLength = 6;
 
 	public EmployeeIdValidator(String errorMsg, TextField employeeId) {
-		// System.out.println("In employeeidValidator");
 		this.errorMsg = errorMsg;
 		this.employeeId = employeeId;
 	}
@@ -29,10 +28,8 @@ public class EmployeeIdValidator implements Validator {
 		String empid = employeeId.getValue();
 		if (empid.matches(".*[A-Za-z].*") || empid.length() < minLength || empid.length() > maxLength)
 			return false;
-		// System.out.println(isValid);
-		if (!FeedbackDAO.isValidEmployeeId(empid))
+		if (EmployeeDAO.getEmployee(empid) == null)
 			return false;
-		// System.out.println(isValid+"..................");
 		return true;
 	}
 

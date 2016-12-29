@@ -28,10 +28,9 @@ public class SendMail
 public SendMail(String toAddress,String content) {
     SendMail.toAddress= toAddress;
     SendMail.content = content;
-    sendMail();
 }
 
-  public static void sendMail()
+  public  void sendMail()
   {
     try
     {
@@ -87,5 +86,6 @@ public SendMail(String toAddress,String content) {
       System.out.println(e);
     }
   }
+
 }
 

@@ -9,5 +9,7 @@ public interface StringConstants {
 	String FEEDFORWARD = "Feed Forward";
 	String HR_RESPONSIVENESS = "HR Responsiveness";
 	String RANDOM_CODE_STRING="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+	String PASSWORD_ENCODING_STRING="3982";
+	String NEW_PASSWORD="Password1$";
 
 }

@@ -1,9 +1,11 @@
 package com.example.Helpers;
 
+import com.example.constants.StringConstants;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.themes.ValoTheme;
 
@@ -49,6 +51,21 @@ public class Utils {
 			return true;
 		else
 			return false;
+	}
+
+	public static String booleanToStringConvertor(boolean condition) {
+		if(condition)
+			return "YES";
+		else
+			return "NO";
+	}
+
+	public static String encode(String password) {
+		Integer passwordHash = password.hashCode();
+		passwordHash *= Integer.parseInt(StringConstants.PASSWORD_ENCODING_STRING);
+		passwordHash += Integer.parseInt(StringConstants.PASSWORD_ENCODING_STRING);
+		return passwordHash.toString();
+
 	}
 
 }
