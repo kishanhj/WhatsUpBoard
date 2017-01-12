@@ -40,7 +40,6 @@ public class ProjectDAO {
 			return project_details;
 
 		} catch (SQLException e) {
-
 			e.printStackTrace();
 		} finally {
 			ConnectionUtils.closeConnection(con);
@@ -108,6 +107,15 @@ public class ProjectDAO {
 		return null;
 	}
 
+	/**
+	 * extracts ProjectName from t_project based on projectId
+	 *
+	 * @param projectId
+	 *            project Id
+	 *
+	 * @return string : ProjectName
+	 */
+
 	public static String getProjectName(int projectId) {
 		//Connection con = null;
 		try {
@@ -127,8 +135,18 @@ public class ProjectDAO {
 		return null;
 	}
 
+
+	/**
+	 * Insert new  project to t_project using projectName
+	 *
+	 * @param projectName
+	 *           Name of the project
+
+	 *
+	 * @return Status of update
+	 */
 	public static int addProject(String projectName) {
-		//Connection con = null;
+
 		try {
 			con = ConnectionUtils.getConnection();
 			PreparedStatement stmt = con.prepareStatement(QueryConstant.ADD_PROJECT_QUERY);

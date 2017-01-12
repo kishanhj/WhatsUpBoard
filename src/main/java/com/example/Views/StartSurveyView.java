@@ -76,7 +76,7 @@ public class StartSurveyView extends HorizontalLayout implements View {
 
 		feedbackMonth.setNullSelectionAllowed(false);
 		feedbackMonth.setRequired(true);
-		feedbackMonth.addValidator(new MonthValidator(ValidationConstants.MONTH_VALIDATOR, feedbackMonth));
+		feedbackMonth.addValidator(new MonthValidator(ValidationConstants.MONTH_VALIDATOR, feedbackMonth,user.getTProject()));
 		feedbackMonth.setValidationVisible(true);
 		content.addComponent(feedbackMonth);
 

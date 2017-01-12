@@ -182,7 +182,7 @@ public class FeedbackFormView extends VerticalLayout implements View {
 
 		final VerticalSplitPanel HeaderPanel = new VerticalSplitPanel();
 		HeaderPanel.setSizeFull();
-		HeaderPanel.setSplitPosition(25f, Unit.PERCENTAGE);
+		HeaderPanel.setSplitPosition(39f, Unit.PERCENTAGE);
 		HeaderPanel.setLocked(true);
 		HeaderPanel.setFirstComponent(vlayout);
 		HeaderPanel.setSecondComponent(feedBackForm);

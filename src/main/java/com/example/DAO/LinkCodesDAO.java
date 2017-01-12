@@ -9,11 +9,16 @@ import java.util.HashMap;
 import com.example.Helpers.ConnectionUtils;
 import com.example.constants.QueryConstant;
 import com.vaadin.server.Page;
-import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextField;
 
 public class LinkCodesDAO {
 
+     /**
+      * Add code to t_link_codes based on key and value
+      * @param key
+      * @param value
+      * @return   Indicates success or failure
+      */
 	public static boolean addCode(String key,String value) {
 		Connection con = null;
 		try {
@@ -29,7 +34,7 @@ public class LinkCodesDAO {
 				return false;
 
 		} catch (SQLException e) {
-			Notification.show("Failed to Update");
+
 			Page.getCurrent().reload();
 		} finally {
 			ConnectionUtils.closeConnection(con);
@@ -37,7 +42,10 @@ public class LinkCodesDAO {
 
 		return false;
 	}
-
+/**
+ *  Retrieves codes from t_link_codes
+ * @return  codeList
+ */
 	public static HashMap<String, String> getCodes() {
 
 		Connection con = null;
@@ -51,13 +59,19 @@ public class LinkCodesDAO {
             }
           return codeList;
 		} catch (SQLException e) {
-			Notification.show("Failed to Update");
+			e.printStackTrace();
 		} finally {
 			ConnectionUtils.closeConnection(con);
 		}
 
 		return null;
 	}
+
+	/**
+	 *  delete a code based on employeeIdTextField
+	 * @param employeeIdTextField
+	 *
+	 */
 
 	public static void deleteCode(TextField employeeIdTextField) {
 		Connection con = null;
@@ -67,8 +81,7 @@ public class LinkCodesDAO {
 			stmt.setString(1, employeeIdTextField.getValue());
              stmt.executeUpdate();
 		} catch (SQLException e) {
-			Notification.show("Failed to Update");
-			e.printStackTrace();
+              e.printStackTrace();
 		} finally {
 			ConnectionUtils.closeConnection(con);
 		}

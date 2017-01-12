@@ -19,7 +19,9 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.ProgressBar;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
-
+/**
+ *Genreates View Feedback View
+ */
 public class ViewFeedbackView extends VerticalLayout implements View {
 
 	private static final long serialVersionUID = 1L;
@@ -34,6 +36,10 @@ public class ViewFeedbackView extends VerticalLayout implements View {
 
 	}
 
+	/**
+	 * Initialises to build layout
+	 * @return
+	 */
 	private VerticalLayout init() {
 		VerticalLayout content = new VerticalLayout();
 		ComboBox feedbackMonth = new ComboBox();
@@ -42,7 +48,7 @@ public class ViewFeedbackView extends VerticalLayout implements View {
 		content.setSpacing(true);
 
 		feedbackMonth.setCaption("Month");
-		List<String> months = FeedbackDAO.getMonthList();
+		List<String> months = FeedbackDAO.getMonthList(user.getTProject());
 		for (String month : months)
 			feedbackMonth.addItem(month);
 
@@ -98,6 +104,11 @@ public class ViewFeedbackView extends VerticalLayout implements View {
 
 	}
 
+	/**
+	 * Displays values in the table
+	 * @param view_feedback
+	 * @param feedback_month
+	 */
 	private void showFeedbacks(Table view_feedback, ComboBox feedback_month) {
 		List<QualityFeedbackVO> feedbacks = QualityFeedbackDAO.getMonthWiseFeedbacks(feedback_month,user.getTProject());
 		String employeeName;

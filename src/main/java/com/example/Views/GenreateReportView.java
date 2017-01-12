@@ -73,7 +73,7 @@ public class GenreateReportView extends VerticalLayout implements View {
 		ComboBox feedbackMonth = new ComboBox();
         feedbackMonth.setCaption(StringConstants.MONTH);
 
-        List<String> months = FeedbackDAO.getMonthList();
+        List<String> months = FeedbackDAO.getMonthList(user.getTProject());
 		for (String month : months)
 			feedbackMonth.addItem(month);
 
@@ -102,7 +102,7 @@ public class GenreateReportView extends VerticalLayout implements View {
 			completedFeedbacks.setValue((float) feedbackContainer.size() / (employeeCount * 6));
 		});
 
-		
+
 		viewFeedbackTable.addStyleName(StringConstants.STYLE_SLIDER_BAR);
 		viewFeedbackTable.setSelectable(true);
 
@@ -293,7 +293,6 @@ public class GenreateReportView extends VerticalLayout implements View {
 
 	@Override
 	public void enter(ViewChangeEvent event) {
-		// TODO Auto-generated method stub
 
 	}
 

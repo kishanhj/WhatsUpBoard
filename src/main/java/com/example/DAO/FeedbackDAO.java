@@ -17,7 +17,6 @@ public class FeedbackDAO {
 
 	public static Connection con = null;
 
-
 	/**
 	 * Extracts the feedbackId from feedback table based on employeeId and month
 	 * values
@@ -32,7 +31,7 @@ public class FeedbackDAO {
 	 *
 	 */
 	public static int getFeedbackId(String employee_id, String feedback_month) {
-		// Connection con = null;
+
 		try {
 			con = ConnectionUtils.getConnection();
 			PreparedStatement stmt = con.prepareStatement(QueryConstant.GET_FEEDBACK_ID_QUERY);
@@ -51,13 +50,21 @@ public class FeedbackDAO {
 		return 0;
 	}
 
+	/**
+	 * Extracts the feedbackId from feedback table based on month values
+	 *
+	 * @param feedback_month
+	 *            feedback month
+	 *
+	 * @return int : FeedbackId
+	 */
+	public static int getFeedbackId(String feedback_month,int ProjectId) {
 
-	public static int getFeedbackId(String feedback_month) {
-		// Connection con = null;
 		try {
 			con = ConnectionUtils.getConnection();
 			PreparedStatement stmt = con.prepareStatement(QueryConstant.GET_FEEDBACK_ID_MONTH_QUERY);
 			stmt.setString(1, feedback_month);
+			stmt.setInt(2, ProjectId);
 			ResultSet rs = stmt.executeQuery();
 			if (rs.next()) {
 				return rs.getInt(1);
@@ -71,8 +78,20 @@ public class FeedbackDAO {
 		return 0;
 	}
 
-	public static List<Integer> getAllFeedbackId(String feedback_month,int projectId) {
-		 Connection con = null;
+	/**
+	 * Extracts all feedbackIds from feedback table based on projectId and month
+	 * values
+	 *
+	 * @param feedback_month
+	 *            feedback month
+	 *
+	 * @param projectId
+	 *            project Id
+	 *
+	 * @return int : feedbackIds
+	 */
+	public static List<Integer> getAllFeedbackId(String feedback_month, int projectId) {
+		Connection con = null;
 		try {
 			con = ConnectionUtils.getConnection();
 			PreparedStatement stmt = con.prepareStatement(QueryConstant.GET_FEEDBACK_ID_MONTH_AND_PROJECT_QUERY);
@@ -92,8 +111,6 @@ public class FeedbackDAO {
 		return null;
 	}
 
-
-
 	/**
 	 * Returns the projectId of the employee
 	 *
@@ -103,7 +120,7 @@ public class FeedbackDAO {
 	 * @return int : projectId of the employee
 	 */
 	public static int getFeedbackProject(String employeeId) {
-		// Connection con = null;
+
 		try {
 			con = ConnectionUtils.getConnection();
 			PreparedStatement stmt = con.prepareStatement(QueryConstant.GET_FEEDBACK_PROJECT_QUERY);
@@ -122,6 +139,17 @@ public class FeedbackDAO {
 
 	}
 
+	/**
+	 * Inserts all employee feedbacks to the t_feedback
+	 *
+	 * @param employee
+	 *            EmployeeVO for each employee
+	 *
+	 * @param month
+	 *            month value
+	 *
+	 * @return boolean : Indicates success or failure
+	 */
 	public static boolean addFeedbackEntry(EmployeeVO employee, String month) {
 
 		try {
@@ -131,7 +159,7 @@ public class FeedbackDAO {
 			stmt.setString(1, employee.getEmployeeId());
 			stmt.setString(2, employee.getEmployeeEmailId());
 			stmt.setString(3, employee.getEmployeeName());
-			stmt.setString(4,  month);
+			stmt.setString(4, month);
 			stmt.setInt(5, employee.getProjectId());
 			isSuccessful = stmt.executeUpdate();
 			if (isSuccessful == 1)
@@ -148,6 +176,14 @@ public class FeedbackDAO {
 		return false;
 	}
 
+	/**
+	 * extracts employeeName from t_feedback based on feedbackId
+	 *
+	 * @param feedbackId
+	 *            feedback Id
+	 *
+	 * @return string : employeeName
+	 */
 	public static String getEmployeeName(int feedbackId) {
 		try {
 			con = ConnectionUtils.getConnection();
@@ -166,11 +202,19 @@ public class FeedbackDAO {
 		return null;
 	}
 
-	public static List<String> getMonthList() {
+	/**
+	 * returns list of months from t_feedback
+	 *
+	 * @return monthList
+	 *
+	 */
+
+	public static List<String> getMonthList(int projectId) {
 		Connection con = null;
 		try {
 			con = ConnectionUtils.getConnection();
 			PreparedStatement stmt = con.prepareStatement(QueryConstant.GET_MONTH_LIST_QUERY);
+			stmt.setInt(1, projectId);
 			ResultSet rs = stmt.executeQuery();
 			List<String> monthList = new ArrayList<String>();
 			while (rs.next()) {
@@ -185,6 +229,14 @@ public class FeedbackDAO {
 		return null;
 	}
 
+	/**
+	 * extracts ProjectName from t_feedback based on feedbackId
+	 *
+	 * @param feedbackId
+	 *            feedback Id
+	 *
+	 * @return string : ProjectName
+	 */
 	public static String getProjectName(int feedbackId) {
 		try {
 			con = ConnectionUtils.getConnection();
@@ -192,7 +244,7 @@ public class FeedbackDAO {
 			stmt.setInt(1, feedbackId);
 			ResultSet rs = stmt.executeQuery();
 			if (rs.next()) {
-				return ProjectDAO.getProjectName(rs.getInt(1)) ;
+				return ProjectDAO.getProjectName(rs.getInt(1));
 			} else
 				return null;
 

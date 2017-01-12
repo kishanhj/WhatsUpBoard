@@ -19,11 +19,20 @@ public class EmployeeIdValidator implements Validator {
 
 	int maxLength = 6;
 
+	/**
+	 * Constructor
+	 * @param errorMsg
+	 * @param employeeId
+	 */
 	public EmployeeIdValidator(String errorMsg, TextField employeeId) {
 		this.errorMsg = errorMsg;
 		this.employeeId = employeeId;
 	}
 
+	/**
+	 * checks the validity of employee ID
+	 * @return
+	 */
 	private boolean validityChecker() {
 		String empid = employeeId.getValue();
 		if (empid.matches(".*[A-Za-z].*") || empid.length() < minLength || empid.length() > maxLength)

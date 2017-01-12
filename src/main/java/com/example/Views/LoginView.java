@@ -3,10 +3,10 @@ package com.example.Views;
 
 import com.example.DAO.AdminDAO;
 import com.example.Helpers.Utils;
+import com.example.Mailer.Encoding;
 import com.example.Mailer.ForgotPassword;
 import com.example.VO.AdminVO;
 import com.example.WhatsUpApp.WhatsUpUI;
-import com.example.constants.StringConstants;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
@@ -36,6 +36,10 @@ public class LoginView extends VerticalLayout implements View {
 	public static String NAME="Loginview";
 	WhatsUpUI ui;
 
+	/**
+	 * Constructor
+	 * @param ui
+	 */
 	public LoginView(WhatsUpUI ui) {
 		this.ui=ui;
 		Component loginForm = buildLoginForm();
@@ -50,6 +54,10 @@ public class LoginView extends VerticalLayout implements View {
 
 	}
 
+	/**
+	 * Builds the layout
+	 * @return Component
+	 */
 	private Component buildLoginForm() {
 		 final VerticalLayout loginPanel = new VerticalLayout();
 	        loginPanel.setSizeUndefined();
@@ -78,6 +86,11 @@ public class LoginView extends VerticalLayout implements View {
 	        return loginPanel;
 	}
 
+	/**
+	 * builds forgot password layout
+	 * @param window
+	 * @return Component
+	 */
 	private Component buildForgotPWLayout(Window window) {
 		VerticalLayout addProject = new VerticalLayout();
 		addProject.setSpacing(true);
@@ -89,9 +102,10 @@ public class LoginView extends VerticalLayout implements View {
 		ok_button.setCaption("OK");
 		ok_button.addClickListener(e -> {
 			if(AdminDAO.exist(emailId)){
-			String passwordHash=Utils.encode(StringConstants.NEW_PASSWORD);
+			String newPassword = Encoding.randomCodeGenerator(6);
+			String passwordHash=Utils.encode(newPassword);
 			 AdminDAO.setpassword(emailId,passwordHash)	;
-             ForgotPassword.sendMail(emailId);
+             ForgotPassword.sendMail(emailId,newPassword);
 			window.close();
 			Notification.show("Password has been mailed");
 			}
@@ -114,6 +128,10 @@ public class LoginView extends VerticalLayout implements View {
 		return addProject;
 	}
 
+	/**
+	 * Builds the fields
+	 * @return Component
+	 */
 	private Component buildFields() {
 		 HorizontalLayout fields = new HorizontalLayout();
 	        fields.setSpacing(true);
@@ -159,6 +177,10 @@ public class LoginView extends VerticalLayout implements View {
 	        return fields;
 	}
 
+	/**
+	 * Builds the lables
+	 * @return Component
+	 */
 	private Component buildLabels() {
 		 HorizontalLayout labels = new HorizontalLayout();
 	        labels.addStyleName("labels");

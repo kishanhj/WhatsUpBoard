@@ -28,6 +28,10 @@ public class ExcelReportGenerator {
 	String areaName;
 	int areaRowCount;
 
+	/**
+	 * Constructor
+	 * @param month
+	 */
 	public ExcelReportGenerator(ComboBox month) {
 		reportMonth = (String) month.getValue();
 		workbook = new XSSFWorkbook();
@@ -36,6 +40,10 @@ public class ExcelReportGenerator {
 		generateTitle(reportMonth);
 	}
 
+	/**
+	 * Generate area/quality Wise Sheets
+	 * @param areaName
+	 */
    public void GenerateAreaSheet(String areaName){
 		this.areaName = areaName;
 		sheet = workbook.createSheet(areaName + " Feedback");
@@ -43,6 +51,10 @@ public class ExcelReportGenerator {
 		generateAreaTitle(areaName);
 	}
 
+   /**
+    * Generate title page
+    * @param reportMonth
+    */
 	@SuppressWarnings("unused")
 	private void generateTitle(String reportMonth) {
 		Row row = sheet.createRow(++rowCount);
@@ -53,6 +65,10 @@ public class ExcelReportGenerator {
 		generateHeader();
 	}
 
+	/**
+	 * Generate Area Sheets Title
+	 * @param AreaName
+	 */
 	@SuppressWarnings("unused")
 	private void generateAreaTitle(String areaName) {
 		Row row = sheet.createRow(++areaRowCount);
@@ -63,6 +79,9 @@ public class ExcelReportGenerator {
 		generateAreaHeader();
 	}
 
+	/**
+	 * Generates Area Header
+	 */
 	private void generateAreaHeader() {
 		int cellCount = 0;
 		Row row = sheet.createRow(++areaRowCount);
@@ -104,6 +123,13 @@ public class ExcelReportGenerator {
 
 	}
 
+	/**
+	 * Adds a row to area sheet
+	 * @param employeeName
+	 * @param project
+	 * @param satisfactionIndicator
+	 * @param comment
+	 */
 	public void addRow(String employeeName,String project,String satisfactionIndicator, String comment) {
 		int cellCount = 0;
 		CellStyle style = workbook.createCellStyle();
@@ -135,6 +161,9 @@ public class ExcelReportGenerator {
 		percentageCell.setCellStyle(style);
 	}
 
+	/**
+	 * Generates main header
+	 */
 	private void generateHeader() {
 		int cellCount = 0;
 		Row row = sheet.createRow(++rowCount);
@@ -170,6 +199,12 @@ public class ExcelReportGenerator {
 
 	}
 
+	/**
+	 * Adds rows to main sheet
+	 * @param qualityName
+	 * @param satisfactionIndicator
+	 * @param percentage
+	 */
 	public void addRow(String qualityName, String satisfactionIndicator, float percentage) {
 		int cellCount = 0;
 		percentage = percentage * 100;
@@ -197,6 +232,9 @@ public class ExcelReportGenerator {
 
 
 
+	/**
+	 * Triggers the generation of report
+	 */
 	public void generateReport() {
 		Properties prop=new PropertyUtils().getConfigProperties();
 		String reportLocation=prop.getProperty("ReportLocation");
@@ -204,7 +242,6 @@ public class ExcelReportGenerator {
 		report.append(reportMonth).append("_report.xlsx");
 		try (FileOutputStream outputStream = new FileOutputStream(
 				new File(report.toString()))) {
-			//System.out.println("After write "+report.toString());
 			workbook.write(outputStream);
 
 		} catch (FileNotFoundException e) {

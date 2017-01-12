@@ -18,42 +18,49 @@ import com.vaadin.ui.Notification;
 public class EmployeeDAO {
 	private static Connection con = null;
 
-	   /**
-	    * Returns the list of all qualities in detail
-	    *
-	    * @return
-	    *       List of QualityVo
-	    */
-		public static List<EmployeeVO> getEmployeeDetails()  {
+	/**
+	 * Returns the list of all employee details
+	 *
+	 * @return List of EmployeeVO
+	 */
+	public static List<EmployeeVO> getEmployeeDetails() {
 
-			try {
-				EmployeeVO empDetails = new EmployeeVO();
-				ArrayList<EmployeeVO> EmpList;
-				con = ConnectionUtils.getConnection();
-				Statement stmt = con.createStatement();
-			    ResultSet rs = stmt.executeQuery(QueryConstant.GET_ALL_EMPLOYEE_QUERY);
+		try {
+			EmployeeVO empDetails = new EmployeeVO();
+			ArrayList<EmployeeVO> EmpList;
+			con = ConnectionUtils.getConnection();
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery(QueryConstant.GET_ALL_EMPLOYEE_QUERY);
 
-			    EmpList = new ArrayList<EmployeeVO>();
+			EmpList = new ArrayList<EmployeeVO>();
 
-				while (rs.next()) {
-					empDetails = new EmployeeVO();
-					empDetails.setEmployeeId(rs.getString(1));
-					empDetails.setEmployeeEmailId(rs.getString(2));
-					empDetails.setEmployeeName(rs.getString(3));
-					empDetails.setProjectId(rs.getInt(4));
-					EmpList.add(empDetails);
-				}
-				return EmpList;
-
-			} catch (SQLException e) {
-				Notification.show("Failed to close connection");
-				Page.getCurrent().reload();
-			} finally {
-				ConnectionUtils.closeConnection(con);
+			while (rs.next()) {
+				empDetails = new EmployeeVO();
+				empDetails.setEmployeeId(rs.getString(1));
+				empDetails.setEmployeeEmailId(rs.getString(2));
+				empDetails.setEmployeeName(rs.getString(3));
+				empDetails.setProjectId(rs.getInt(4));
+				EmpList.add(empDetails);
 			}
-			return null;
+			return EmpList;
 
+		} catch (SQLException e) {
+			Page.getCurrent().reload();
+		} finally {
+			ConnectionUtils.closeConnection(con);
 		}
+		return null;
+
+	}
+
+	/**
+	 * Returns all the details of the employee from its employeeId
+	 *
+	 * @param employeeId
+	 *            Id of an Employee
+	 *
+	 * @return EmployeeVO
+	 */
 
 	public static EmployeeVO getEmployee(String employeeId) {
 
@@ -62,7 +69,7 @@ public class EmployeeDAO {
 			con = ConnectionUtils.getConnection();
 			PreparedStatement stmt = con.prepareStatement(QueryConstant.GET_EMPLOYEE_QUERY);
 			stmt.setString(1, employeeId);
-		    ResultSet rs = stmt.executeQuery();
+			ResultSet rs = stmt.executeQuery();
 
 			if (rs.next()) {
 				empDetails = new EmployeeVO();
@@ -73,9 +80,7 @@ public class EmployeeDAO {
 				return empDetails;
 			}
 
-
 		} catch (SQLException e) {
-			Notification.show("Failed to close connection");
 			Page.getCurrent().reload();
 		} finally {
 			ConnectionUtils.closeConnection(con);
@@ -83,27 +88,38 @@ public class EmployeeDAO {
 		return null;
 	}
 
+	/**
+	 * Extracts the employeeName from employee table based on employeeId
+	 *
+	 * @param employeeId
+	 *
+	 * @return  employeeName
+	 */
 	public static String getEmployeeName(String employeeId) {
 
 		try {
 			con = ConnectionUtils.getConnection();
 			PreparedStatement stmt = con.prepareStatement(QueryConstant.GET_EMPLOYEE_QUERY);
 			stmt.setString(1, employeeId);
-		    ResultSet rs = stmt.executeQuery();
+			ResultSet rs = stmt.executeQuery();
 
 			if (rs.next()) {
 				return rs.getString(3);
 			}
 
-
 		} catch (SQLException e) {
-			Notification.show("Failed to close connection");
+			e.printStackTrace();
 		} finally {
 			ConnectionUtils.closeConnection(con);
 		}
 		return null;
 	}
 
+	/**
+	 * Returns number of employees
+	 * @param tProject
+	 * @return
+	 */
 	public static int getEmployeeCount(int tProject) {
 		try {
 			con = ConnectionUtils.getConnection();

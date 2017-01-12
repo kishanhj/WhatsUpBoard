@@ -6,6 +6,7 @@ import com.example.Mailer.Encoding;
 import com.example.Views.ErrorView;
 import com.example.Views.FeedbackFormView;
 import com.example.Views.LoginView;
+import com.example.constants.StringConstants;
 import com.example.validators.UrlValidator;
 import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Theme;
@@ -26,14 +27,14 @@ public class WhatsUpUI extends UI {
 		VerticalLayout rootLayout = new VerticalLayout();
 		rootLayout.setSizeFull();
 
-		String empIdCode = vaadinRequest.getParameter("a");
-		String monthCode = vaadinRequest.getParameter("b");
+		String empIdCode = vaadinRequest.getParameter(StringConstants.A);
+		String monthCode = vaadinRequest.getParameter(StringConstants.B);
 		if (UrlValidator.validate(empIdCode, monthCode)) {
 			String employeeId = Encoding.getCodeValue(empIdCode);
 			String month = Encoding.getCodeValue(monthCode);
 			rootLayout.addComponent(new FeedbackFormView(this, employeeId, month));
 
-		}else if(empIdCode.equals("admin")){
+		}else if(empIdCode.equals(StringConstants.ADMIN)){
 			rootLayout.addComponent(new LoginView(this));
 		}
 		else {

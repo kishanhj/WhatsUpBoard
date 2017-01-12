@@ -42,6 +42,10 @@ public class SuperAdminView extends VerticalLayout implements View {
 
 	}
 
+	/**
+	 * Initiates to build the layout
+	 * @return
+	 */
 	private Component init() {
 
 		TabSheet functions = new TabSheet();
@@ -51,6 +55,10 @@ public class SuperAdminView extends VerticalLayout implements View {
 
 	}
 
+	/**
+	 * Builds Mange Admin PAge
+	 * @return
+	 */
 	private Component manageProjects() {
 		VerticalLayout mainLayout = new VerticalLayout();
 
@@ -90,6 +98,11 @@ public class SuperAdminView extends VerticalLayout implements View {
 		return mainLayout;
 	}
 
+	/**
+	 * Builds Add project Layout
+	 * @param window
+	 * @return
+	 */
 	private Component addProjectLayout(Window window) {
 		VerticalLayout addProject = new VerticalLayout();
 		addProject.setSpacing(true);
@@ -126,6 +139,10 @@ public class SuperAdminView extends VerticalLayout implements View {
 
 	}
 
+	/**
+	 * Loads project table
+	 * @param projectListTable
+	 */
 	private void loadProjectTable(Table projectListTable) {
 		List<ProjectVO> projects = ProjectDAO.getAllProjectDetails();
 		int i = 1;
@@ -136,6 +153,10 @@ public class SuperAdminView extends VerticalLayout implements View {
 
 	}
 
+	/**
+	 * Builds Manage Admin Layout
+	 * @return
+	 */
 	private VerticalLayout manageAdmins() {
 		VerticalLayout mainLayout = new VerticalLayout();
 
@@ -185,6 +206,10 @@ public class SuperAdminView extends VerticalLayout implements View {
 
 	}
 
+	/**
+	 * Loads admin table
+	 * @param adminListTable
+	 */
 	private void loadAdminTable(Table adminListTable) {
 		List<AdminVO> admins = AdminDAO.getAllAdminDetails();
 		int i = 1;
@@ -198,6 +223,11 @@ public class SuperAdminView extends VerticalLayout implements View {
 		}
 	}
 
+	/**
+	 * Builds Add admin window
+	 * @param window
+	 * @return
+	 */
 	public VerticalLayout addAdminLayout(Window window) {
 
 		VerticalLayout super_view = new VerticalLayout();
@@ -254,6 +284,13 @@ public class SuperAdminView extends VerticalLayout implements View {
 
 	}
 
+	/**
+	 * Gets the details of the loggedin admin
+	 * @param adminId
+	 * @param password
+	 * @param isSuperAdmin
+	 * @return
+	 */
 	private AdminVO getAdminVo(TextField adminId, PasswordField password, OptionGroup isSuperAdmin) {
 		AdminVO admin = new AdminVO();
 		admin.setAdminId(adminId.getValue());

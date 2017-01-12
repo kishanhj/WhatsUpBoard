@@ -31,11 +31,11 @@ public class ForgotPassword
 
 
 
-  public static  void sendMail(TextField emailId)  {
+  public static  void sendMail(TextField emailId,String password)  {
     try
     {
       toAddress = emailId.getValue();
-      content = "Your new password is Password1$";
+      content = "Your new password is "+password;
       Properties props = new Properties();
       props.put("mail.smtp.host", clbMailhost);
       props.put("mail.smtp.port", "587");

@@ -24,20 +24,20 @@ import com.vaadin.ui.themes.ValoTheme;
 
 public final class MenuView extends VerticalLayout {
 
-	/**
-	 *
-	 */
 	private static final long serialVersionUID = 1L;
 	public static final String ID = "dashboard-menu";
 	public static final String REPORTS_BADGE_ID = "dashboard-menu-reports-badge";
 	public static final String NOTIFICATIONS_BADGE_ID = "dashboard-menu-notifications-badge";
-	//private static final String STYLE_VISIBLE = "valo-menu-visible";
 	private MenuItem settingsItem;
 	WhatsUpUI ui;
 	AdminVO user;
 
+	/**
+	 * Constructor
+	 * @param ui
+	 */
 	public MenuView(WhatsUpUI ui) {
-		this.ui=ui;
+		this.ui = ui;
 		user = (AdminVO) ui.getSession().getAttribute("user");
 		setPrimaryStyleName("valo-menu");
 		setId(ID);
@@ -48,6 +48,10 @@ public final class MenuView extends VerticalLayout {
 
 	}
 
+	/**
+	 * Builds the layout
+	 * @return
+	 */
 	private VerticalLayout buildContent() {
 		final VerticalLayout menuContent = new VerticalLayout();
 		menuContent.addStyleName("sidebar");
@@ -55,28 +59,32 @@ public final class MenuView extends VerticalLayout {
 		menuContent.setSpacing(true);
 		menuContent.setMargin(true);
 
-		Component menu =  buildUserMenu();
+		Component menu = buildUserMenu();
 
-		menuContent.addComponents(buildTitle(),menu,buildUserLink(),buildUserLink1(),buildUserLink2());
-		if (user.getIsSuperAdmin()){
-			menuContent.addComponents(buildUserLink4());
+		menuContent.addComponents(buildTitle(), menu, buildStartFeedBackbutton(), buildViewFeedBackButton(), buildGenerateReportButton());
+		if (user.getIsSuperAdmin()) {
+			menuContent.addComponents(buildSuperAdminButton());
 		}
-//		menuContent.addComponent(buildToggleButton());
-//		menuContent.addComponent(buildMenuItems());
+		// menuContent.addComponent(buildToggleButton());
+		// menuContent.addComponent(buildMenuItems());
 
 		menuContent.setComponentAlignment(menu, Alignment.MIDDLE_CENTER);
 
 		return menuContent;
 	}
 
-	private Component buildUserLink4() {
+	/**
+	 * Builds SuperAdmin Button
+	 * @return
+	 */
+	private Component buildSuperAdminButton() {
 		Button generateReport = new Button();
 
 		generateReport.setCaption("Super Admin function");
-		VerticalLayout layy2 = new VerticalLayout();
-		layy2.addComponent(generateReport);
+		VerticalLayout layout = new VerticalLayout();
+		layout.addComponent(generateReport);
 		generateReport.setSizeFull();
-		layy2.setComponentAlignment(generateReport, Alignment.MIDDLE_CENTER);
+		layout.setComponentAlignment(generateReport, Alignment.MIDDLE_CENTER);
 		generateReport.addClickListener(e -> {
 			Navigator nav = getUI().getNavigator();
 			nav.navigateTo(SuperAdminView.NAME);
@@ -84,15 +92,19 @@ public final class MenuView extends VerticalLayout {
 		return generateReport;
 	}
 
-	private Component buildUserLink2() {
+	/**
+	 * Builds Generate report button
+	 * @return
+	 */
+	private Component buildGenerateReportButton() {
 
 		Button generateReport = new Button();
 
 		generateReport.setCaption("Generate Report");
-		VerticalLayout layy2 = new VerticalLayout();
-		layy2.addComponent(generateReport);
+		VerticalLayout layout = new VerticalLayout();
+		layout.addComponent(generateReport);
 		generateReport.setSizeFull();
-		layy2.setComponentAlignment(generateReport, Alignment.MIDDLE_CENTER);
+		layout.setComponentAlignment(generateReport, Alignment.MIDDLE_CENTER);
 		generateReport.addClickListener(e -> {
 			Navigator nav = getUI().getNavigator();
 			nav.navigateTo(GenreateReportView.NAME);
@@ -101,7 +113,7 @@ public final class MenuView extends VerticalLayout {
 
 	}
 
-	private Component buildUserLink1() {
+	private Component buildViewFeedBackButton() {
 
 		Button viewFeedback = new Button();
 
@@ -118,7 +130,7 @@ public final class MenuView extends VerticalLayout {
 		return viewFeedback;
 	}
 
-	private Component buildUserLink() {
+	private Component buildStartFeedBackbutton() {
 		Button startSurvey = new Button();
 
 		startSurvey.setCaption("Start Survey");
@@ -146,11 +158,16 @@ public final class MenuView extends VerticalLayout {
 		return logoWrapper;
 	}
 
+	/**
+	 * Builds the menu part
+	 * @return
+	 */
 	private Component buildUserMenu() {
 		final MenuBar settings = new MenuBar();
 		settings.addStyleName("user-menu");
 		settings.setCaptionAsHtml(true);
-		settings.setCaption("<center><strong>Welcome "+EmployeeDAO.getEmployeeName(user.getAdminId())+"</strong></center>");
+		settings.setCaption(
+				"<center><strong>Welcome " + EmployeeDAO.getEmployeeName(user.getAdminId()) + "</strong></center>");
 		settingsItem = settings.addItem("", new ThemeResource("UserImage.png"), null);
 		settingsItem.addItem("Sign Out", new Command() {
 			private static final long serialVersionUID = 1L;
@@ -171,8 +188,8 @@ public final class MenuView extends VerticalLayout {
 			public void menuSelected(MenuItem selectedItem) {
 				Window window = new Window("Change password");
 				window.setContent(changePasswordLayout(window));
-                window.center();
-                ui.addWindow(window);
+				window.center();
+				ui.addWindow(window);
 
 			}
 
@@ -181,71 +198,49 @@ public final class MenuView extends VerticalLayout {
 		return settings;
 	}
 
+	/**
+	 * Builds change password layout
+	 * @param window
+	 * @return
+	 */
+	private Component changePasswordLayout(Window window) {
+		VerticalLayout addProject = new VerticalLayout();
+		addProject.setSpacing(true);
+		addProject.setMargin(true);
 
-		private Component changePasswordLayout(Window window) {
-			VerticalLayout addProject = new VerticalLayout();
-			addProject.setSpacing(true);
-			addProject.setMargin(true);
+		PasswordField oldPassword = new PasswordField("Old Password");
+		PasswordField newPassword = new PasswordField("New Password");
 
-			PasswordField oldPassword =new PasswordField("Old Password");
-			PasswordField newPassword =new PasswordField("New Password");
-
-			Button ok_button = new Button();
-			ok_button.setCaption("Change");
-			ok_button.addClickListener(e -> {
-				String oldPasswordHash=Utils.encode(oldPassword.getValue());
-				String newPasswordHash=Utils.encode(newPassword.getValue());
-	            if(AdminDAO.changePassword(oldPasswordHash,newPasswordHash,user.getAdminId())) {
+		Button ok_button = new Button();
+		ok_button.setCaption("Change");
+		ok_button.addClickListener(e -> {
+			String oldPasswordHash = Utils.encode(oldPassword.getValue());
+			String newPasswordHash = Utils.encode(newPassword.getValue());
+			if (AdminDAO.changePassword(oldPasswordHash, newPasswordHash, user.getAdminId())) {
 				Notification.show("Succesfull Changed");
 				window.close();
-	            } else {
-	            	Notification.show("Incorrect Old Password");
-	            	oldPassword.setValue("");
-	            }
-			});
+			} else {
+				Notification.show("Incorrect Old Password");
+				oldPassword.setValue("");
+			}
+		});
 
-			Button cancel = new Button();
-			cancel.setCaption("Cancel");
-			cancel.addClickListener(e -> {
-				window.close();
-			});
+		Button cancel = new Button();
+		cancel.setCaption("Cancel");
+		cancel.addClickListener(e -> {
+			window.close();
+		});
 
-			HorizontalLayout buttons = new HorizontalLayout();
-			buttons.setSpacing(true);
-			buttons.addComponents(ok_button,cancel);
-			buttons.setComponentAlignment(cancel, Alignment.BOTTOM_RIGHT);
-			buttons.setComponentAlignment(ok_button, Alignment.BOTTOM_LEFT);
+		HorizontalLayout buttons = new HorizontalLayout();
+		buttons.setSpacing(true);
+		buttons.addComponents(ok_button, cancel);
+		buttons.setComponentAlignment(cancel, Alignment.BOTTOM_RIGHT);
+		buttons.setComponentAlignment(ok_button, Alignment.BOTTOM_LEFT);
 
-	       addProject.addComponents(oldPassword,newPassword,buttons);
+		addProject.addComponents(oldPassword, newPassword, buttons);
 
-			return addProject;
+		return addProject;
 
-		}
-
-
-
-//	private Component buildToggleButton() {
-//		Button valoMenuToggleButton = new Button("Menu", new ClickListener() {
-//			/**
-//			 *
-//			 */
-//			private static final long serialVersionUID = 1L;
-//
-//			@Override
-//			public void buttonClick(final ClickEvent event) {
-//				if (getStyleName().contains(STYLE_VISIBLE)) {
-//					removeStyleName(STYLE_VISIBLE);
-//				} else {
-//					addStyleName(STYLE_VISIBLE);
-//				}
-//			}
-//		});
-//		valoMenuToggleButton.setIcon(FontAwesome.ANDROID);
-//		valoMenuToggleButton.addStyleName("valo-menu-toggle");
-//		valoMenuToggleButton.addStyleName(ValoTheme.BUTTON_BORDERLESS);
-//		valoMenuToggleButton.addStyleName(ValoTheme.BUTTON_SMALL);
-//		return valoMenuToggleButton;
-//	}
-
+	}
 
 }

@@ -11,6 +11,10 @@ import com.vaadin.ui.themes.ValoTheme;
 public class SuccessView extends VerticalLayout implements View {
 
 	private static final long serialVersionUID = 1L;
+
+	/**
+	 * Constructor
+	 */
 	public SuccessView() {
 		VerticalLayout success = success();
 		addComponent(success);
@@ -18,31 +22,31 @@ public class SuccessView extends VerticalLayout implements View {
 		setSizeFull();
 
 	}
+   /**
+    * Builds the success view
+    * @return
+    */
+	private VerticalLayout success() {
+		VerticalLayout thankspage = new VerticalLayout();
 
+		Label title = new Label("<center>Your feedback has been saved successfully<center>");
+		Label title1 = new Label("<center>Thank you so much for your feedback<center>");
+		title.addStyleName(ValoTheme.LABEL_H2);
+		title.addStyleName(ValoTheme.LABEL_BOLD);
+		title.setContentMode(ContentMode.HTML);
+		title1.setContentMode(ContentMode.HTML);
+		thankspage.addComponents(title, title1);
+		thankspage.setComponentAlignment(title, Alignment.BOTTOM_CENTER);
+		thankspage.setComponentAlignment(title1, Alignment.TOP_CENTER);
+		thankspage.setSizeFull();
+		return thankspage;
 
-	      private VerticalLayout success() {
-	    	  VerticalLayout thankspage=new VerticalLayout();
+	}
 
-		  		Label title=new Label("<center>Your feedback has been saved successfully<center>");
-		  		Label title1=new Label("<center>Thank you so much for your feedback<center>");
-		  		title.addStyleName(ValoTheme.LABEL_H2);
-		  		title.addStyleName(ValoTheme.LABEL_BOLD);
-	            title.setContentMode(ContentMode.HTML);
-		  		title1.setContentMode(ContentMode.HTML);
-		  		thankspage.addComponents(title,title1);
-		  		thankspage.setComponentAlignment(title, Alignment.BOTTOM_CENTER);
-		  		thankspage.setComponentAlignment(title1, Alignment.TOP_CENTER);
-		  		thankspage.setSizeFull();
-		  		return thankspage;
-
-
-	  	}
 	@Override
 	public void enter(ViewChangeEvent event) {
 		// TODO Auto-generated method stub
 
 	}
-
-
 
 }

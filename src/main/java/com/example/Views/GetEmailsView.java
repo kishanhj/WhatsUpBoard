@@ -16,12 +16,21 @@ public class GetEmailsView extends VerticalLayout {
 	ComboBox month;
 	Window window;
 
+	/**
+	 * Constructor
+	 * @param month
+	 * @param win
+	 */
 	public GetEmailsView(ComboBox month, Window win) {
 		this.month = month;
 		this.window = win;
 		addComponent(init());
 	}
 
+	/**
+	 * builds the layout
+	 * @return
+	 */
 	private Component init() {
 		VerticalLayout mainLayout = new VerticalLayout();
 		TextArea emails = new TextArea("please enter comma seperated emails");

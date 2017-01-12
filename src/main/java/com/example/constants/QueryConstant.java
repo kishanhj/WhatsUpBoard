@@ -10,9 +10,9 @@ public interface QueryConstant {
 
      String GET_FEEDBACK_ID_MONTH_AND_PROJECT_QUERY="select FEEDBACK_ID from T_FEEDBACK where FEEDBACK_MONTH=?  and project_id_feedback_fk=?";
 
-     String GET_FEEDBACK_ID_MONTH_QUERY="select FEEDBACK_ID from T_FEEDBACK where FEEDBACK_MONTH=?";
+     String GET_FEEDBACK_ID_MONTH_QUERY="select FEEDBACK_ID from T_FEEDBACK where FEEDBACK_MONTH=? and project_id_feedback_fk=?";
 
-     String GET_MONTH_LIST_QUERY="select distinct FEEDBACK_MONTH from T_FEEDBACK  ";
+     String GET_MONTH_LIST_QUERY="select distinct FEEDBACK_MONTH from T_FEEDBACK where project_id_feedback_fk=? ";
 
      String GET_FEEDBACK_PROJECT_QUERY="select PROJECT_ID_FEEDBACK_FK from T_FEEDBACK where EMPLOYEE_ID=? ";
 

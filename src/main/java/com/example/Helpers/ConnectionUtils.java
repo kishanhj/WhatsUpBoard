@@ -4,10 +4,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import com.example.constants.StringConstants;
+
 public class ConnectionUtils {
-
-	// public static Connection connection;
-
 	/**
 	 * Generates a connection object
 	 *
@@ -17,18 +16,12 @@ public class ConnectionUtils {
 		Connection connection = null;
 		try {
 			if (connection == null) {
-				// System.out.println("In getConnection to load driver");
-				Class.forName("com.mysql.jdbc.Driver");
-				String url = "jdbc:mysql://localhost/Watsup_board";
-				connection = DriverManager.getConnection(url, "root", "root");
-				// System.out.println("Connection Object after loading :
-				// "+connection);
+				Class.forName(StringConstants.SQL_DRIVER);
+				String url = StringConstants.SQL_URL;
+				connection = DriverManager.getConnection(url, StringConstants.SQL_USERNAME, StringConstants.SQL_PASSWORD);
 			}
 		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
-			// System.out.println("Con failed");
-			// Notification.show("Connection Failed...Please reload and Try
-			// Again");
 		}
 
 		return connection;

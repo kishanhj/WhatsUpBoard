@@ -50,13 +50,14 @@ public class QualityFeedbackDAO {
 	}
 
 	/**
-	 * Checks whether feedback with this EmployeeId already e
+	 * Checks whether feedback with this EmployeeId already exists
 	 * @param feedbackId
-	 * @return
+	 * @return  Indicates true or false
+	 *
 	 */
 	public static boolean exists(int feedbackId) {
 		try {
-			//System.out.println("in quality feedback dao exists");
+
 			con = ConnectionUtils.getConnection();
 			PreparedStatement stmt = con.prepareStatement(QueryConstant.DOES_QUALITY_FEEDBACK_EXIST_QUERY);
 			stmt.setInt(1, feedbackId);
@@ -74,6 +75,13 @@ public class QualityFeedbackDAO {
 		}
 		return false;
 	}
+	/**
+	 * extracts the feedbacks from t_feedback_quality based on feedback_month and projectId
+	 * @param feedback_month
+	 * @param projectId
+	 * @return List of QualityFeedbackVO
+	 *
+	 */
 
 	public static List<QualityFeedbackVO> getMonthWiseFeedbacks(ComboBox feedback_month,int projectId) {
 		List<QualityFeedbackVO> feedbacks = new ArrayList<QualityFeedbackVO>();
@@ -103,6 +111,15 @@ public class QualityFeedbackDAO {
 		return null;
 
 	}
+
+	/**
+	 * extracts the feedbacks from t_feedback_quality based on feedback_month and projectId and qualityName
+	 *
+	 * @param feedback_month
+	 * @param qualityName
+	 * @param projectId
+	 * @return List of QualityFeedbackVO
+	 */
 
 	public static List<QualityFeedbackVO> getQualiyWiseFeedbacks(ComboBox feedback_month, String qualityName,int projectId) {
 		List<QualityFeedbackVO> feedbacks = new ArrayList<QualityFeedbackVO>();

@@ -48,4 +48,15 @@ public interface StringConstants {
 	String NOT_SATISFACTORY = "Not Satisfactory";
 	String SATISFACTORY = " Satisfactory";
 	String NOT_SATISFIED = "Not Satisfied";
+	String SQL_DRIVER = "com.mysql.jdbc.Driver";
+	String SQL_URL = "jdbc:mysql://localhost/Watsup_board";
+	String CONFIG_FILENAME = "config.properties";
+	String SQL_USERNAME = "root";
+	String SQL_PASSWORD = "root";
+	String UNSATISFIED_IMAGE = "sad.png";
+	String SATISFIED_IMAGE = "bad.png";
+	String A = "a";
+	String B = "b";
+	Object ADMIN = "admin";
+
 }
