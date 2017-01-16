@@ -23,9 +23,13 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.Table;
+import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Window;
 
 /**
  * Start survey view
@@ -78,12 +82,27 @@ public class StartSurveyView extends HorizontalLayout implements View {
 		feedbackMonth.setRequired(true);
 		feedbackMonth.addValidator(new MonthValidator(ValidationConstants.MONTH_VALIDATOR, feedbackMonth,user.getTProject()));
 		feedbackMonth.setValidationVisible(true);
-		content.addComponent(feedbackMonth);
+
+		Button addEmployee = new Button("Add New Employee");
+		addEmployee.addClickListener(e -> {
+			Window window = new Window("Add new Employee");
+			window.center();
+			window.setContent(addEmployeeLayout(window));
+			ui.addWindow(window);
+		});
+
+		HorizontalLayout buttons = new HorizontalLayout();
+		buttons.addComponents(feedbackMonth,addEmployee);
+		buttons.setSizeFull();
+		buttons.setComponentAlignment(feedbackMonth, Alignment.MIDDLE_LEFT);
+		buttons.setComponentAlignment(addEmployee, Alignment.MIDDLE_RIGHT);
+
+		content.addComponent(buttons);
 
 		content.setSpacing(true);
 		content.setMargin(true);
 		content.setSizeUndefined();
-		content.setComponentAlignment(feedbackMonth, Alignment.MIDDLE_LEFT);
+
 
 		Table employeelListTable = new Table("Employee List");
 		employeelListTable.setWidth("800px");
@@ -144,6 +163,33 @@ public class StartSurveyView extends HorizontalLayout implements View {
 		content.addComponent(startSurvey);
 
 		return content;
+	}
+
+	private Component addEmployeeLayout(Window window) {
+		VerticalLayout addProject = new VerticalLayout();
+		addProject.setSpacing(true);
+		addProject.setMargin(true);
+
+		TextField employeeName =new TextField("Employee Name");
+		employeeName.setRequired(true);
+		TextField emailId =new TextField("Email ID");
+		emailId.setRequired(true);
+		TextField employeeId =new TextField("Employee ID");
+		employeeId.setRequired(true);
+
+		Button ok_button = new Button();
+		ok_button.setCaption("OK");
+		ok_button.addClickListener(e -> {
+            if(!EmployeeDAO.exists(employeeId.getValue())){
+            	EmployeeDAO.addEmployee(employeeName.getValue(),employeeId.getValue(),emailId.getValue(),user.getTProject());
+			Notification.show("Succesfull added");
+            }
+            else
+            Notification.show("Employee with this ID already exist");
+			window.close();
+	});
+		addProject.addComponents(employeeName,employeeId,emailId,ok_button);
+		return addProject;
 	}
 
 	/**

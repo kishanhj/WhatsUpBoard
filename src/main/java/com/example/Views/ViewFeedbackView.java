@@ -48,6 +48,8 @@ public class ViewFeedbackView extends VerticalLayout implements View {
 		content.setMargin(true);
 		content.setSpacing(true);
 
+
+
 		feedbackMonth.setCaption("Month");
 		List<String> months = FeedbackDAO.getMonthList(user.getTProject());
 		for (String month : months)
@@ -106,6 +108,7 @@ public class ViewFeedbackView extends VerticalLayout implements View {
 		return content;
 
 	}
+
 
 	/**
 	 * Displays values in the table

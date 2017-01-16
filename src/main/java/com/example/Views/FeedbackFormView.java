@@ -28,7 +28,6 @@ import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
-import com.vaadin.ui.Notification;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
@@ -196,11 +195,6 @@ public class FeedbackFormView extends VerticalLayout implements View {
 	private HorizontalLayout buildLogoBar() {
 		HorizontalLayout logoBar = new HorizontalLayout();
 		Image brillioLogo = new Image(null, new ThemeResource(StringConstants.IMAGE_B1));
-
-//		Label title = new Label(StringConstants.TITLE_WHATSUP_BOARD);
-//		title.setContentMode(ContentMode.HTML);
-//		title.addStyleName(ValoTheme.LABEL_H2);
-//		title.addStyleName(ValoTheme.LABEL_BOLD);
 		Image title = new Image(null, new ThemeResource("logo.png"));
 
 		logoBar.setSizeFull();
@@ -236,7 +230,6 @@ public class FeedbackFormView extends VerticalLayout implements View {
 				boolean flag = QualityFeedbackDAO.addFeedbacks(qualityWiseFeedbacks);
 				if (flag) {
 					LinkCodesDAO.deleteCode(employeeIdTextField);
-					Notification.show(StringConstants.FEEDBACK_SUCCESS);
 					ui.setContent(new SuccessView());
 				}
 			} catch (ClassNotFoundException e1) {

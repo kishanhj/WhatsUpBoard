@@ -56,7 +56,11 @@ public interface QueryConstant {
 
     String GET_EMPLOYEE_QUERY="select * from t_employee where employee_id=?";
 
+    String INSERT_EMPLOYEE_QUERY="insert into T_Employee(EMPLOYEE_ID ,EMPLOYEE_EMAIL_ID ,EMPLOYEE_NAME,PROJECT_ID_EMPLOYEE_FK )values(?,?,?,?);";
+
     String GET_EMPLOYEE_COUNT_QUERY="select count(*) from T_employee where project_id_employee_fk=?";
+
+    String EMPLOYEE_EXISTS_QUERY="select * from T_employee where employee_id=?";
 
     String INSERT_CODE_QUERY="insert into t_link_codes(code_key,code_value)values(?,?)";
 

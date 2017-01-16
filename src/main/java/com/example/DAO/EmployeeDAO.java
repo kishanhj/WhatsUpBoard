@@ -138,6 +138,41 @@ public class EmployeeDAO {
 		}
 		return 0;
 	}
+
+	public static boolean exists(String Id) {
+		try{
+		con = ConnectionUtils.getConnection();
+		PreparedStatement stmt = con.prepareStatement(QueryConstant.EMPLOYEE_EXISTS_QUERY);
+		stmt.setString(1, Id);
+	    ResultSet rs = stmt.executeQuery();
+		if (rs.next()) {
+			return true;
+		}
+	} catch (SQLException e) {
+		Notification.show("Failed to close connection");
+	} finally {
+		ConnectionUtils.closeConnection(con);
 	}
+	return false;
+	}
+
+	public static void addEmployee(String name, String Id, String email, int tProject) {
+		try {
+			con = ConnectionUtils.getConnection();
+			PreparedStatement stmt = con.prepareStatement(QueryConstant.INSERT_EMPLOYEE_QUERY);
+			stmt.setString(1, Id);
+			stmt.setString(2, email);
+			stmt.setString(3, name);
+			stmt.setInt(4, tProject);
+		    stmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			ConnectionUtils.closeConnection(con);
+		}
+	}
+
+	}
+
 
 

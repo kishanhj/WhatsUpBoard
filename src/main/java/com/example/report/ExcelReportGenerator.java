@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.Properties;
 
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
@@ -208,6 +209,8 @@ public class ExcelReportGenerator {
 	public void addRow(String qualityName, String satisfactionIndicator, float percentage) {
 		int cellCount = 0;
 		percentage = percentage * 100;
+		DecimalFormat twoDForm = new DecimalFormat("#.##");
+		percentage=Float.valueOf(twoDForm.format(percentage));
 		CellStyle style = workbook.createCellStyle();
 		style.setBorderBottom(HSSFCellStyle.BORDER_MEDIUM);
 		style.setBorderTop(HSSFCellStyle.BORDER_MEDIUM);
