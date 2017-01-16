@@ -83,6 +83,12 @@
 			<artifactId>poi-ooxml</artifactId>
 			<version>3.11</version>
 		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.40</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -108,7 +114,7 @@
 							<goal>update-widgetset</goal>
 							<goal>compile</goal>
 							<!-- Comment out compile-theme goal to use on-the-fly theme compilation -->
-							<goal>compile-theme</goal>
+							<!--  <goal>compile-theme</goal>-->
 						</goals>
 					</execution>
 				</executions>

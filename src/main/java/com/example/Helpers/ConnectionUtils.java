@@ -18,6 +18,9 @@ public class ConnectionUtils {
 			if (connection == null) {
 				Class.forName(StringConstants.SQL_DRIVER);
 				String url = StringConstants.SQL_URL;
+				//String dataBaseName = new PropertyUtils().getproperty("DatabaseName");
+				//url=url+dataBaseName;
+				//System.out.println(url);
 				connection = DriverManager.getConnection(url, StringConstants.SQL_USERNAME, StringConstants.SQL_PASSWORD);
 			}
 		} catch (SQLException | ClassNotFoundException e) {

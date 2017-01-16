@@ -1578,12 +1578,16 @@ div.v-layout.v-horizontal.v-widget {
 	color: #FFFFFF;
 	font: white;
 	line-height: normal;
-	border-radius: 4px;
+	border-radius: 0px;
 	font-family: arial;
 	font-size: 15px;
 	font-weight: bold;
 	text-align: center;
 	text-decoration: none;
+}
+
+.panelcolor {
+	background: #93B81D;
 }
 
 .textStyle {
@@ -13593,7 +13597,7 @@ div.v-layout.v-horizontal.v-widget {
 
 .mytheme .v-table-header {
 	color: #89CFF0;
-	background: #4455aa;
+	background: #006400;
 	font-weight: bold;
 	text-align: center;
 }
@@ -13604,12 +13608,12 @@ div.v-layout.v-horizontal.v-widget {
 
 .mytheme .v-table-row:hover {
 	color: #FF3355;
-	background: #DFDFC4;
+	background: #FFFFFF;
 }
 
 .mytheme .v-table-row-odd:hover {
 	color: #fff;
-	background: #6475ca;
+	background: #93B81D;
 }
 
 .mytheme .v-icon {
@@ -13622,6 +13626,10 @@ div.v-layout.v-horizontal.v-widget {
 
 .mytheme .v-table-resizer {
 	display: none;
+}
+
+.mytheme .panelcolor {
+	background: #cfff87;
 }
 
 .mytheme .v-splitpanel-hsplitter-mainramhsplitpanel, .mytheme .v-splitpanel-hsplitter-mainramhsplitpanel div {

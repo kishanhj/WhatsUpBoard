@@ -40,6 +40,8 @@ public class PropertyUtils {
 	 * @return Value of the property
 	 */
 	public  String getproperty(String name) {
+		if(configProperties.isEmpty())
+			loadProperties();
 		return configProperties.getProperty(name);
 	}
 

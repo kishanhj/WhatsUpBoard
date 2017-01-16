@@ -18,10 +18,10 @@ public interface StringConstants {
 	String ERROR_MSG = "<center>You have already submitted this form<center>";
 	String STYLE_TITLE_PANEL = "titlepanel";
 	String HUNDRED_PERCENT="100%";
-	String FORTY_PERCENT="40%";
+	String FORTY_PIXEL="70px";
 	String STYLE_TEXT = "textStyle";
 	String IMAGE_B1="B1.png";
-	String TITLE_WHATSUP_BOARD="<center>WhatsUp Board Survey<center>";
+	String TITLE_WHATSUP_BOARD="<center>WHAT'S UP...??? BOARD SURVEY<center>";
 	String FEEDBACK_SUCCESS="Feedback was captured succesfully";
 	String SATISFIED="Satisfied";
 	String IMAGE_BAD="bad.png";

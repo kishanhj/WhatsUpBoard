@@ -26,7 +26,6 @@ public class SendReports
   private static String toAddressFile = "";
 
   private static String subject = "WhatsUp Board Survey report";
- // private static String replyTo = "";
   private static String attachFile = "";
 
   public SendReports(String toAddress,String month) {
@@ -46,7 +45,7 @@ public class SendReports
       Properties props = new Properties();
       props.put("mail.smtp.host", clbMailhost);
       props.put("mail.smtp.port", "587");
-      props.put("mail.smtp.auth", "BRillio@8890");
+      props.put("mail.smtp.auth", "BRIllio@8890");
 
       props.put("mail.smtp.starttls.enable", "true");
       System.out.println("SendMail - after args and props");
@@ -55,7 +54,7 @@ public class SendReports
       {
         protected PasswordAuthentication getPasswordAuthentication()
         {
-          return new PasswordAuthentication("pumaadmin@brillio.com", "BRillio@8890");
+          return new PasswordAuthentication("pumaadmin@brillio.com", "BRIllio@8890");
         }
       });
       System.out.println("SendMail - after authentication");
@@ -90,15 +89,17 @@ public class SendReports
 
       System.out.println("SendMail - after mail changes save");
       Transport transport = session.getTransport("smtp");
-      transport.connect(clbMailhost, "pumaadmin@brillio.com", "BRillio@8890");
+      transport.connect(clbMailhost, "pumaadmin@brillio.com", "BRIllio@8890");
       System.out.println("SendMail - after connection");
       transport.sendMessage(msg, msg.getAllRecipients());
+      System.out.println("SendMail - after sendMessage");
       transport.close();
       File report = new File(attachFile);
       report.delete();
     }
     catch (Exception e) {
       System.out.println(e);
+      e.printStackTrace();
     }
   }
 

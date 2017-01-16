@@ -9,6 +9,7 @@ import java.util.HashMap;
 import com.example.Helpers.ConnectionUtils;
 import com.example.constants.QueryConstant;
 import com.vaadin.server.Page;
+import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.TextField;
 
 public class LinkCodesDAO {
@@ -79,6 +80,20 @@ public class LinkCodesDAO {
 			 con = ConnectionUtils.getConnection();
 			PreparedStatement stmt = con.prepareStatement(QueryConstant.DELETE_CODE_QUERY);
 			stmt.setString(1, employeeIdTextField.getValue());
+             stmt.executeUpdate();
+		} catch (SQLException e) {
+              e.printStackTrace();
+		} finally {
+			ConnectionUtils.closeConnection(con);
+		}
+
+	}
+	public static void deleteCode(ComboBox employeeIdTextField) {
+		Connection con = null;
+		try {
+			 con = ConnectionUtils.getConnection();
+			PreparedStatement stmt = con.prepareStatement(QueryConstant.DELETE_CODE_QUERY);
+			stmt.setString(1, (String)employeeIdTextField.getValue());
              stmt.executeUpdate();
 		} catch (SQLException e) {
               e.printStackTrace();

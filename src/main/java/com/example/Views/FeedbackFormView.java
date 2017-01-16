@@ -20,7 +20,6 @@ import com.example.constants.StringConstants;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
-import com.vaadin.server.Resource;
 import com.vaadin.server.Responsive;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.shared.ui.label.ContentMode;
@@ -116,7 +115,7 @@ public class FeedbackFormView extends VerticalLayout implements View {
 	/**
 	 * Map of all quality Images
 	 */
-	Map<String, Resource> qualityImage = new HashMap<String, Resource>();
+	Map<String, Image> qualityImage = new HashMap<String, Image>();
 
 	/**
 	 *  Constructor with ui instance as parameter
@@ -162,9 +161,10 @@ public class FeedbackFormView extends VerticalLayout implements View {
 		final HorizontalLayout headerLayout = new HorizontalLayout();
 		HorizontalLayout logoBar = buildLogoBar();
 		headerLayout.addStyleName(StringConstants.STYLE_TITLE_PANEL);
+		headerLayout.setSpacing(false);
 		headerLayout.setSizeFull();
 		headerLayout.setWidth(StringConstants.HUNDRED_PERCENT);
-		headerLayout.setHeight(StringConstants.FORTY_PERCENT);
+		headerLayout.setHeight(StringConstants.FORTY_PIXEL);
 		headerLayout.addComponents(logoBar);
 		headerLayout.setExpandRatio(logoBar, 1);
 
@@ -182,7 +182,7 @@ public class FeedbackFormView extends VerticalLayout implements View {
 
 		final VerticalSplitPanel HeaderPanel = new VerticalSplitPanel();
 		HeaderPanel.setSizeFull();
-		HeaderPanel.setSplitPosition(39f, Unit.PERCENTAGE);
+		HeaderPanel.setSplitPosition(20.75f, Unit.PERCENTAGE);
 		HeaderPanel.setLocked(true);
 		HeaderPanel.setFirstComponent(vlayout);
 		HeaderPanel.setSecondComponent(feedBackForm);
@@ -304,13 +304,13 @@ public class FeedbackFormView extends VerticalLayout implements View {
 
 		VerticalLayout layout = new VerticalLayout();
 		layout.setSpacing(true);
-		layout.setMargin(true);
+	    layout.setMargin(true);
 
 		Table feedbackTable = new Table();
 		feedbackTable.setSizeFull();
-		// feedbackTable.setSizeFull();
 		feedbackTable.setPageLength(feedbackTable.size());
 		ConfigTable(feedbackTable);
+		setImageresources();
 		addRows(feedbackTable);
 
 		return feedbackTable;
@@ -328,32 +328,33 @@ public class FeedbackFormView extends VerticalLayout implements View {
 		}
 	}
 
-	// private void setImageresources() {
-	// List<Resource> Images = new ArrayList<Resource>();
-	//
-	// Resource LeadershipTouch=new ThemeResource("leadership.jpg");
-	// Resource Communication=new ThemeResource("communication.jpg");
-	// Resource TimelyRecognition=new ThemeResource("timlyrecognition2.jpg");
-	// Resource Learning=new ThemeResource("learning.jpg");
-	// Resource FeedForward=new ThemeResource("feedforward1.jpg");
-	// Resource HRResponsiveness=new ThemeResource("HR.jpg");
-	//
-	//
-	// Images.add( LeadershipTouch);
-	// Images.add(Communication);
-	// Images.add(TimelyRecognition);
-	// Images.add(Learning);
-	// Images.add(FeedForward);
-	// Images.add(HRResponsiveness);
-	//
-	// int count=1;
-	//
-	// for(QualityVO quality:qualities){
-	// qualityImage.put(quality.getQualityName(), Images.get(count++));
-	// }
-	//
-	//
-	// }
+	/**
+	 * Initializes the qualityImages Map
+	 */
+	 private void setImageresources() {
+	 Map<String,Image> Images = new HashMap<String,Image>();
+
+	 Image LeadershipTouch=new Image(null,new ThemeResource("leadership.jpg"));
+	 Image Communication=new Image(null,new ThemeResource("communication.jpg"));
+	 Image TimelyRecognition=new Image(null,new ThemeResource("timlyrecognition2.jpg"));
+	 Image Learning=new Image(null,new ThemeResource("learning.jpg"));
+	 Image FeedForward=new Image(null,new ThemeResource("feedforward.jpg"));
+	 Image HRResponsiveness=new Image(null,new ThemeResource("HR.jpg"));
+
+
+	 Images.put("Leadership Touch",LeadershipTouch);
+	 Images.put("Communication",Communication);
+	 Images.put("Timely Recognition",TimelyRecognition);
+	 Images.put("Learning",Learning);
+	 Images.put("Feed Forward",FeedForward);
+	 Images.put("HR Responsiveness",HRResponsiveness);
+
+	 for(QualityVO quality:qualities){
+	 qualityImage.put(quality.getQualityName(), Images.get(quality.getQualityName()));
+	 }
+
+
+	 }
 
 	/**
 	 * creates components to be added to the table
@@ -366,10 +367,11 @@ public class FeedbackFormView extends VerticalLayout implements View {
 	private void createFields(Table feedbackTable, String qualityName, String qualityDesc, int rowNumber) {
 		Button qualityButton = new Button(StringConstants.SATISFIED);
 		TextArea reason = new TextArea();
+		qualityDesc = qualityName+":   "+qualityDesc;
 		ConfigButtonAndText(qualityButton, reason);
 		qualityButtons.put(qualityName, qualityButton);
 		qualityReason.put(qualityName, reason);
-		feedbackTable.addItem(new Object[] { qualityName, qualityDesc, qualityButton, reason }, rowNumber);
+		feedbackTable.addItem(new Object[] { qualityImage.get(qualityName), qualityDesc, qualityButton, reason }, rowNumber);
 	}
 
 	/**
@@ -395,14 +397,14 @@ public class FeedbackFormView extends VerticalLayout implements View {
 	 * @param feedbackTable
 	 */
 	private void ConfigTable(Table feedbackTable) {
-		feedbackTable.addContainerProperty(StringConstants.AREA, String.class, null);
+		feedbackTable.addContainerProperty(StringConstants.AREA, Image.class, null);
 		feedbackTable.addContainerProperty(StringConstants.DESCRIPTION, String.class, null);
 		feedbackTable.addContainerProperty(StringConstants.SATISFIED, Button.class, null);
 		feedbackTable.addContainerProperty(StringConstants.REASON, TextArea.class, null);
 
-		feedbackTable.setColumnWidth(StringConstants.AREA, 250);
+		feedbackTable.setColumnWidth(StringConstants.AREA, 200);
 		feedbackTable.setColumnWidth(StringConstants.DESCRIPTION, 490);
-		feedbackTable.setColumnWidth(StringConstants.SATISFIED, 190);
+		feedbackTable.setColumnWidth(StringConstants.SATISFIED, 250);
 		feedbackTable.setColumnWidth(StringConstants.REASON, 400);
 
 		feedbackTable.setColumnAlignment(StringConstants.AREA, Align.CENTER);
@@ -410,7 +412,7 @@ public class FeedbackFormView extends VerticalLayout implements View {
 		feedbackTable.setColumnAlignment(StringConstants.SATISFIED, Align.CENTER);
 		feedbackTable.setColumnAlignment(StringConstants.REASON, Align.CENTER);
 
-		feedbackTable.setColumnExpandRatio(StringConstants.AREA, 9);
+		feedbackTable.setColumnExpandRatio(StringConstants.AREA, 15);
 		feedbackTable.setColumnExpandRatio(StringConstants.DESCRIPTION, 20);
 		feedbackTable.setColumnExpandRatio(StringConstants.SATISFIED,8);
 		feedbackTable.setColumnExpandRatio(StringConstants.REASON, 20);
@@ -442,7 +444,7 @@ public class FeedbackFormView extends VerticalLayout implements View {
 	 */
 	private HorizontalLayout buildTextFields() {
 		HorizontalLayout fieldLayout = new HorizontalLayout();
-		fieldLayout.setSpacing(true);
+		//fieldLayout.setSpacing(false);
 
 		nameTextField = new TextField(StringConstants.NAME);
 		nameTextField.setValue(employee.getEmployeeName());
@@ -463,15 +465,12 @@ public class FeedbackFormView extends VerticalLayout implements View {
 		projectField.setRequired(true);
 		projectField.setNullSelectionAllowed(false);
 		String projectName = ProjectDAO.getProjectName(employee.getProjectId());
-		List<String> projects = ProjectDAO.getAllProjects();
-		for (String projectname : projects) {
-			projectField.addItem(projectname);
-		}
+		projectField.addItem(projectName);
 		projectField.setValue(projectName);
 		projectField.setReadOnly(true);
 
 		fieldLayout.addComponents(nameTextField, employeeIdTextField, monthField, projectField);
-		fieldLayout.setMargin(true);
+		//fieldLayout.setMargin(true);
 		fieldLayout.setSpacing(true);
 
 		return fieldLayout;

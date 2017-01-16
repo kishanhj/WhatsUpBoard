@@ -7,12 +7,14 @@
 .mytheme {
   @include addons;
   @include mytheme;
+
   .v-table-cell-wrapper {
     white-space: normal;
     }
+
     .v-table-header {
     color: 		#89CFF0;
-    background: #4455aa;
+    background: #006400;
     font-weight: bold;
     text-align: center;
   }
@@ -23,13 +25,14 @@
 
   .v-table-row:hover{
     color:#FF3355;
-    background:#DFDFC4;
-   // background: #FFFFFF;
+    background: #FFFFFF;
   }
+
   .v-table-row-odd:hover {
     color: #fff;
-    background: #6475ca;
+    background: #93B81D;
 }
+
 .v-icon{
 font-size:40px;
   }
@@ -41,14 +44,13 @@ font-size:40px;
   display: none;
 }
 
+.panelcolor {
+background:#cfff87;
+}
+
 .v-splitpanel-hsplitter-mainramhsplitpanel,
 .v-splitpanel-hsplitter-mainramhsplitpanel div  {
     width: 0px;
 }
-
- .v-scrollable{
- height:auto !important;
- width::auto !important;
- }
 }
 

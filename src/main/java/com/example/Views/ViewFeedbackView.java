@@ -5,11 +5,13 @@ import java.util.List;
 
 import com.example.DAO.EmployeeDAO;
 import com.example.DAO.FeedbackDAO;
+import com.example.DAO.LinkCodesDAO;
 import com.example.DAO.QualityDAO;
 import com.example.DAO.QualityFeedbackDAO;
 import com.example.VO.AdminVO;
 import com.example.VO.QualityFeedbackVO;
 import com.example.WhatsUpApp.WhatsUpUI;
+import com.example.constants.IntegerConstants;
 import com.vaadin.data.util.IndexedContainer;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
@@ -43,7 +45,6 @@ public class ViewFeedbackView extends VerticalLayout implements View {
 	private VerticalLayout init() {
 		VerticalLayout content = new VerticalLayout();
 		ComboBox feedbackMonth = new ComboBox();
-		;
 		content.setMargin(true);
 		content.setSpacing(true);
 
@@ -82,6 +83,8 @@ public class ViewFeedbackView extends VerticalLayout implements View {
 			viewFeedbackTable.setPageLength(Math.min(feedbackContainer.size(), 10));
 			int employeeCount = EmployeeDAO.getEmployeeCount(user.getTProject());
 			completedFeedbacks.setValue((float) feedbackContainer.size()/(employeeCount * 6));
+			if(completedFeedbacks.getValue() == IntegerConstants.ONE)
+				LinkCodesDAO.deleteCode(feedbackMonth);
 		});
 
 		feedbackContainer.addContainerProperty("Employee Name", String.class, null);

@@ -38,7 +38,7 @@ public SendMail(String toAddress,String content) {
       Properties props = new Properties();
       props.put("mail.smtp.host", clbMailhost);
       props.put("mail.smtp.port", "587");
-      props.put("mail.smtp.auth", "BRillio@8890");
+      props.put("mail.smtp.auth", "BRIllio@8890");
 
       props.put("mail.smtp.starttls.enable", "true");
      // System.out.println("SendMail - after args and props");
@@ -47,7 +47,7 @@ public SendMail(String toAddress,String content) {
       {
         protected PasswordAuthentication getPasswordAuthentication()
         {
-          return new PasswordAuthentication("pumaadmin@brillio.com", "BRillio@8890");
+          return new PasswordAuthentication("pumaadmin@brillio.com", "BRIllio@8890");
         }
       });
      // System.out.println("SendMail - after authentication");
@@ -77,7 +77,7 @@ public SendMail(String toAddress,String content) {
 
     //  System.out.println("SendMail - after mail changes save");
       Transport transport = session.getTransport("smtp");
-      transport.connect(clbMailhost, "pumaadmin@brillio.com", "BRillio@8890");
+      transport.connect(clbMailhost, "pumaadmin@brillio.com", "BRIllio@8890");
     //  System.out.println("SendMail - after connection");
       transport.sendMessage(msg, msg.getAllRecipients());
       transport.close();

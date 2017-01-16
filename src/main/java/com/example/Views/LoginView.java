@@ -44,13 +44,13 @@ public class LoginView extends VerticalLayout implements View {
 		this.ui=ui;
 		Component loginForm = buildLoginForm();
 
-		Panel p=new Panel();
-		p.setSizeUndefined();
-		p.setContent(loginForm);
+		Panel mainPanel=new Panel();
+		mainPanel.setSizeUndefined();
+		mainPanel.setContent(loginForm);
 
 		setSizeFull();
-		addComponent(p);
-		setComponentAlignment(p, Alignment.MIDDLE_CENTER);
+		addComponent(mainPanel);
+		setComponentAlignment(mainPanel, Alignment.MIDDLE_CENTER);
 
 	}
 
