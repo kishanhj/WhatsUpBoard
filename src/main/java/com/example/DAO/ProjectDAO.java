@@ -9,6 +9,7 @@ import java.util.List;
 
 import com.example.Helpers.ConnectionUtils;
 import com.example.VO.ProjectVO;
+import com.example.constants.IntegerConstants;
 import com.example.constants.QueryConstant;
 
 public class ProjectDAO {
@@ -149,8 +150,14 @@ public class ProjectDAO {
 
 		try {
 			con = ConnectionUtils.getConnection();
-			PreparedStatement stmt = con.prepareStatement(QueryConstant.ADD_PROJECT_QUERY);
-			stmt.setString(1, projectName);
+			int projectId = 0;
+			PreparedStatement stmt = con.prepareStatement(QueryConstant.MAX_PROJECT_ID_QUERY);
+			ResultSet rs= stmt.executeQuery();
+			if(rs.next())
+				 projectId=rs.getInt(1)+IntegerConstants.ONE;
+			stmt = con.prepareStatement(QueryConstant.ADD_PROJECT_QUERY);
+			stmt.setInt(1, projectId);
+			stmt.setString(2, projectName);
 			return stmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();

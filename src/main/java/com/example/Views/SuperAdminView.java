@@ -70,9 +70,9 @@ public class SuperAdminView extends VerticalLayout implements View {
 		addProject.addClickListener(e -> {
 			Window window = new Window("Add new Admin");
 			window.center();
+			window.setResizable(false);
 			window.setContent(addProjectLayout(window));
 			ui.addWindow(window);
-			loadAdminTable(projectListTable);
 
 		});
 
@@ -103,6 +103,7 @@ public class SuperAdminView extends VerticalLayout implements View {
 	 * @param window
 	 * @return
 	 */
+	@SuppressWarnings("deprecation")
 	private Component addProjectLayout(Window window) {
 		VerticalLayout addProject = new VerticalLayout();
 		addProject.setSpacing(true);
@@ -113,10 +114,15 @@ public class SuperAdminView extends VerticalLayout implements View {
 		Button ok_button = new Button();
 		ok_button.setCaption("OK");
 		ok_button.addClickListener(e -> {
+			if(project.getValue().equals("") || project.getValue() == null)
+			{
+				new Notification("ERROR", "Project name cannot be empty",Notification.TYPE_ERROR_MESSAGE).show(ui.getPage());
+				return ;
+			}
             if(ProjectDAO.addProject(project.getValue()) != IntegerConstants.ZERO)
 			Notification.show("Succesfull added");
             else
-            Notification.show("Project with this Name already exist");
+            	new Notification("ERROR", "Project with this ID alredy exist",Notification.TYPE_ERROR_MESSAGE).show(ui.getPage());
 			window.close();
 			loadProjectTable(projectListTable);
 		});
@@ -145,6 +151,7 @@ public class SuperAdminView extends VerticalLayout implements View {
 	 */
 	private void loadProjectTable(Table projectListTable) {
 		List<ProjectVO> projects = ProjectDAO.getAllProjectDetails();
+		projectListTable.removeAllItems();
 		int i = 1;
 		for (ProjectVO project : projects) {
 			projectListTable.addItem(new Object[] { project.getProjectId(), project.getProjectName() }, i++);
@@ -190,6 +197,7 @@ public class SuperAdminView extends VerticalLayout implements View {
 		addAdmin.addClickListener(e -> {
 			Window window = new Window("Add new Admin");
 			window.center();
+			window.setResizable(false);
 			window.setContent(addAdminLayout(window));
 			ui.addWindow(window);
 			loadAdminTable(adminListTable);
@@ -212,6 +220,7 @@ public class SuperAdminView extends VerticalLayout implements View {
 	 */
 	private void loadAdminTable(Table adminListTable) {
 		List<AdminVO> admins = AdminDAO.getAllAdminDetails();
+		adminListTable.removeAllItems();
 		int i = 1;
 		String projectName;
 		String adminName;
@@ -228,6 +237,7 @@ public class SuperAdminView extends VerticalLayout implements View {
 	 * @param window
 	 * @return
 	 */
+	@SuppressWarnings("deprecation")
 	public VerticalLayout addAdminLayout(Window window) {
 
 		VerticalLayout super_view = new VerticalLayout();
@@ -238,12 +248,14 @@ public class SuperAdminView extends VerticalLayout implements View {
 		adminId.addValidator(new EmployeeIdValidator("Invalid ID", adminId));
 
 		PasswordField password = new PasswordField("Password");
+		password.setRequired(true);
 
 		OptionGroup isSuperAdmin = new OptionGroup("Is Super Admin");
 		isSuperAdmin.addItem(1);
 		isSuperAdmin.setItemCaption(1, "Yes");
 		isSuperAdmin.addItem(2);
 		isSuperAdmin.setItemCaption(2, "No");
+		isSuperAdmin.setValue(2);
 
 		super_view.addComponents(adminId, password, isSuperAdmin);
 		super_view.setComponentAlignment(adminId, Alignment.BOTTOM_CENTER);
@@ -253,14 +265,26 @@ public class SuperAdminView extends VerticalLayout implements View {
 		HorizontalLayout buttons = new HorizontalLayout();
 		buttons.setSpacing(true);
 
-		Button ok_button = new Button();
-		ok_button.setCaption("OK");
+		Button ok_button = new Button("OK");
 		ok_button.addClickListener(e -> {
+			//password.validate();
+			if(!EmployeeDAO.exists(adminId.getValue()))
+			{
+				new Notification("ERROR", "Invalid ID",Notification.TYPE_ERROR_MESSAGE).show(ui.getPage());
+				//window.close();
+				return ;
+			}
+			if(password.getValue().equals("") || password.getValue() == null)
+			{
+				new Notification("ERROR", "PassWord cannot be empty",Notification.TYPE_ERROR_MESSAGE).show(ui.getPage());
+				//window.close();
+				return ;
+			}
 			AdminVO admin = getAdminVo(adminId, password, isSuperAdmin);
 			if(AdminDAO.addAdmin(admin) != IntegerConstants.ZERO)
 			Notification.show("Succesfull added");
 			else
-			Notification.show("Admin with this ID alredy exist");
+			new Notification("ERROR", "Admin with this ID alredy exist",Notification.TYPE_ERROR_MESSAGE).show(ui.getPage());
 			window.close();
 			loadAdminTable(adminListTable);
 		});

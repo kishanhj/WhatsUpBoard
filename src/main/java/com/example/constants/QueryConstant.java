@@ -36,7 +36,9 @@ public interface QueryConstant {
 
     String GET_PROJECT_NAME_QUERY="select project_name from t_project where project_id=?";
 
-    String ADD_PROJECT_QUERY="insert into t_project(project_name) values(?)";
+    String ADD_PROJECT_QUERY="insert into t_project(project_id,project_name) values(?,?)";
+
+    String MAX_PROJECT_ID_QUERY="select max(project_id) from t_project";
 
     String GET_ALL_EMPLOYEE_QUERY="select * from t_employee";
 

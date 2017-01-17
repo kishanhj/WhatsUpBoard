@@ -20,14 +20,17 @@ import com.example.constants.StringConstants;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.server.Page;
 import com.vaadin.server.Responsive;
 import com.vaadin.server.ThemeResource;
+import com.vaadin.shared.Position;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
@@ -143,6 +146,7 @@ public class FeedbackFormView extends VerticalLayout implements View {
 		setSizeFull();
 		addComponents(feedBackForm);
 		setComponentAlignment(feedBackForm, Alignment.MIDDLE_CENTER);
+		buildNotification();
 	}
 
 	/**
@@ -186,6 +190,22 @@ public class FeedbackFormView extends VerticalLayout implements View {
 		mainLayout.addComponents(HeaderPanel);
 		return mainLayout;
 	}
+
+
+	/**
+	 * Builds the notification window
+	 */
+	private void buildNotification() {
+		Notification notification = new Notification("Welcome to WHATSUP Board Feedback page ");
+		notification.setDescription("Please click on the smily on the row where you are unhappy ");
+       notification.setHtmlContentAllowed(true);
+       notification.setStyleName("tray dark small closable login-help");
+       notification.setPosition(Position.BOTTOM_CENTER);
+       notification.setDelayMsec(20000);
+       notification.show(Page.getCurrent());
+
+	}
+
 
 	/**
 	 * Builds the LogoBar
@@ -327,12 +347,12 @@ public class FeedbackFormView extends VerticalLayout implements View {
 	 private void setImageresources() {
 	 Map<String,Image> Images = new HashMap<String,Image>();
 
-	 Image LeadershipTouch=new Image(null,new ThemeResource("leadership.jpg"));
-	 Image Communication=new Image(null,new ThemeResource("communication.jpg"));
-	 Image TimelyRecognition=new Image(null,new ThemeResource("timlyrecognition2.jpg"));
-	 Image Learning=new Image(null,new ThemeResource("learning.jpg"));
-	 Image FeedForward=new Image(null,new ThemeResource("feedforward.jpg"));
-	 Image HRResponsiveness=new Image(null,new ThemeResource("HR.jpg"));
+	 Image LeadershipTouch=new Image(null,new ThemeResource("leadership.png"));
+	 Image Communication=new Image(null,new ThemeResource("communication.png"));
+	 Image TimelyRecognition=new Image(null,new ThemeResource("Timely rec.png"));
+	 Image Learning=new Image(null,new ThemeResource("learning.png"));
+	 Image FeedForward=new Image(null,new ThemeResource("feedforward.png"));
+	 Image HRResponsiveness=new Image(null,new ThemeResource("hr.png"));
 
 
 	 Images.put("Leadership Touch",LeadershipTouch);

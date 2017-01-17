@@ -58,5 +58,6 @@ public interface StringConstants {
 	String A = "a";
 	String B = "b";
 	Object ADMIN = "admin";
+	String STYLE_BUTTON_ICON = "buttonStyle";
 
 }

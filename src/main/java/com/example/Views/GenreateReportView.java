@@ -119,8 +119,7 @@ public class GenreateReportView extends VerticalLayout implements View {
 
 		});
 
-		content.addComponent(viewFeedbackTable);
-		content.addComponents(completedFeedbacks, generateReport);
+		content.addComponents(completedFeedbacks,viewFeedbackTable,generateReport);
 		return content;
 
 	}

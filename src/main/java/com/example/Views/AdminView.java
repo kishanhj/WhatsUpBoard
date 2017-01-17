@@ -62,6 +62,7 @@ public class AdminView extends VerticalLayout implements View {
 		navigator.addView(ViewFeedbackView.NAME, new ViewFeedbackView(ui));
 		navigator.addView(GenreateReportView.NAME, new GenreateReportView(ui));
 		navigator.addView(SuperAdminView.NAME, new SuperAdminView(ui));
+		navigator.addView("",new ErrorView());
 		navigator.navigateTo(StartSurveyView.NAME);
 
 		setSizeFull();

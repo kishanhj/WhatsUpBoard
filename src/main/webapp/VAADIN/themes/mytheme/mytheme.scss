@@ -105,11 +105,30 @@ text-decoration: none;
 width:100%
 }
 
+.v-button-buttonStyle {
+font-size:30px;
+color:green;
+}
+
+.buttonStyle {
+    font-size: 30px;
+    color: green;
+}
+
 
 @import "../valo/valo.scss";
 
 @mixin mytheme {
   @include valo;
 
-  // Insert your own theme rules here
+.v-button-buttonStyle {
+font-size:30px;
+color:green;
+}
+
+.mytheme .v-icon {
+    font-size: 30px;
+    color:green;
+}
+
 }

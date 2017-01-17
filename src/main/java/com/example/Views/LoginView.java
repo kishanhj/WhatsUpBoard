@@ -77,6 +77,7 @@ public class LoginView extends VerticalLayout implements View {
             	Window window = new Window("Forgot Password");
             	window.setContent(buildForgotPWLayout(window));
             	window.center();
+            	window.setResizable(false);
             	ui.addWindow(window);
             });
 

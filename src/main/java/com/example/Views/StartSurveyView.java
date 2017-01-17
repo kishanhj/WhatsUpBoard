@@ -20,6 +20,7 @@ import com.example.validators.MonthValidator;
 import com.vaadin.data.util.IndexedContainer;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
@@ -30,6 +31,7 @@ import com.vaadin.ui.Table;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
+import com.vaadin.ui.themes.ValoTheme;
 
 /**
  * Start survey view
@@ -52,6 +54,16 @@ public class StartSurveyView extends HorizontalLayout implements View {
 	 * Holds information of currently Loggedin User
 	 */
 	private AdminVO user;
+
+	/**
+	 * Employee table
+	 */
+	Table employeelListTable;
+
+	/**
+	 * List of employees
+	 */
+	List<EmployeeVO> employees;
 
 	/**
 	 * Constructor with ui instance as parameter
@@ -84,8 +96,13 @@ public class StartSurveyView extends HorizontalLayout implements View {
 		feedbackMonth.setValidationVisible(true);
 
 		Button addEmployee = new Button("Add New Employee");
+		addEmployee.setIcon(FontAwesome.USER_PLUS);
+		addEmployee.addStyleName(StringConstants.STYLE_BUTTON_ICON);
+		addEmployee.addStyleName(ValoTheme.BUTTON_ICON_ONLY);
+		addEmployee.addStyleName(ValoTheme.BUTTON_LARGE);
 		addEmployee.addClickListener(e -> {
 			Window window = new Window("Add new Employee");
+			window.setResizable(false);
 			window.center();
 			window.setContent(addEmployeeLayout(window));
 			ui.addWindow(window);
@@ -103,8 +120,8 @@ public class StartSurveyView extends HorizontalLayout implements View {
 		content.setMargin(true);
 		content.setSizeUndefined();
 
-
-		Table employeelListTable = new Table("Employee List");
+		employees = EmployeeDAO.getEmployeeDetails();
+	    employeelListTable = new Table("Employee List");
 		employeelListTable.setWidth("800px");
 		employeelListTable.setPageLength(8);
 
@@ -129,16 +146,7 @@ public class StartSurveyView extends HorizontalLayout implements View {
 		content.addComponent(employeelListTable);
 		content.setComponentAlignment(employeelListTable, Alignment.MIDDLE_CENTER);
 
-		List<EmployeeVO> employees = EmployeeDAO.getEmployeeDetails();
-		int i = 1;
-		String projectName;
-		for (EmployeeVO employee : employees) {
-			if (user.getTProject() == employee.getProjectId()) {
-				projectName = ProjectDAO.getProjectName(employee.getProjectId());
-				employeelListTable.addItem(new Object[] { employee.getEmployeeName(), employee.getEmployeeId(),
-						projectName, employee.getEmployeeEmailId() }, i++);
-			}
-		}
+		loadEmployeeTable();
 		content.addComponent(employeelListTable);
 		content.setComponentAlignment(employeelListTable, Alignment.MIDDLE_CENTER);
 
@@ -165,6 +173,29 @@ public class StartSurveyView extends HorizontalLayout implements View {
 		return content;
 	}
 
+	/**
+	 * loads the employee table data
+	 */
+	private void loadEmployeeTable() {
+		employees = EmployeeDAO.getEmployeeDetails();
+		employeelListTable.removeAllItems();
+		int i = 1;
+		String projectName;
+		for (EmployeeVO employee : employees) {
+			if (user.getTProject() == employee.getProjectId()) {
+				projectName = ProjectDAO.getProjectName(employee.getProjectId());
+				employeelListTable.addItem(new Object[] { employee.getEmployeeName(), employee.getEmployeeId(),
+						projectName, employee.getEmployeeEmailId() }, i++);
+			}
+		}
+
+	}
+
+	/**
+	 * Generates a layout to add an employee
+	 * @param window
+	 * @return
+	 */
 	private Component addEmployeeLayout(Window window) {
 		VerticalLayout addProject = new VerticalLayout();
 		addProject.setSpacing(true);
@@ -186,6 +217,7 @@ public class StartSurveyView extends HorizontalLayout implements View {
             }
             else
             Notification.show("Employee with this ID already exist");
+            loadEmployeeTable();
 			window.close();
 	});
 		addProject.addComponents(employeeName,employeeId,emailId,ok_button);

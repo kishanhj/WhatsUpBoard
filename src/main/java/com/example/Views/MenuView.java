@@ -189,6 +189,7 @@ public final class MenuView extends VerticalLayout {
 				Window window = new Window("Change password");
 				window.setContent(changePasswordLayout(window));
 				window.center();
+				window.setResizable(false);
 				ui.addWindow(window);
 
 			}
@@ -203,6 +204,7 @@ public final class MenuView extends VerticalLayout {
 	 * @param window
 	 * @return
 	 */
+	@SuppressWarnings("deprecation")
 	private Component changePasswordLayout(Window window) {
 		VerticalLayout addProject = new VerticalLayout();
 		addProject.setSpacing(true);
@@ -214,13 +216,18 @@ public final class MenuView extends VerticalLayout {
 		Button ok_button = new Button();
 		ok_button.setCaption("Change");
 		ok_button.addClickListener(e -> {
+			if(newPassword.getValue().equals("") || newPassword.getValue() == null)
+			{
+				new Notification("ERROR", "Password cannot be empty",Notification.TYPE_ERROR_MESSAGE).show(ui.getPage());
+				return ;
+			}
 			String oldPasswordHash = Utils.encode(oldPassword.getValue());
 			String newPasswordHash = Utils.encode(newPassword.getValue());
 			if (AdminDAO.changePassword(oldPasswordHash, newPasswordHash, user.getAdminId())) {
 				Notification.show("Succesfull Changed");
 				window.close();
 			} else {
-				Notification.show("Incorrect Old Password");
+				new Notification("ERROR", "Incorrect Old Password",Notification.TYPE_ERROR_MESSAGE).show(ui.getPage());
 				oldPassword.setValue("");
 			}
 		});

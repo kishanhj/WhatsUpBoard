@@ -104,7 +104,7 @@ public class ViewFeedbackView extends VerticalLayout implements View {
 		viewFeedbackTable.setContainerDataSource(feedbackContainer);
 
 
-		content.addComponents(viewFeedbackTable,completedFeedbacks);
+		content.addComponents(completedFeedbacks,viewFeedbackTable);
 		return content;
 
 	}

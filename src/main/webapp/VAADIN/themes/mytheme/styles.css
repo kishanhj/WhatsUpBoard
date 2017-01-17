@@ -1,12 +1,12 @@
 /**
  * Checks if a list contains a certain value.
- * 
+ *
  * @param {list} $list - the list to check
  * @param {value} $var - the value to search for
  * @param {bool} $recursive (false) - should any contained lists be checked for the value
- * 
+ *
  * @return {bool} true if the value is found from the list, false otherwise
- * 
+ *
  * @group lists
  */
 
@@ -283,9 +283,9 @@
 
 /**
  * Outputs cross-browser Valo-specific linear gradient background-image declarations.
- * 
+ *
  * @group style
- * 
+ *
  * @param {color} $color ($v-background-color) - The base color for the gradient color stops
  * @param {list} $gradient ($v-gradient) - Valo-specific gradient value. See the documentation for $v-gradient.
  * @param {color} $fallback (null) - A fallback color for browser which do not support linear gradients (IE8 and IE9 in particular). If null, the base $color is used instead.
@@ -307,11 +307,11 @@
 
 /**
  * Ouput selectors and properties to vertically center elements inside their parent.
- * 
+ *
  * @param {string} $to-align (()) - The selector to match the elements which you wish to align vertically. The targeted elements should be inline or inline-block elements.
  * @param {string} $align (middle) - The vertical-align value, e.g. top, middle, bottom
  * @param {string} $pseudo-element (after) - Which pseudo element to use for the vertical align guide
- * 
+ *
  * @group util
  */
 
@@ -536,7 +536,7 @@
 
 /**
  * Outputs the context menu selectors and styles, which is used by Table and Tree for instance.
- * 
+ *
  * @requires {mixin} valo-selection-item-style
  * @requires {mixin} valo-selection-item-selected-style
  */
@@ -586,7 +586,7 @@
 /**
  *
  *
- * @param {string} $primary-stylename (v-absolutelayout) - 
+ * @param {string} $primary-stylename (v-absolutelayout) -
  *
  * @group absolutelayout
  */
@@ -609,16 +609,16 @@
  */
 
 /**
- * A list of colors for custom event colors. Can be an empty list of you don't 
+ * A list of colors for custom event colors. Can be an empty list of you don't
  * need any custom event colors.
- * 
+ *
  * @example javascript
  * // Java code
  * // 'event' is an instance of EditableCalendarEvent
  * event.setStyleName("color1"); // 1st color in the list
  * event.setStyleName("color2"); // 2nd color in the list
  * // etc.
- * 
+ *
  * @group calendar
  */
 
@@ -632,7 +632,7 @@
  */
 
 /**
- * Outputs the global selectors and properties for the ColorPicker component - styles which are 
+ * Outputs the global selectors and properties for the ColorPicker component - styles which are
  * considered mandatory for the component to work properly.
  *
  * @param {string} $primary-stylename (v-colorpicker) - the primary style name for the selectors
@@ -652,14 +652,14 @@
 /**
  * The amount of spacing between different widgets in a component group.
  * If null, a computed value is used ($v-border size * -1, or 1px if $v-border size is 0)
- * 
+ *
  * @group csslayout
  */
 
 /**
  *
  *
- * @param {string} $primary-stylename (v-customcomponent) - 
+ * @param {string} $primary-stylename (v-customcomponent) -
  *
  * @group customcomponent
  */
@@ -667,7 +667,7 @@
 /**
  *
  *
- * @param {string} $primary-stylename (v-customlayout) - 
+ * @param {string} $primary-stylename (v-customlayout) -
  *
  * @group customlayout
  */
@@ -683,16 +683,16 @@
 
 /**
  * Outputs the styles and selectors for the DragAndDropWrapper component.
- * 
+ *
  * @param {string} $primary-stylename (v-ddwrapper) - the primary style name for the selectors
- * 
+ *
  * @group drag-n-drop
  */
 
 /**
  *
  *
- * @param {string} $primary-stylename (v-form) - 
+ * @param {string} $primary-stylename (v-form) -
  *
  * @group form
  */
@@ -759,14 +759,14 @@
 /**
  *
  *
- * @param {string} $primary-stylename (v-gridlayout) - 
+ * @param {string} $primary-stylename (v-gridlayout) -
  *
  * @group gridlayout
  */
 
 /**
  * The font weight for headers.
- * 
+ *
  * @group label
  */
 
@@ -778,7 +778,7 @@
 /**
  *
  *
- * @param {string} $primary-stylename (v-loginform) - 
+ * @param {string} $primary-stylename (v-loginform) -
  *
  * @group loginform
  */
@@ -786,8 +786,8 @@
 /**
  *
  *
- * @param {string} $primary-stylename (v-menubar) - 
- * @param {bool} $include-additional-styles - 
+ * @param {string} $primary-stylename (v-menubar) -
+ * @param {bool} $include-additional-styles -
  *
  * @group menubar
  */
@@ -795,7 +795,7 @@
 /**
  *
  *
- * @param {string} $primary-stylename (v-nativebutton) - 
+ * @param {string} $primary-stylename (v-nativebutton) -
  *
  * @group nativebutton
  */
@@ -803,7 +803,7 @@
 /**
  *
  *
- * @param {string} $primary-stylename (v-select) - 
+ * @param {string} $primary-stylename (v-select) -
  *
  * @group nativeselect
  */
@@ -816,8 +816,8 @@
 /**
  *
  *
- * @param {string} $primary-stylename (v-select-optiongroup) - 
- * @param {bool} $include-additional-styles - 
+ * @param {string} $primary-stylename (v-select-optiongroup) -
+ * @param {bool} $include-additional-styles -
  *
  * @group optiongroup
  */
@@ -874,8 +874,8 @@
 /**
  *
  *
- * @param {string} $primary-stylename (v-splitpanel) - 
- * @param {bool} $include-additional-styles - 
+ * @param {string} $primary-stylename (v-splitpanel) -
+ * @param {bool} $include-additional-styles -
  *
  * @group splitpanel
  */
@@ -887,7 +887,7 @@
 
 /**
  * Should the tabsheet content changes be animated.
- * 
+ *
  * @group tabsheet
  */
 
@@ -913,7 +913,7 @@
 /**
  *
  *
- * @param {string} $primary-stylename (v-treetable) - 
+ * @param {string} $primary-stylename (v-treetable) -
  *
  * @group treetable
  */
@@ -921,7 +921,7 @@
 /**
  *
  *
- * @param {string} $primary-stylename (v-select-twincol) - 
+ * @param {string} $primary-stylename (v-select-twincol) -
  *
  * @group twin-column-select
  */
@@ -1106,6 +1106,8 @@
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
+	font-size:30px;
+	color:green;
 }
 
 .v-icon, .v-errorindicator, .v-required-field-indicator {
@@ -1606,13 +1608,13 @@ div.v-layout.v-horizontal.v-widget {
 
 /**
  * Checks if a list contains a certain value.
- * 
+ *
  * @param {list} $list - the list to check
  * @param {value} $var - the value to search for
  * @param {bool} $recursive (false) - should any contained lists be checked for the value
- * 
+ *
  * @return {bool} true if the value is found from the list, false otherwise
- * 
+ *
  * @group lists
  */
 
@@ -1627,9 +1629,9 @@ div.v-layout.v-horizontal.v-widget {
 
 /**
  * Outputs cross-browser Valo-specific linear gradient background-image declarations.
- * 
+ *
  * @group style
- * 
+ *
  * @param {color} $color ($v-background-color) - The base color for the gradient color stops
  * @param {list} $gradient ($v-gradient) - Valo-specific gradient value. See the documentation for $v-gradient.
  * @param {color} $fallback (null) - A fallback color for browser which do not support linear gradients (IE8 and IE9 in particular). If null, the base $color is used instead.
@@ -1651,11 +1653,11 @@ div.v-layout.v-horizontal.v-widget {
 
 /**
  * Ouput selectors and properties to vertically center elements inside their parent.
- * 
+ *
  * @param {string} $to-align (()) - The selector to match the elements which you wish to align vertically. The targeted elements should be inline or inline-block elements.
  * @param {string} $align (middle) - The vertical-align value, e.g. top, middle, bottom
  * @param {string} $pseudo-element (after) - Which pseudo element to use for the vertical align guide
- * 
+ *
  * @group util
  */
 
@@ -1880,7 +1882,7 @@ div.v-layout.v-horizontal.v-widget {
 
 /**
  * Outputs the context menu selectors and styles, which is used by Table and Tree for instance.
- * 
+ *
  * @requires {mixin} valo-selection-item-style
  * @requires {mixin} valo-selection-item-selected-style
  */
@@ -1930,7 +1932,7 @@ div.v-layout.v-horizontal.v-widget {
 /**
  *
  *
- * @param {string} $primary-stylename (v-absolutelayout) - 
+ * @param {string} $primary-stylename (v-absolutelayout) -
  *
  * @group absolutelayout
  */
@@ -1953,16 +1955,16 @@ div.v-layout.v-horizontal.v-widget {
  */
 
 /**
- * A list of colors for custom event colors. Can be an empty list of you don't 
+ * A list of colors for custom event colors. Can be an empty list of you don't
  * need any custom event colors.
- * 
+ *
  * @example javascript
  * // Java code
  * // 'event' is an instance of EditableCalendarEvent
  * event.setStyleName("color1"); // 1st color in the list
  * event.setStyleName("color2"); // 2nd color in the list
  * // etc.
- * 
+ *
  * @group calendar
  */
 
@@ -1976,7 +1978,7 @@ div.v-layout.v-horizontal.v-widget {
  */
 
 /**
- * Outputs the global selectors and properties for the ColorPicker component - styles which are 
+ * Outputs the global selectors and properties for the ColorPicker component - styles which are
  * considered mandatory for the component to work properly.
  *
  * @param {string} $primary-stylename (v-colorpicker) - the primary style name for the selectors
@@ -1996,14 +1998,14 @@ div.v-layout.v-horizontal.v-widget {
 /**
  * The amount of spacing between different widgets in a component group.
  * If null, a computed value is used ($v-border size * -1, or 1px if $v-border size is 0)
- * 
+ *
  * @group csslayout
  */
 
 /**
  *
  *
- * @param {string} $primary-stylename (v-customcomponent) - 
+ * @param {string} $primary-stylename (v-customcomponent) -
  *
  * @group customcomponent
  */
@@ -2011,7 +2013,7 @@ div.v-layout.v-horizontal.v-widget {
 /**
  *
  *
- * @param {string} $primary-stylename (v-customlayout) - 
+ * @param {string} $primary-stylename (v-customlayout) -
  *
  * @group customlayout
  */
@@ -2027,16 +2029,16 @@ div.v-layout.v-horizontal.v-widget {
 
 /**
  * Outputs the styles and selectors for the DragAndDropWrapper component.
- * 
+ *
  * @param {string} $primary-stylename (v-ddwrapper) - the primary style name for the selectors
- * 
+ *
  * @group drag-n-drop
  */
 
 /**
  *
  *
- * @param {string} $primary-stylename (v-form) - 
+ * @param {string} $primary-stylename (v-form) -
  *
  * @group form
  */
@@ -2103,14 +2105,14 @@ div.v-layout.v-horizontal.v-widget {
 /**
  *
  *
- * @param {string} $primary-stylename (v-gridlayout) - 
+ * @param {string} $primary-stylename (v-gridlayout) -
  *
  * @group gridlayout
  */
 
 /**
  * The font weight for headers.
- * 
+ *
  * @group label
  */
 
@@ -2122,7 +2124,7 @@ div.v-layout.v-horizontal.v-widget {
 /**
  *
  *
- * @param {string} $primary-stylename (v-loginform) - 
+ * @param {string} $primary-stylename (v-loginform) -
  *
  * @group loginform
  */
@@ -2130,8 +2132,8 @@ div.v-layout.v-horizontal.v-widget {
 /**
  *
  *
- * @param {string} $primary-stylename (v-menubar) - 
- * @param {bool} $include-additional-styles - 
+ * @param {string} $primary-stylename (v-menubar) -
+ * @param {bool} $include-additional-styles -
  *
  * @group menubar
  */
@@ -2139,7 +2141,7 @@ div.v-layout.v-horizontal.v-widget {
 /**
  *
  *
- * @param {string} $primary-stylename (v-nativebutton) - 
+ * @param {string} $primary-stylename (v-nativebutton) -
  *
  * @group nativebutton
  */
@@ -2147,7 +2149,7 @@ div.v-layout.v-horizontal.v-widget {
 /**
  *
  *
- * @param {string} $primary-stylename (v-select) - 
+ * @param {string} $primary-stylename (v-select) -
  *
  * @group nativeselect
  */
@@ -2160,8 +2162,8 @@ div.v-layout.v-horizontal.v-widget {
 /**
  *
  *
- * @param {string} $primary-stylename (v-select-optiongroup) - 
- * @param {bool} $include-additional-styles - 
+ * @param {string} $primary-stylename (v-select-optiongroup) -
+ * @param {bool} $include-additional-styles -
  *
  * @group optiongroup
  */
@@ -2218,8 +2220,8 @@ div.v-layout.v-horizontal.v-widget {
 /**
  *
  *
- * @param {string} $primary-stylename (v-splitpanel) - 
- * @param {bool} $include-additional-styles - 
+ * @param {string} $primary-stylename (v-splitpanel) -
+ * @param {bool} $include-additional-styles -
  *
  * @group splitpanel
  */
@@ -2231,7 +2233,7 @@ div.v-layout.v-horizontal.v-widget {
 
 /**
  * Should the tabsheet content changes be animated.
- * 
+ *
  * @group tabsheet
  */
 
@@ -2257,7 +2259,7 @@ div.v-layout.v-horizontal.v-widget {
 /**
  *
  *
- * @param {string} $primary-stylename (v-treetable) - 
+ * @param {string} $primary-stylename (v-treetable) -
  *
  * @group treetable
  */
@@ -2265,7 +2267,7 @@ div.v-layout.v-horizontal.v-widget {
 /**
  *
  *
- * @param {string} $primary-stylename (v-select-twincol) - 
+ * @param {string} $primary-stylename (v-select-twincol) -
  *
  * @group twin-column-select
  */
@@ -2798,8 +2800,8 @@ div.v-layout.v-horizontal.v-widget {
 	color: #2d612d;
 	border-radius: 6px;
 	border: 2px solid #b9c5b9;
-	
-	
+
+
 }
 
 .mytheme .v-verticallayout-card  > .v-margin-top, .mytheme .v-horizontallayout-card  > .v-margin-top {
@@ -2842,13 +2844,13 @@ div.v-layout.v-horizontal.v-widget {
 	padding: 0 17px;
 	color: #102010;
 	font-weight: 500;
-	
-	
+
+
 	border-radius: 6px;
 	border: 2px solid #a4afa4;
 	background: #EBFAEB;
-	
-	
+
+
 }
 
 .mytheme .v-button:before {
@@ -2930,13 +2932,13 @@ div.v-layout.v-horizontal.v-widget {
 	padding: 0 17px;
 	color: #f4f6f1;
 	font-weight: 500;
-	
-	
+
+
 	border-radius: 6px;
 	border: 2px solid #69853f;
 	background: #96be5a;
-	
-	
+
+
 	padding: 0 19px;
 	font-weight: bold;
 	min-width: 81px;
@@ -2973,13 +2975,13 @@ div.v-layout.v-horizontal.v-widget {
 	padding: 0 17px;
 	color: #eaf4e9;
 	font-weight: 500;
-	
-	
+
+
 	border-radius: 6px;
 	border: 2px solid #1e6916;
 	background: #2c9720;
-	
-	
+
+
 }
 
 .mytheme .v-button-friendly:after {
@@ -3009,13 +3011,13 @@ div.v-layout.v-horizontal.v-widget {
 	padding: 0 17px;
 	color: #f9f0ef;
 	font-weight: 500;
-	
-	
+
+
 	border-radius: 6px;
 	border: 2px solid #a53129;
 	background: #ed473b;
-	
-	
+
+
 }
 
 .mytheme .v-button-danger:after {
@@ -3142,10 +3144,10 @@ div.v-layout.v-horizontal.v-widget {
 .mytheme .v-button-tiny {
 	height: 28px;
 	padding: 0 14px;
-	
-	
+
+
 	font-size: 12px;
-	
+
 	border-radius: 6px;
 }
 
@@ -3160,10 +3162,10 @@ div.v-layout.v-horizontal.v-widget {
 .mytheme .v-button-small {
 	height: 31px;
 	padding: 0 15px;
-	
-	
+
+
 	font-size: 14px;
-	
+
 	border-radius: 6px;
 }
 
@@ -3178,10 +3180,10 @@ div.v-layout.v-horizontal.v-widget {
 .mytheme .v-button-large {
 	height: 44px;
 	padding: 0 20px;
-	
-	
+
+
 	font-size: 20px;
-	
+
 	border-radius: 6px;
 }
 
@@ -3196,10 +3198,10 @@ div.v-layout.v-horizontal.v-widget {
 .mytheme .v-button-huge {
 	height: 59px;
 	padding: 0 27px;
-	
-	
+
+
 	font-size: 26px;
-	
+
 	border-radius: 6px;
 }
 
@@ -3329,13 +3331,13 @@ div.v-layout.v-horizontal.v-widget {
 	padding: 0 10px;
 	color: #102010;
 	font-weight: 500;
-	
-	
+
+
 	border-radius: 6px;
 	border: 2px solid #a4afa4;
 	background: #EBFAEB;
-	
-	
+
+
 	padding: 0;
 	height: 19px;
 }
@@ -3454,13 +3456,13 @@ div.v-layout.v-horizontal.v-widget {
 	padding: 0 8px;
 	color: #102010;
 	font-weight: 500;
-	
-	
+
+
 	border-radius: 5px;
 	border: 2px solid #a4afa4;
 	background: #EBFAEB;
-	
-	
+
+
 	padding: 0;
 	height: 16px;
 }
@@ -3579,13 +3581,13 @@ div.v-layout.v-horizontal.v-widget {
 	padding: 0 11px;
 	color: #102010;
 	font-weight: 500;
-	
-	
+
+
 	border-radius: 6px;
 	border: 2px solid #a4afa4;
 	background: #EBFAEB;
-	
-	
+
+
 	padding: 0;
 	height: 22px;
 }
@@ -3667,7 +3669,7 @@ div.v-layout.v-horizontal.v-widget {
 	user-select: text;
 	margin: 0;
 	font: inherit;
-	
+
 	font-weight: 400;
 	line-height: normal;
 	height: 37px;
@@ -3676,8 +3678,8 @@ div.v-layout.v-horizontal.v-widget {
 	border: 2px solid #a4afa4;
 	background: white;
 	color: #2c632c;
-	
-	
+
+
 	-webkit-transition: box-shadow 180ms, border 180ms;
 	-moz-transition: box-shadow 180ms, border 180ms;
 	transition: box-shadow 180ms, border 180ms;
@@ -4031,8 +4033,8 @@ div.v-layout.v-horizontal.v-widget {
 	user-select: none;
 	background: #EBFAEB;
 	cursor: inherit;
-	
-	
+
+
 	border: 2px solid #a4afa4;
 	text-shadow: inherit;
 	text-overflow: ellipsis;
@@ -4102,7 +4104,7 @@ div.v-layout.v-horizontal.v-widget {
 
 .mytheme .v-filterselect-tiny {
 	height: 28px;
-	
+
 	font-size: 12px;
 }
 
@@ -4121,14 +4123,14 @@ div.v-layout.v-horizontal.v-widget {
 	user-select: text;
 	margin: 0;
 	font: inherit;
-	
+
 	font-weight: 400;
 	line-height: normal;
 	height: 28px;
-	
+
 	padding: 3px 5px;
-	
-	
+
+
 	-webkit-transition: box-shadow 180ms, border 180ms;
 	-moz-transition: box-shadow 180ms, border 180ms;
 	transition: box-shadow 180ms, border 180ms;
@@ -4154,7 +4156,7 @@ div.v-layout.v-horizontal.v-widget {
 }
 
 .mytheme .v-filterselect-tiny span.v-icon {
-	
+
 	width: 28px;
 	line-height: 1;
 	padding-top: 0.12em;
@@ -4230,7 +4232,7 @@ div.v-layout.v-horizontal.v-widget {
 
 .mytheme .v-filterselect-compact, .mytheme .v-filterselect-small {
 	height: 31px;
-	
+
 }
 
 .mytheme .v-filterselect-compact [class*="input"], .mytheme .v-filterselect-small [class*="input"] {
@@ -4248,14 +4250,14 @@ div.v-layout.v-horizontal.v-widget {
 	user-select: text;
 	margin: 0;
 	font: inherit;
-	
+
 	font-weight: 400;
 	line-height: normal;
 	height: 31px;
-	
+
 	padding: 3px 6px;
-	
-	
+
+
 	-webkit-transition: box-shadow 180ms, border 180ms;
 	-moz-transition: box-shadow 180ms, border 180ms;
 	transition: box-shadow 180ms, border 180ms;
@@ -4281,7 +4283,7 @@ div.v-layout.v-horizontal.v-widget {
 }
 
 .mytheme .v-filterselect-compact span.v-icon, .mytheme .v-filterselect-small span.v-icon {
-	
+
 	width: 31px;
 	line-height: 1;
 	padding-top: 0.12em;
@@ -4361,7 +4363,7 @@ div.v-layout.v-horizontal.v-widget {
 
 .mytheme .v-filterselect-large {
 	height: 44px;
-	
+
 	font-size: 20px;
 }
 
@@ -4380,14 +4382,14 @@ div.v-layout.v-horizontal.v-widget {
 	user-select: text;
 	margin: 0;
 	font: inherit;
-	
+
 	font-weight: 400;
 	line-height: normal;
 	height: 44px;
-	
+
 	padding: 5px 8px;
-	
-	
+
+
 	-webkit-transition: box-shadow 180ms, border 180ms;
 	-moz-transition: box-shadow 180ms, border 180ms;
 	transition: box-shadow 180ms, border 180ms;
@@ -4413,7 +4415,7 @@ div.v-layout.v-horizontal.v-widget {
 }
 
 .mytheme .v-filterselect-large span.v-icon {
-	
+
 	width: 44px;
 	line-height: 1;
 	padding-top: 0.12em;
@@ -4489,7 +4491,7 @@ div.v-layout.v-horizontal.v-widget {
 
 .mytheme .v-filterselect-huge {
 	height: 59px;
-	
+
 	font-size: 26px;
 }
 
@@ -4508,14 +4510,14 @@ div.v-layout.v-horizontal.v-widget {
 	user-select: text;
 	margin: 0;
 	font: inherit;
-	
+
 	font-weight: 400;
 	line-height: normal;
 	height: 59px;
-	
+
 	padding: 7px 10px;
-	
-	
+
+
 	-webkit-transition: box-shadow 180ms, border 180ms;
 	-moz-transition: box-shadow 180ms, border 180ms;
 	transition: box-shadow 180ms, border 180ms;
@@ -4541,7 +4543,7 @@ div.v-layout.v-horizontal.v-widget {
 }
 
 .mytheme .v-filterselect-huge span.v-icon {
-	
+
 	width: 59px;
 	line-height: 1;
 	padding-top: 0.12em;
@@ -4651,8 +4653,8 @@ div.v-layout.v-horizontal.v-widget {
 	color: #2d612d;
 	border-radius: 6px;
 	border: 2px solid #b9c5b9;
-	
-	
+
+
 }
 
 .mytheme .v-csslayout-card  > .v-margin-top {
@@ -4839,13 +4841,13 @@ div.v-layout.v-horizontal.v-widget {
 	user-select: text;
 	margin: 0;
 	font: inherit;
-	
+
 	font-weight: 400;
 	line-height: normal;
 	height: 37px;
 	border-radius: 0;
 	padding: 4px 7px;
-	
+
 	-webkit-box-shadow: none;
 	box-shadow: none;
 	-webkit-transition: box-shadow 180ms, border 180ms;
@@ -5236,7 +5238,7 @@ div.v-layout.v-horizontal.v-widget {
 }
 
 .mytheme .v-grid-row-focused > td {
-	
+
 }
 
 .mytheme .v-grid-header th {
@@ -5246,7 +5248,7 @@ div.v-layout.v-horizontal.v-widget {
 	font-weight: inherit;
 	border-left: 2px solid #b8bfb8;
 	border-bottom: 2px solid #b8bfb8;
-	
+
 	text-align: left;
 }
 
@@ -5292,7 +5294,7 @@ div.v-layout.v-horizontal.v-widget {
 	border-left: 2px solid #b8bfb8;
 	border-top: 2px solid #b8bfb8;
 	border-bottom: none;
-	
+
 }
 
 .mytheme .v-grid-footer td:first-child {
@@ -5766,7 +5768,7 @@ div.v-layout.v-horizontal.v-widget {
 	user-select: text;
 	margin: 0;
 	font: inherit;
-	
+
 	font-weight: 400;
 	line-height: normal;
 	height: 37px;
@@ -5775,8 +5777,8 @@ div.v-layout.v-horizontal.v-widget {
 	border: 2px solid #a4afa4;
 	background: white;
 	color: #2c632c;
-	
-	
+
+
 	-webkit-transition: box-shadow 180ms, border 180ms;
 	-moz-transition: box-shadow 180ms, border 180ms;
 	transition: box-shadow 180ms, border 180ms;
@@ -5860,14 +5862,14 @@ div.v-layout.v-horizontal.v-widget {
 	user-select: text;
 	margin: 0;
 	font: inherit;
-	
+
 	font-weight: 400;
 	line-height: normal;
 	height: 28px;
 	border-radius: 6px;
 	padding: 3px 7px;
-	
-	
+
+
 	-webkit-transition: box-shadow 180ms, border 180ms;
 	-moz-transition: box-shadow 180ms, border 180ms;
 	transition: box-shadow 180ms, border 180ms;
@@ -5892,14 +5894,14 @@ div.v-layout.v-horizontal.v-widget {
 	user-select: text;
 	margin: 0;
 	font: inherit;
-	
+
 	font-weight: 400;
 	line-height: normal;
 	height: 31px;
 	border-radius: 6px;
 	padding: 3px 8px;
-	
-	
+
+
 	-webkit-transition: box-shadow 180ms, border 180ms;
 	-moz-transition: box-shadow 180ms, border 180ms;
 	transition: box-shadow 180ms, border 180ms;
@@ -5927,14 +5929,14 @@ div.v-layout.v-horizontal.v-widget {
 	user-select: text;
 	margin: 0;
 	font: inherit;
-	
+
 	font-weight: 400;
 	line-height: normal;
 	height: 44px;
 	border-radius: 6px;
 	padding: 5px 10px;
-	
-	
+
+
 	-webkit-transition: box-shadow 180ms, border 180ms;
 	-moz-transition: box-shadow 180ms, border 180ms;
 	transition: box-shadow 180ms, border 180ms;
@@ -5959,14 +5961,14 @@ div.v-layout.v-horizontal.v-widget {
 	user-select: text;
 	margin: 0;
 	font: inherit;
-	
+
 	font-weight: 400;
 	line-height: normal;
 	height: 59px;
 	border-radius: 6px;
 	padding: 7px 12px;
-	
-	
+
+
 	-webkit-transition: box-shadow 180ms, border 180ms;
 	-moz-transition: box-shadow 180ms, border 180ms;
 	transition: box-shadow 180ms, border 180ms;
@@ -6233,7 +6235,7 @@ div.v-layout.v-horizontal.v-widget {
 	user-select: text;
 	margin: 0;
 	font: inherit;
-	
+
 	font-weight: 400;
 	line-height: normal;
 	height: 37px;
@@ -6242,8 +6244,8 @@ div.v-layout.v-horizontal.v-widget {
 	border: 2px solid #a4afa4;
 	background: white;
 	color: #2c632c;
-	
-	
+
+
 	-webkit-transition: box-shadow 180ms, border 180ms;
 	-moz-transition: box-shadow 180ms, border 180ms;
 	transition: box-shadow 180ms, border 180ms;
@@ -6336,15 +6338,15 @@ div.v-layout.v-horizontal.v-widget {
 	user-select: text;
 	margin: 0;
 	font: inherit;
-	
+
 	font-weight: 400;
 	line-height: normal;
 	height: 28px;
 	border-radius: 6px;
 	padding: 6px;
-	
-	
-	
+
+
+
 	-webkit-transition: box-shadow 180ms, border 180ms;
 	-moz-transition: box-shadow 180ms, border 180ms;
 	transition: box-shadow 180ms, border 180ms;
@@ -6378,15 +6380,15 @@ div.v-layout.v-horizontal.v-widget {
 	user-select: text;
 	margin: 0;
 	font: inherit;
-	
+
 	font-weight: 400;
 	line-height: normal;
 	height: 31px;
 	border-radius: 6px;
 	padding: 6px;
-	
-	
-	
+
+
+
 	-webkit-transition: box-shadow 180ms, border 180ms;
 	-moz-transition: box-shadow 180ms, border 180ms;
 	transition: box-shadow 180ms, border 180ms;
@@ -6420,15 +6422,15 @@ div.v-layout.v-horizontal.v-widget {
 	user-select: text;
 	margin: 0;
 	font: inherit;
-	
+
 	font-weight: 400;
 	line-height: normal;
 	height: 44px;
 	border-radius: 6px;
 	padding: 6px;
-	
-	
-	
+
+
+
 	-webkit-transition: box-shadow 180ms, border 180ms;
 	-moz-transition: box-shadow 180ms, border 180ms;
 	transition: box-shadow 180ms, border 180ms;
@@ -6462,15 +6464,15 @@ div.v-layout.v-horizontal.v-widget {
 	user-select: text;
 	margin: 0;
 	font: inherit;
-	
+
 	font-weight: 400;
 	line-height: normal;
 	height: 59px;
 	border-radius: 6px;
 	padding: 6px;
-	
-	
-	
+
+
+
 	-webkit-transition: box-shadow 180ms, border 180ms;
 	-moz-transition: box-shadow 180ms, border 180ms;
 	transition: box-shadow 180ms, border 180ms;
@@ -6522,7 +6524,7 @@ div.v-layout.v-horizontal.v-widget {
 	user-select: text;
 	margin: 0;
 	font: inherit;
-	
+
 	font-weight: 400;
 	line-height: normal;
 	height: 37px;
@@ -6531,8 +6533,8 @@ div.v-layout.v-horizontal.v-widget {
 	border: 2px solid #a4afa4;
 	background: white;
 	color: #2c632c;
-	
-	
+
+
 	-webkit-transition: box-shadow 180ms, border 180ms;
 	-moz-transition: box-shadow 180ms, border 180ms;
 	transition: box-shadow 180ms, border 180ms;
@@ -7160,15 +7162,15 @@ div.v-layout.v-horizontal.v-widget {
 	user-select: text;
 	margin: 0;
 	font: inherit;
-	
+
 	font-weight: 400;
 	line-height: normal;
 	height: 28px;
 	border-radius: 6px;
 	padding: 3px 7px;
-	
-	
-	
+
+
+
 	-webkit-transition: box-shadow 180ms, border 180ms;
 	-moz-transition: box-shadow 180ms, border 180ms;
 	transition: box-shadow 180ms, border 180ms;
@@ -7275,15 +7277,15 @@ div.v-layout.v-horizontal.v-widget {
 	user-select: text;
 	margin: 0;
 	font: inherit;
-	
+
 	font-weight: 400;
 	line-height: normal;
 	height: 31px;
 	border-radius: 6px;
 	padding: 3px 8px;
-	
-	
-	
+
+
+
 	-webkit-transition: box-shadow 180ms, border 180ms;
 	-moz-transition: box-shadow 180ms, border 180ms;
 	transition: box-shadow 180ms, border 180ms;
@@ -7395,15 +7397,15 @@ div.v-layout.v-horizontal.v-widget {
 	user-select: text;
 	margin: 0;
 	font: inherit;
-	
+
 	font-weight: 400;
 	line-height: normal;
 	height: 44px;
 	border-radius: 6px;
 	padding: 5px 10px;
-	
-	
-	
+
+
+
 	-webkit-transition: box-shadow 180ms, border 180ms;
 	-moz-transition: box-shadow 180ms, border 180ms;
 	transition: box-shadow 180ms, border 180ms;
@@ -7511,15 +7513,15 @@ div.v-layout.v-horizontal.v-widget {
 	user-select: text;
 	margin: 0;
 	font: inherit;
-	
+
 	font-weight: 400;
 	line-height: normal;
 	height: 59px;
 	border-radius: 6px;
 	padding: 7px 12px;
-	
-	
-	
+
+
+
 	-webkit-transition: box-shadow 180ms, border 180ms;
 	-moz-transition: box-shadow 180ms, border 180ms;
 	transition: box-shadow 180ms, border 180ms;
@@ -7836,13 +7838,13 @@ div.v-layout.v-horizontal.v-widget {
 	padding: 0 17px;
 	color: #102010;
 	font-weight: 500;
-	
+
 	cursor: default;
 	border-radius: 6px;
 	border: 2px solid #a4afa4;
 	background: #EBFAEB;
-	
-	
+
+
 	padding: 0;
 	text-align: left;
 	line-height: 33px;
@@ -7913,13 +7915,13 @@ div.v-layout.v-horizontal.v-widget {
 	padding: 0 15px;
 	color: inherit;
 	font-weight: 500;
-	
+
 	cursor: pointer;
 	border-radius: 0;
 	border: 2px solid #a4afa4;
 	background: #EBFAEB;
-	
-	
+
+
 	background: transparent;
 	-webkit-box-shadow: none;
 	box-shadow: none;
@@ -8006,14 +8008,14 @@ div.v-layout.v-horizontal.v-widget {
 
 .mytheme .v-menubar > .v-menubar-menuitem-selected {
 	color: #f4f6f1;
-	
-	
-	
+
+
+
 	border-radius: 0;
 	border: 2px solid #69853f;
 	background: #96be5a;
-	
-	
+
+
 	border-top-width: 0;
 	border-left-width: 0;
 	border-bottom-width: 0;
@@ -8149,9 +8151,9 @@ div.v-layout.v-horizontal.v-widget {
 .mytheme .v-menubar-small {
 	height: 31px;
 	padding: 0 15px;
-	
+
 	font-weight: 500;
-	
+
 	cursor: default;
 	border-radius: 6px;
 	padding: 0;
@@ -8302,13 +8304,13 @@ div.v-layout.v-horizontal.v-widget {
 	padding: 0 10px;
 	color: #102010;
 	font-weight: 500;
-	
-	
+
+
 	border-radius: 6px;
 	border: 2px solid #a4afa4;
 	background: #EBFAEB;
-	
-	
+
+
 	padding: 0;
 	height: 19px;
 }
@@ -8460,13 +8462,13 @@ div.v-layout.v-horizontal.v-widget {
 	padding: 0 8px;
 	color: #102010;
 	font-weight: 500;
-	
-	
+
+
 	border-radius: 5px;
 	border: 2px solid #a4afa4;
 	background: #EBFAEB;
-	
-	
+
+
 	padding: 0;
 	height: 16px;
 }
@@ -8584,13 +8586,13 @@ div.v-layout.v-horizontal.v-widget {
 	padding: 0 8px;
 	color: #102010;
 	font-weight: 500;
-	
-	
+
+
 	border-radius: 5px;
 	border: 2px solid #a4afa4;
 	background: #EBFAEB;
-	
-	
+
+
 	padding: 0;
 	height: 16px;
 }
@@ -8742,13 +8744,13 @@ div.v-layout.v-horizontal.v-widget {
 	padding: 0 11px;
 	color: #102010;
 	font-weight: 500;
-	
-	
+
+
 	border-radius: 6px;
 	border: 2px solid #a4afa4;
 	background: #EBFAEB;
-	
-	
+
+
 	padding: 0;
 	height: 22px;
 }
@@ -8866,13 +8868,13 @@ div.v-layout.v-horizontal.v-widget {
 	padding: 0 11px;
 	color: #102010;
 	font-weight: 500;
-	
-	
+
+
 	border-radius: 6px;
 	border: 2px solid #a4afa4;
 	background: #EBFAEB;
-	
-	
+
+
 	padding: 0;
 	height: 22px;
 }
@@ -9822,13 +9824,13 @@ div.v-layout.v-horizontal.v-widget {
 	padding: 0 17px;
 	color: #102010;
 	font-weight: 500;
-	
-	
+
+
 	border-radius: 6px;
 	border: 2px solid #a4afa4;
 	background: #EBFAEB;
-	
-	
+
+
 	position: absolute;
 	z-index: 2;
 	top: 0;
@@ -9930,8 +9932,8 @@ div.v-layout.v-horizontal.v-widget {
 
 .mytheme tbody.v-drag-element tr {
 	display: block;
-	
-	
+
+
 	-webkit-box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 	border-radius: 6px;
@@ -10191,8 +10193,8 @@ div.v-layout.v-horizontal.v-widget {
 	padding: 0 17px;
 	color: #102010;
 	font-weight: 500;
-	
-	
+
+
 	border-radius: 6px;
 	border: 2px solid #a4afa4;
 	background: #EBFAEB;
@@ -10244,8 +10246,8 @@ div.v-layout.v-horizontal.v-widget {
 	padding: 0 17px;
 	color: #102010;
 	font-weight: 500;
-	
-	
+
+
 	border-radius: 6px;
 	border: 2px solid #a4afa4;
 	background: #EBFAEB;
@@ -10292,8 +10294,8 @@ div.v-layout.v-horizontal.v-widget {
 	padding: 0 17px;
 	color: #102010;
 	font-weight: 500;
-	
-	
+
+
 	border-radius: 6px;
 	border: 2px solid #a4afa4;
 	background: #EBFAEB;
@@ -10359,8 +10361,8 @@ div.v-layout.v-horizontal.v-widget {
 	padding: 0 17px;
 	color: #102010;
 	font-weight: 500;
-	
-	
+
+
 	border-radius: 6px;
 	border: 2px solid #a4afa4;
 	background: #EBFAEB;
@@ -10421,8 +10423,8 @@ div.v-layout.v-horizontal.v-widget {
 	border-radius: 6px;
 	height: inherit;
 	background: #96be5a;
-	
-	
+
+
 	border: 2px solid #69853f;
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
@@ -10449,8 +10451,8 @@ div.v-layout.v-horizontal.v-widget {
 	border-radius: 6px;
 	height: inherit;
 	background: #96be5a;
-	
-	
+
+
 	border: 2px solid #69853f;
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
@@ -10525,7 +10527,7 @@ div.v-layout.v-horizontal.v-widget {
 	margin: 16px 11px;
 	white-space: nowrap;
 	overflow: hidden;
-	
+
 }
 
 .mytheme .v-slider-base:before {
@@ -10543,8 +10545,8 @@ div.v-layout.v-horizontal.v-widget {
 	border-radius: 6px;
 	height: inherit;
 	background: #96be5a;
-	
-	
+
+
 	border: 2px solid #69853f;
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
@@ -10578,13 +10580,13 @@ div.v-layout.v-horizontal.v-widget {
 	padding: 0 17px;
 	color: #102010;
 	font-weight: 500;
-	
-	
+
+
 	border-radius: 6px;
 	border: 2px solid #a4afa4;
 	background: #EBFAEB;
-	
-	
+
+
 }
 
 .mytheme .v-slider-handle:before:after {
@@ -11251,8 +11253,8 @@ div.v-layout.v-horizontal.v-widget {
 	color: #2d612d;
 	border-radius: 6px;
 	border: 2px solid #b9c5b9;
-	
-	
+
+
 	overflow: visible !important;
 }
 
@@ -11269,8 +11271,8 @@ div.v-layout.v-horizontal.v-widget {
 	color: #2a5e2a;
 	font-weight: 400;
 	font-size: 14px;
-	
-	
+
+
 	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.05);
 	border-radius: 4px 4px 0 0;
 }
@@ -11378,8 +11380,8 @@ div.v-layout.v-horizontal.v-widget {
 	color: #2d612d;
 	border-radius: 6px;
 	border: 2px solid #b9c5b9;
-	
-	
+
+
 	background-color: #EBFAEB;
 	background-image: -webkit-linear-gradient(top, #EBFAEB 0%, #EBFAEB 100%);
 	background-image: linear-gradient(to bottom,#EBFAEB 0%, #EBFAEB 100%);
@@ -11434,8 +11436,8 @@ div.v-layout.v-horizontal.v-widget {
 	color: #2a5e2a;
 	font-weight: 400;
 	font-size: 14px;
-	
-	
+
+
 	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.05);
 	display: block;
 	background: transparent;
@@ -12083,13 +12085,13 @@ div.v-layout.v-horizontal.v-widget {
 	font-size: 2.4em;
 	margin-top: 1.4em;
 	margin-bottom: 1em;
-	
+
 	letter-spacing: -0.03em;
 }
 
 .mytheme h2, .mytheme .v-label-h2 {
 	font-size: 1.6em;
-	
+
 	margin-top: 1.6em;
 	margin-bottom: 0.77em;
 	letter-spacing: -0.02em;
@@ -12097,7 +12099,7 @@ div.v-layout.v-horizontal.v-widget {
 
 .mytheme h3, .mytheme .v-label-h3 {
 	font-size: 1.2em;
-	
+
 	margin-top: 1.8em;
 	margin-bottom: 0.77em;
 	letter-spacing: 0;
@@ -12455,7 +12457,7 @@ div.v-layout.v-horizontal.v-widget {
 	user-select: text;
 	margin: 0;
 	font: inherit;
-	
+
 	font-weight: 400;
 	line-height: normal;
 	height: 37px;
@@ -12464,8 +12466,8 @@ div.v-layout.v-horizontal.v-widget {
 	border: 2px solid #a4afa4;
 	background: white;
 	color: #2c632c;
-	
-	
+
+
 	-webkit-transition: box-shadow 180ms, border 180ms;
 	-moz-transition: box-shadow 180ms, border 180ms;
 	transition: box-shadow 180ms, border 180ms;
@@ -12485,8 +12487,8 @@ div.v-layout.v-horizontal.v-widget {
 
 .mytheme .v-richtextarea .gwt-RichTextToolbar {
 	background: #EBFAEB;
-	
-	
+
+
 	border-bottom: 2px solid #a4afa4;
 	color: #2a5e2a;
 }
@@ -13058,8 +13060,8 @@ div.v-layout.v-horizontal.v-widget {
 	padding: 12px 19px;
 	font-size: 14px;
 	border-bottom: 2px solid #69853f;
-	
-	
+
+
 	text-align: center;
 }
 
@@ -13074,8 +13076,8 @@ div.v-layout.v-horizontal.v-widget {
 
 .mytheme .valo-menu-title .v-menubar-menuitem {
 	background: transparent;
-	
-	
+
+
 	text-shadow: inherit;
 	font-size: 16px;
 	border-color: inherit;
@@ -13171,7 +13173,7 @@ div.v-layout.v-horizontal.v-widget {
 	width: 56px;
 	height: 56px;
 	border-radius: 30px;
-	
+
 	display: block;
 	margin: 0 auto 0.3em;
 	border: 2px solid #a4afa4;
@@ -13304,7 +13306,7 @@ div.v-layout.v-horizontal.v-widget {
 	overflow: hidden;
 	background: #dfdfdf;
 	font-size: 13px;
-	
+
 }
 
 .mytheme .valo-menu-part.large-icons [class*="subtitle"] [class*="badge"] {
@@ -13377,8 +13379,8 @@ div.v-layout.v-horizontal.v-widget {
 	font-size: 25px;
 	line-height: 44px;
 	margin: 19px auto;
-	
-	
+
+
 }
 
 .mytheme .valo-menu-logo:focus {
@@ -13419,7 +13421,7 @@ div.v-layout.v-horizontal.v-widget {
 	overflow: hidden;
 	background: #dfdfdf;
 	font-size: 13px;
-	
+
 }
 
 .mytheme .valo-menu-responsive[width-range~="801px-1100px"] .valo-menu-part [class*="subtitle"] [class*="badge"] {
@@ -13617,7 +13619,8 @@ div.v-layout.v-horizontal.v-widget {
 }
 
 .mytheme .v-icon {
-	font-size: 40px;
+	font-size: 30px;
+	color:green;
 }
 
 .mytheme .v-logo {
