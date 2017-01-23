@@ -50,7 +50,7 @@ public class QualityFeedbackDAO {
 	}
 
 	/**
-	 * Checks whether feedback with this EmployeeId already exists
+	 * Checks whether feedback with this FeedbackId already exists
 	 * @param feedbackId
 	 * @return  Indicates true or false
 	 *
@@ -63,9 +63,9 @@ public class QualityFeedbackDAO {
 			stmt.setInt(1, feedbackId);
 			ResultSet rs = stmt.executeQuery();
 			if(rs.next()){
-				return false;
-			}else{
 				return true;
+			}else{
+				return false;
 			}
 
 		} catch (SQLException e) {
@@ -146,6 +146,34 @@ public class QualityFeedbackDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}finally {
+			ConnectionUtils.closeConnection(con);
+		}
+		return null;
+	}
+
+
+	public static List<QualityFeedbackVO> getFeedbacks(int feedbackId) {
+		List<QualityFeedbackVO> feedbacks = new ArrayList<QualityFeedbackVO>();
+		QualityFeedbackVO quality;
+		try {
+			con = ConnectionUtils.getConnection();
+			PreparedStatement stmt = con.prepareStatement(QueryConstant.GET_FEEDBACKS);
+			stmt.setInt(1, feedbackId);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				quality = new QualityFeedbackVO();
+				quality.setSatisfyIndicator(rs.getBoolean(2));
+				quality.setComment(rs.getString(3));
+				quality.setFeedbackId(rs.getInt(4));
+				quality.setQualityId(rs.getInt(5));
+				feedbacks.add(quality);
+			}
+			return feedbacks;
+		}
+
+		catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
 			ConnectionUtils.closeConnection(con);
 		}
 		return null;

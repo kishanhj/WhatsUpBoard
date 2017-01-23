@@ -12,6 +12,8 @@ public interface QueryConstant {
 
      String GET_FEEDBACK_ID_MONTH_QUERY="select FEEDBACK_ID from T_FEEDBACK where FEEDBACK_MONTH=? and project_id_feedback_fk=?";
 
+     String GET_FEEDBACK_ID_NAME_QUERY="select FEEDBACK_ID from T_FEEDBACK where FEEDBACK_MONTH=? and employee_name=?";
+
      String GET_MONTH_LIST_QUERY="select distinct FEEDBACK_MONTH from T_FEEDBACK where project_id_feedback_fk=? ";
 
      String GET_FEEDBACK_PROJECT_QUERY="select PROJECT_ID_FEEDBACK_FK from T_FEEDBACK where EMPLOYEE_ID=? ";
@@ -42,6 +44,8 @@ public interface QueryConstant {
 
     String GET_ALL_EMPLOYEE_QUERY="select * from t_employee";
 
+    String GET_ALL_PROJECT_EMPLOYEE_QUERY="select * from t_employee where project_id_employee_fk=?";
+
     String GET_ADMIN_DETAILS_QUERY="select * from t_admin where admin_id=?";
 
     String ADD_ADMIN_QUERY="insert into t_admin(ADMIN_ID,PASSWORD,ADMIN_EMAIL_ID,IS_SUPER_ADMIN,PROJECT_ID_ADMIN_FK) values(?,?,?,?,?); ";
@@ -60,6 +64,10 @@ public interface QueryConstant {
 
     String INSERT_EMPLOYEE_QUERY="insert into T_Employee(EMPLOYEE_ID ,EMPLOYEE_EMAIL_ID ,EMPLOYEE_NAME,PROJECT_ID_EMPLOYEE_FK )values(?,?,?,?);";
 
+    String DELETE_EMPLOYEE_QUERY="delete from t_employee where employee_id=?";
+
+    String DELETE_ADMIN_QUERY="delete from t_admin where admin_id=?";
+
     String GET_EMPLOYEE_COUNT_QUERY="select count(*) from T_employee where project_id_employee_fk=?";
 
     String EMPLOYEE_EXISTS_QUERY="select * from T_employee where employee_id=?";
@@ -68,7 +76,7 @@ public interface QueryConstant {
 
     String GET_CODE_QUERY="Select * from t_link_codes";
 
-    String DELETE_CODE_QUERY="delete from t_link_codes where code_key=?";
+    String DELETE_CODE_QUERY="delete  from t_link_codes where code_key=?";
 
     String GET_FEEDBACKS="select * from  t_feedback_quality where feedback_id_fk=?";
 

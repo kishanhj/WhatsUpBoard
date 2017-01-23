@@ -11,13 +11,15 @@ public class EmployeeIdValidator implements Validator {
 
 	String errorMsg;
 
-	String emptyStringMsg=ValidationConstants.EMPTY_STRING_MSG;
+	 String emptyStringMsg=ValidationConstants.EMPTY_STRING_MSG;
 
-	TextField employeeId;
+	 TextField employeeId;
 
-	int minLength = 4;
+	 int minLength = 4;
 
-	int maxLength = 6;
+	 int maxLength = 6;
+
+	 boolean isNew = false;
 
 	/**
 	 * Constructor
@@ -29,24 +31,33 @@ public class EmployeeIdValidator implements Validator {
 		this.employeeId = employeeId;
 	}
 
+	public EmployeeIdValidator(String errorMsg, TextField employeeId,boolean isNew) {
+		this.errorMsg = errorMsg;
+		this.employeeId = employeeId;
+		this.isNew = isNew;
+	}
+
 	/**
 	 * checks the validity of employee ID
 	 * @return
 	 */
-	private boolean validityChecker() {
+	private  boolean validityChecker(TextField employeeId) {
 		String empid = employeeId.getValue();
 		if (empid.matches(".*[A-Za-z].*") || empid.length() < minLength || empid.length() > maxLength)
 			return false;
+		if(!isNew){
 		if (EmployeeDAO.getEmployee(empid) == null)
 			return false;
+		}
 		return true;
 	}
 
 	@Override
 	public void validate(Object value) throws InvalidValueException {
-		if(employeeId.getValue().equals(""))
+		if(employeeId.getValue().equals("") || employeeId.getValue()==null){
 			throw new InvalidValueException(emptyStringMsg);
-		if (!validityChecker()) {
+		}
+		if (!validityChecker(employeeId)) {
 			employeeId.setValidationVisible(true);
 			throw new InvalidValueException(errorMsg);
 		}

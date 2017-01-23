@@ -6,4 +6,7 @@ public interface ValidationConstants {
 	String EMPTY_STRING_MSG = "This field is required";
     String MONTH_VALIDATOR="Survey for this month is already over";
     String REASON_VALIDATOR_MSG="Please enter a valid Reason";
+    String PASSWORD_VALIDATOR = "Password cannot be empty";
+    String ERROR="ERROR";
+	String FAILED = "FAILED";
 }

@@ -1,6 +1,5 @@
 package com.example.Views;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -9,24 +8,27 @@ import com.example.DAO.FeedbackDAO;
 import com.example.DAO.QualityDAO;
 import com.example.DAO.QualityFeedbackDAO;
 import com.example.Helpers.PropertyUtils;
+import com.example.Mailer.SendReports;
 import com.example.VO.AdminVO;
+import com.example.VO.EmployeeVO;
 import com.example.VO.QualityFeedbackVO;
 import com.example.VO.QualityVO;
 import com.example.WhatsUpApp.WhatsUpUI;
 import com.example.constants.IntegerConstants;
 import com.example.constants.StringConstants;
 import com.example.report.ExcelReportGenerator;
-import com.vaadin.data.util.IndexedContainer;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
-import com.vaadin.ui.ProgressBar;
-import com.vaadin.ui.Table;
+import com.vaadin.ui.Notification.Type;
+import com.vaadin.ui.TextArea;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
@@ -50,6 +52,11 @@ public class GenreateReportView extends VerticalLayout implements View {
 	private AdminVO user;
 
 	/**
+	 * Indicates whether the survey is completed
+	 */
+	boolean isSurveyCompleted= false;
+
+	/**
 	 * Constructor with ui instance as parameter
 	 *
 	 * @param ui
@@ -70,6 +77,7 @@ public class GenreateReportView extends VerticalLayout implements View {
 		content.setMargin(true);
 		content.setSpacing(true);
 
+
 		ComboBox feedbackMonth = new ComboBox();
         feedbackMonth.setCaption(StringConstants.MONTH);
 
@@ -80,95 +88,64 @@ public class GenreateReportView extends VerticalLayout implements View {
 		content.addComponent(feedbackMonth);
 		content.setComponentAlignment(feedbackMonth, Alignment.MIDDLE_LEFT);
 
-		IndexedContainer feedbackContainer = buildContainer();
-
-		Table viewFeedbackTable = BuildTable(feedbackContainer);
-
-		ProgressBar completedFeedbacks = new ProgressBar(viewFeedbackTable.size());
-		completedFeedbacks.setWidth(StringConstants.NINE_HUNDRED_PX);
-
-		completedFeedbacks.addContextClickListener(e -> {
-			float count = completedFeedbacks.getValue() * 100;
-			int employeesLeft = (int) (EmployeeDAO.getEmployeeCount(user.getTProject())
-					* (1 - completedFeedbacks.getValue()));
-			Notification.show(count + StringConstants.PROGRESS_BAR_MSG + employeesLeft);
+		feedbackMonth.addValueChangeListener(e ->{
+			List<EmployeeVO> employees = EmployeeDAO.getEmployeeDetails(user.getTProject());
+			float leftcount=0;
+			for (EmployeeVO employee : employees) {
+					int feedbackId = FeedbackDAO.getFeedbackId(employee.getEmployeeId(), (String) feedbackMonth.getValue());
+					if (!QualityFeedbackDAO.exists(feedbackId)){
+						leftcount++;
+					}
+			}
+			if(leftcount/employees.size() == IntegerConstants.F_ONE)
+				isSurveyCompleted = true;
 		});
-
-		feedbackMonth.addValueChangeListener(e -> {
-			viewFeedbackTable.removeAllItems();
-			showFeedbacks(viewFeedbackTable, feedbackMonth);
-			viewFeedbackTable.setPageLength(Math.min(feedbackContainer.size(), 10));
-			int employeeCount = EmployeeDAO.getEmployeeCount(user.getTProject());
-			completedFeedbacks.setValue((float) feedbackContainer.size() / (employeeCount * 6));
-		});
-
-
-		viewFeedbackTable.addStyleName(StringConstants.STYLE_SLIDER_BAR);
-		viewFeedbackTable.setSelectable(true);
 
 		Button generateReport = new Button(StringConstants.GENERATE_REPORT);
 
+		TextArea emails = new TextArea("please enter comma seperated emails");
+
 		generateReport.addClickListener(e -> {
-			if (completedFeedbacks.getValue() < IntegerConstants.ONE) {
+			if(feedbackMonth.getValue() == null){
+				Notification.show("ERROR", "Please select a month",Type.ERROR_MESSAGE);
+				return;
+			}
+			if(emails.getValue() == null||emails.getValue().equals("")){
+				Notification.show("ERROR", "Please enter a valid EmailID",Type.ERROR_MESSAGE);
+				return ;
+			}
+			if (!isSurveyCompleted) {
 				Window window = new Window();
-				window.setContent(buildConformationWindow(window, feedbackMonth));
+				window.setContent(buildConformationWindow(window, feedbackMonth,emails));
 				window.center();
+				window.setResizable(false);
 				ui.addWindow(window);
 			} else
-				triggerReportGeneration(feedbackMonth);
+				triggerReportGeneration(emails,feedbackMonth);
 
 		});
 
-		content.addComponents(completedFeedbacks,viewFeedbackTable,generateReport);
+
+
+		content.addComponents(emails,generateReport);
 		return content;
 
 	}
 
-	/**
-	 * Builds the container
-	 * @return IndexedContainer
-	 */
-	private IndexedContainer buildContainer() {
-		IndexedContainer feedbackContainer = new IndexedContainer();
-		feedbackContainer.addContainerProperty(StringConstants.EMPLOYEE_NAME, String.class, null);
-		feedbackContainer.addContainerProperty(StringConstants.QUALITY_NAME, String.class, null);
-		feedbackContainer.addContainerProperty(StringConstants.IS_SATISFIED, String.class, null);
-		feedbackContainer.addContainerProperty(StringConstants.COMMENTS, String.class, null);
-		return feedbackContainer;
-	}
-
-	/**
-	 * Builds the table
-	 * @param feedbackContainer  A IndexedContainer
-	 * @return Table
-	 */
-	private Table BuildTable(IndexedContainer feedbackContainer) {
-		Table viewFeedbackTable = new Table();
-		viewFeedbackTable.setWidth(StringConstants.NINE_HUNDRED_PX);
-		viewFeedbackTable.setPageLength(15);
-
-		viewFeedbackTable.setColumnExpandRatio(StringConstants.EMPLOYEE_NAME, 40);
-		viewFeedbackTable.setColumnExpandRatio(StringConstants.QUALITY_NAME, 40);
-		viewFeedbackTable.setColumnExpandRatio(StringConstants.IS_SATISFIED, 50);
-		viewFeedbackTable.setColumnExpandRatio(StringConstants.COMMENTS, 80);
-
-		viewFeedbackTable.setContainerDataSource(feedbackContainer);
-
-		viewFeedbackTable.setPageLength(Math.min(feedbackContainer.size(), 10));
-		return viewFeedbackTable;
-	}
 
 	/**
 	 * Builds UI for popup conformation window
 	 * @param window
 	 * @param feedbackMonth
+	 * @param emails
 	 * @return VerticalLayout
 	 */
-	private VerticalLayout buildConformationWindow(Window window, ComboBox feedbackMonth) {
+	private Component buildConformationWindow(Window window, ComboBox feedbackMonth, TextArea emails) {
 		VerticalLayout confirmationLayout = new VerticalLayout();
 		HorizontalLayout buttons = new HorizontalLayout();
 
 		Label msg = new Label(StringConstants.CONFORMATION_MSG);
+		msg.setContentMode(ContentMode.HTML);
 		Label confirm = new Label(StringConstants.CONFORMATION);
 
 		Button yes = new Button(StringConstants.YES);
@@ -176,15 +153,15 @@ public class GenreateReportView extends VerticalLayout implements View {
 
 		yes.addClickListener(e -> {
 			window.close();
-			triggerReportGeneration(feedbackMonth);
+			triggerReportGeneration(emails,feedbackMonth);
 		});
 
 		no.addClickListener(e -> window.close());
 
 		buttons.addComponents(yes, no);
 		buttons.setSizeFull();
-		buttons.setComponentAlignment(yes, Alignment.TOP_CENTER);
-		buttons.setComponentAlignment(no, Alignment.TOP_CENTER);
+		buttons.setComponentAlignment(yes, Alignment.TOP_RIGHT);
+		buttons.setComponentAlignment(no, Alignment.TOP_LEFT);
 
 		confirmationLayout.addComponents(msg, confirm, buttons);
 
@@ -195,14 +172,14 @@ public class GenreateReportView extends VerticalLayout implements View {
 
 	/**
 	 * Triggers report generation
+	 * @param emails
 	 * @param feedbackMonth
 	 */
-	private void triggerReportGeneration(ComboBox feedbackMonth) {
+	private void triggerReportGeneration(TextArea emails, ComboBox feedbackMonth) {
 		generateReport(feedbackMonth);
-		Window win = new Window(StringConstants.ENTER_EMAIL);
-		win.setContent(new GetEmailsView(feedbackMonth, win));
-		win.center();
-		getUI().addWindow(win);
+		SendReports reportMailer = new SendReports(emails.getValue(), (String)feedbackMonth.getValue());
+		if(reportMailer.sendReports())
+		Notification.show("Mails have been sent");
 
 	}
 
@@ -263,32 +240,6 @@ public class GenreateReportView extends VerticalLayout implements View {
 		}
 	}
 
-	/**
-	 * Displays feedbacks in the table
-	 * @param view_feedback
-	 * @param feedback_month
-	 */
-	private void showFeedbacks(Table view_feedback, ComboBox feedback_month) {
-		List<QualityFeedbackVO> feedbacks = QualityFeedbackDAO.getMonthWiseFeedbacks(feedback_month,
-				user.getTProject());
-		String employeeName;
-		String qualityName;
-		String feedbackType;
-		int i = 1;
-		for (QualityFeedbackVO feedback : feedbacks) {
-			employeeName = FeedbackDAO.getEmployeeName(feedback.getFeedbackId());
-			qualityName = QualityDAO.getQualityName(feedback.getQualityId());
-			feedbackType = feedback.getSatisfyIndicator() ? StringConstants.SATISFIED  : StringConstants.NOT_SATISFIED;
-			view_feedback.addItem(new Object[] { employeeName, qualityName, feedbackType, feedback.getComment() }, i++);
-			ArrayList<String> varialble = new ArrayList<String>();
-			if (varialble.size() != 0) {
-				if (!varialble.contains(employeeName)) {
-					varialble.add(employeeName);
-				}
-			}
-
-		}
-	}
 
 	@Override
 	public void enter(ViewChangeEvent event) {

@@ -13,6 +13,9 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
+import com.vaadin.ui.Notification;
+import com.vaadin.ui.Notification.Type;
+
 public class SendMail
 {
   private static String clbMailhost = "outlook.office365.com";
@@ -30,18 +33,16 @@ public SendMail(String toAddress,String content) {
     SendMail.content = content;
 }
 
-  public  void sendMail()
+  public  boolean sendMail()
   {
     try
     {
-
       Properties props = new Properties();
       props.put("mail.smtp.host", clbMailhost);
       props.put("mail.smtp.port", "587");
       props.put("mail.smtp.auth", "BRIllio@8890");
 
       props.put("mail.smtp.starttls.enable", "true");
-     // System.out.println("SendMail - after args and props");
 
       Session session = Session.getDefaultInstance(props, new Authenticator()
       {
@@ -50,7 +51,6 @@ public SendMail(String toAddress,String content) {
           return new PasswordAuthentication("pumaadmin@brillio.com", "BRIllio@8890");
         }
       });
-     // System.out.println("SendMail - after authentication");
       Message msg = new MimeMessage(session);
 
       MimeBodyPart mbp = new MimeBodyPart();
@@ -65,25 +65,21 @@ public SendMail(String toAddress,String content) {
 
       msg.setSubject(subject);
 
-     // System.out.println("SendMail - after mail message creation");
-
-
       msg.setContent(multiPart);
 
-      //msg.setText(content);
       mbp.setText(content,"UTF-8", "html");
 
       msg.saveChanges();
 
-    //  System.out.println("SendMail - after mail changes save");
       Transport transport = session.getTransport("smtp");
       transport.connect(clbMailhost, "pumaadmin@brillio.com", "BRIllio@8890");
-    //  System.out.println("SendMail - after connection");
       transport.sendMessage(msg, msg.getAllRecipients());
       transport.close();
+      return true;
     }
     catch (Exception e) {
-      System.out.println(e);
+      Notification.show("ERROR", "cannot mail to "+toAddress+" because: "+e.getMessage(),Type.ERROR_MESSAGE);
+      return false;
     }
   }
 

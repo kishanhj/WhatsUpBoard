@@ -11,9 +11,10 @@ import java.util.List;
 import com.example.Helpers.ConnectionUtils;
 import com.example.VO.EmployeeVO;
 import com.example.constants.QueryConstant;
-
+import com.example.constants.ValidationConstants;
 import com.vaadin.server.Page;
 import com.vaadin.ui.Notification;
+import com.vaadin.ui.Notification.Type;
 
 public class EmployeeDAO {
 	private static Connection con = null;
@@ -31,6 +32,42 @@ public class EmployeeDAO {
 			con = ConnectionUtils.getConnection();
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(QueryConstant.GET_ALL_EMPLOYEE_QUERY);
+
+			EmpList = new ArrayList<EmployeeVO>();
+
+			while (rs.next()) {
+				empDetails = new EmployeeVO();
+				empDetails.setEmployeeId(rs.getString(1));
+				empDetails.setEmployeeEmailId(rs.getString(2));
+				empDetails.setEmployeeName(rs.getString(3));
+				empDetails.setProjectId(rs.getInt(4));
+				EmpList.add(empDetails);
+			}
+			return EmpList;
+
+		} catch (SQLException e) {
+			Page.getCurrent().reload();
+		} finally {
+			ConnectionUtils.closeConnection(con);
+		}
+		return null;
+
+	}
+
+	/**
+	 * Returns the list of all employee details of a project
+	 *
+	 * @return List of EmployeeVO
+	 */
+	public static List<EmployeeVO> getEmployeeDetails(int projectID) {
+
+		try {
+			EmployeeVO empDetails = new EmployeeVO();
+			ArrayList<EmployeeVO> EmpList;
+			con = ConnectionUtils.getConnection();
+			PreparedStatement stmt = con.prepareStatement(QueryConstant.GET_ALL_PROJECT_EMPLOYEE_QUERY);
+			stmt.setInt(1, projectID);
+			ResultSet rs = stmt.executeQuery();
 
 			EmpList = new ArrayList<EmployeeVO>();
 
@@ -167,6 +204,25 @@ public class EmployeeDAO {
 		    stmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			ConnectionUtils.closeConnection(con);
+		}
+	}
+
+	public static boolean delete(String employeeId) {
+		try {
+			con = ConnectionUtils.getConnection();
+			PreparedStatement stmt = con.prepareStatement(QueryConstant.DELETE_EMPLOYEE_QUERY);
+			stmt.setString(1, employeeId);
+		    if(stmt.executeUpdate() == 0)
+		    	return false;
+		    else
+		    	return true;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			Notification.show(ValidationConstants.ERROR,e.getMessage(), Type.ERROR_MESSAGE);
+			return false;
 		} finally {
 			ConnectionUtils.closeConnection(con);
 		}

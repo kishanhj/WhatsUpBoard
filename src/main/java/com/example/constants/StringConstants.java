@@ -11,7 +11,7 @@ public interface StringConstants {
 	String RANDOM_CODE_STRING = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 	String PASSWORD_ENCODING_STRING = "3982";
 	String NEW_PASSWORD = "Password1$";
-	String CONFORMATION_MSG = "All the employees have not submitted the feedback";
+	String CONFORMATION_MSG = "<b><pre>All the employees have not <br>submitted the feedback<pre></b>";
 	String CONFORMATION = "Are you Sure?";
 	String MONTH = "Month";
 	String ERROR_IMG = "srry.png";
@@ -49,7 +49,7 @@ public interface StringConstants {
 	String SATISFACTORY = " Satisfactory";
 	String NOT_SATISFIED = "Not Satisfied";
 	String SQL_DRIVER = "com.mysql.jdbc.Driver";
-	String SQL_URL = "jdbc:mysql://localhost/Watsup_board";
+	String SQL_URL = "jdbc:mysql://localhost/";
 	String CONFIG_FILENAME = "config.properties";
 	String SQL_USERNAME = "root";
 	String SQL_PASSWORD = "root";

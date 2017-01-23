@@ -12,25 +12,28 @@ import com.example.DAO.ProjectDAO;
 import com.example.DAO.QualityDAO;
 import com.example.DAO.QualityFeedbackDAO;
 import com.example.Helpers.Utils;
+import com.example.Mailer.Encoding;
 import com.example.VO.QualityVO;
 import com.example.VO.EmployeeVO;
 import com.example.VO.QualityFeedbackVO;
 import com.example.WhatsUpApp.WhatsUpUI;
 import com.example.constants.StringConstants;
+import com.example.constants.ValidationConstants;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
-import com.vaadin.server.Page;
 import com.vaadin.server.Responsive;
 import com.vaadin.server.ThemeResource;
-import com.vaadin.shared.Position;
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
+import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
@@ -117,18 +120,18 @@ public class FeedbackFormView extends VerticalLayout implements View {
 	 */
 	Map<String, Image> qualityImage = new HashMap<String, Image>();
 
-	/**
-	 *  Constructor with ui instance as parameter
-	 * @param WhatsUpUI ui
-	 */
-	public FeedbackFormView(WhatsUpUI ui) {
-		this.ui = ui;
-		qualities = QualityDAO.getAllQualities();
-		setSizeUndefined();
-		Component feedBackForm = BuildForm();
-		addComponents(feedBackForm);
-		setComponentAlignment(feedBackForm, Alignment.MIDDLE_CENTER);
-	}
+//	/**
+//	 *  Constructor with ui instance as parameter
+//	 * @param WhatsUpUI ui
+//	 */
+//	public FeedbackFormView(WhatsUpUI ui) {
+//		this.ui = ui;
+//		qualities = QualityDAO.getAllQualities();
+//		setSizeUndefined();
+//		Component feedBackForm = BuildForm();
+//		addComponents(feedBackForm);
+//		setComponentAlignment(feedBackForm, Alignment.MIDDLE_CENTER);
+//	}
 
 	/**
 	 *  Constructor
@@ -146,7 +149,7 @@ public class FeedbackFormView extends VerticalLayout implements View {
 		setSizeFull();
 		addComponents(feedBackForm);
 		setComponentAlignment(feedBackForm, Alignment.MIDDLE_CENTER);
-		buildNotification();
+		//buildNotification();
 	}
 
 	/**
@@ -154,6 +157,38 @@ public class FeedbackFormView extends VerticalLayout implements View {
 	 *
 	 * @return Component : which is the MainLayout
 	 */
+//	private Component BuildForm() {
+//
+//		VerticalLayout mainLayout = new VerticalLayout();
+//		mainLayout.setSizeFull();
+//
+//		final HorizontalLayout headerLayout = new HorizontalLayout();
+//		HorizontalLayout logoBar = buildLogoBar();
+//		headerLayout.addStyleName(StringConstants.STYLE_TITLE_PANEL);
+//		headerLayout.setSpacing(true);
+//		headerLayout.setSizeFull();
+//		headerLayout.setWidth(StringConstants.HUNDRED_PERCENT);
+//		headerLayout.addComponents(logoBar);
+//		headerLayout.setExpandRatio(logoBar, 1);
+//
+//		HorizontalLayout textFields = buildTextFields();
+//		textFields.addStyleName(StringConstants.STYLE_TEXT);
+//		textFields.setSpacing(true);
+//
+//		 Table feedBackForm = generateTable();
+//		 CssLayout feedBackFormLayout = new CssLayout();
+//		 feedBackFormLayout.setResponsive(true);
+//		 feedBackFormLayout.addComponent(feedBackForm);
+//		VerticalLayout vlayout = new VerticalLayout();
+//		vlayout.addComponents(headerLayout, textFields,feedBackForm);
+//		vlayout.setComponentAlignment(textFields, Alignment.TOP_CENTER);
+//		vlayout.setExpandRatio(headerLayout, 5);
+//		vlayout.setExpandRatio(textFields, 10);
+//		vlayout.setExpandRatio(feedBackForm, 85);
+//		mainLayout.addComponents(vlayout);
+//		return mainLayout;
+//	}
+//
 	private Component BuildForm() {
 
 		VerticalLayout mainLayout = new VerticalLayout();
@@ -162,49 +197,47 @@ public class FeedbackFormView extends VerticalLayout implements View {
 		final HorizontalLayout headerLayout = new HorizontalLayout();
 		HorizontalLayout logoBar = buildLogoBar();
 		headerLayout.addStyleName(StringConstants.STYLE_TITLE_PANEL);
-		headerLayout.setSpacing(false);
+		headerLayout.setSpacing(true);
 		headerLayout.setSizeFull();
 		headerLayout.setWidth(StringConstants.HUNDRED_PERCENT);
-		headerLayout.setHeight(StringConstants.FORTY_PIXEL);
 		headerLayout.addComponents(logoBar);
 		headerLayout.setExpandRatio(logoBar, 1);
 
 		HorizontalLayout textFields = buildTextFields();
 		textFields.addStyleName(StringConstants.STYLE_TEXT);
+		textFields.setSpacing(true);
 
-		VerticalLayout vlayout = new VerticalLayout();
+	     VerticalLayout vlayout = new VerticalLayout();
 		vlayout.addComponents(headerLayout, textFields);
 		vlayout.setComponentAlignment(textFields, Alignment.TOP_CENTER);
-		vlayout.setExpandRatio(headerLayout, 1);
-		vlayout.setExpandRatio(textFields, 4);
+//		vlayout.setExpandRatio(headerLayout, 5);
+//		vlayout.setExpandRatio(textFields, 10);
+		 Table feedBackForm = generateTable();
+		 final VerticalSplitPanel HeaderPanel = new VerticalSplitPanel();
+		 HeaderPanel.setSizeFull();
+		 HeaderPanel.setSplitPosition(18.6f,Unit.PERCENTAGE);
+          HeaderPanel.setFirstComponent(vlayout);
+          HeaderPanel.setSecondComponent(feedBackForm);
 
-
-		Table feedBackForm = generateTable();
-
-		final VerticalSplitPanel HeaderPanel = new VerticalSplitPanel();
-		HeaderPanel.setSizeFull();
-		HeaderPanel.setSplitPosition(20.75f, Unit.PERCENTAGE);
-		HeaderPanel.setLocked(true);
-		HeaderPanel.setFirstComponent(vlayout);
-		HeaderPanel.setSecondComponent(feedBackForm);
+//		vlayout.setExpandRatio(feedBackForm, 85);
 		mainLayout.addComponents(HeaderPanel);
 		return mainLayout;
 	}
 
 
-	/**
-	 * Builds the notification window
-	 */
-	private void buildNotification() {
-		Notification notification = new Notification("Welcome to WHATSUP Board Feedback page ");
-		notification.setDescription("Please click on the smily on the row where you are unhappy ");
-       notification.setHtmlContentAllowed(true);
-       notification.setStyleName("tray dark small closable login-help");
-       notification.setPosition(Position.BOTTOM_CENTER);
-       notification.setDelayMsec(20000);
-       notification.show(Page.getCurrent());
-
-	}
+//	/**
+//	 * Builds the notification window
+//	 */
+//	private void buildNotification() {
+//		Notification notification = new Notification("Welcome to WHATSUP Board Feedback page ");
+//		notification.setDescription("Please click on the smily on the row where you are unhappy ");
+//       notification.setHtmlContentAllowed(true);
+//       notification.setStyleName("tray dark small closable login-help");
+//       notification.setPosition(Position.BOTTOM_CENTER);
+//       notification.setDelayMsec(20000);
+//       notification.show(Page.getCurrent());
+//
+//	}
 
 
 	/**
@@ -215,15 +248,16 @@ public class FeedbackFormView extends VerticalLayout implements View {
 	private HorizontalLayout buildLogoBar() {
 		HorizontalLayout logoBar = new HorizontalLayout();
 		Image brillioLogo = new Image(null, new ThemeResource(StringConstants.IMAGE_B1));
-		Image title = new Image(null, new ThemeResource("logo.png"));
+		Image title = new Image(null, new ThemeResource("logo3.png"));
 
-		logoBar.setSizeFull();
+		logoBar.setWidth("100%");
+
 		HorizontalLayout buttonsLayout = generateButtons();
 		logoBar.addComponents(brillioLogo, title, buttonsLayout);
-		 logoBar.setComponentAlignment(title, Alignment.BOTTOM_CENTER);
-		logoBar.setExpandRatio(title, 60);
-		logoBar.setExpandRatio(brillioLogo, 20);
-		logoBar.setExpandRatio(buttonsLayout, 20);
+		 logoBar.setComponentAlignment(title, Alignment.MIDDLE_CENTER);
+		logoBar.setExpandRatio(title, 40);
+		logoBar.setExpandRatio(brillioLogo, 30);
+		logoBar.setExpandRatio(buttonsLayout, 30);
 		logoBar.setSpacing(true);
 		Responsive.makeResponsive(logoBar);
 		return logoBar;
@@ -245,8 +279,16 @@ public class FeedbackFormView extends VerticalLayout implements View {
 		submit.addClickListener(e -> {
 			try {
 				List<QualityFeedbackVO> qualityWiseFeedbacks;
-				validateAllFields();
+				if(!validateAllFields()){
+					return;
+				}
 				qualityWiseFeedbacks = generateQualityWiseFeedback();
+				String code = Encoding.getCode(employeeIdTextField.getValue());
+				if(code == null){
+					Notification.show(ValidationConstants.ERROR, "Feedback already accepted from another tab or window", Type.ERROR_MESSAGE);
+					ui.setContent(new SuccessView());
+					return ;
+				}
 				boolean flag = QualityFeedbackDAO.addFeedbacks(qualityWiseFeedbacks);
 				if (flag) {
 					LinkCodesDAO.deleteCode(employeeIdTextField);
@@ -267,7 +309,8 @@ public class FeedbackFormView extends VerticalLayout implements View {
 		buttons.setSpacing(true);
 		buttons.setComponentAlignment(submit, Alignment.TOP_RIGHT);
 		buttons.setComponentAlignment(clear, Alignment.TOP_LEFT);
-		buttons.setSizeFull();
+		buttons.setWidth("100%");
+		buttons.setHeight("80%");
 
 		return buttons;
 
@@ -276,14 +319,17 @@ public class FeedbackFormView extends VerticalLayout implements View {
 	/**
 	 * Invokes Validations on all fields
 	 */
-	private void validateAllFields() {
-		employeeIdTextField.validate();
-		monthField.validate();
-		projectField.validate();
+	private boolean validateAllFields() {
+		try{
 		for (QualityVO key : qualities) {
 			TextArea reason = qualityReason.get(key.getQualityName());
 			reason.validate();
 		}
+		}catch (Exception e) {
+			Notification.show("ERROR", e.getMessage(), Type.ERROR_MESSAGE);
+			return false;
+		}
+		return true;
 
 	}
 
@@ -315,13 +361,9 @@ public class FeedbackFormView extends VerticalLayout implements View {
 	 */
 	private Table generateTable() {
 
-		VerticalLayout layout = new VerticalLayout();
-		layout.setSpacing(true);
-	    layout.setMargin(true);
-
 		Table feedbackTable = new Table();
 		feedbackTable.setSizeFull();
-		feedbackTable.setPageLength(feedbackTable.size());
+		feedbackTable.setPageLength(6);
 		ConfigTable(feedbackTable);
 		setImageresources();
 		addRows(feedbackTable);
@@ -380,11 +422,13 @@ public class FeedbackFormView extends VerticalLayout implements View {
 	private void createFields(Table feedbackTable, String qualityName, String qualityDesc, int rowNumber) {
 		Button qualityButton = new Button(StringConstants.SATISFIED);
 		TextArea reason = new TextArea();
-		qualityDesc = qualityName+":   "+qualityDesc;
+		qualityDesc = "<b>"+qualityName+":</b>   "+qualityDesc;
+		Label description = new Label(qualityDesc);
+		description.setContentMode(ContentMode.HTML);
 		ConfigButtonAndText(qualityButton, reason);
 		qualityButtons.put(qualityName, qualityButton);
 		qualityReason.put(qualityName, reason);
-		feedbackTable.addItem(new Object[] { qualityImage.get(qualityName), qualityDesc, qualityButton, reason }, rowNumber);
+		feedbackTable.addItem(new Object[] { qualityImage.get(qualityName), description, qualityButton, reason }, rowNumber);
 	}
 
 	/**
@@ -395,11 +439,13 @@ public class FeedbackFormView extends VerticalLayout implements View {
 	 */
 	private void ConfigButtonAndText(Button button, TextArea text) {
 
-		text.setWidth(390, Unit.PIXELS);
+		text.setWidth(100, Unit.PERCENTAGE);
+		text.setHeight(100,Unit.PIXELS);
 		button.setIcon(new ThemeResource(StringConstants.IMAGE_BAD));
 		button.addStyleName(ValoTheme.BUTTON_BORDERLESS);
 		button.addStyleName(ValoTheme.BUTTON_ICON_ONLY);
 		button.addStyleName(ValoTheme.BUTTON_HUGE);
+		button.setDescription("click here");
 		button.addClickListener(e -> Utils.imageToggler(button, text));
 
 	}
@@ -410,24 +456,20 @@ public class FeedbackFormView extends VerticalLayout implements View {
 	 * @param feedbackTable
 	 */
 	private void ConfigTable(Table feedbackTable) {
+
 		feedbackTable.addContainerProperty(StringConstants.AREA, Image.class, null);
-		feedbackTable.addContainerProperty(StringConstants.DESCRIPTION, String.class, null);
+		feedbackTable.addContainerProperty(StringConstants.DESCRIPTION, Label.class, null);
 		feedbackTable.addContainerProperty(StringConstants.SATISFIED, Button.class, null);
 		feedbackTable.addContainerProperty(StringConstants.REASON, TextArea.class, null);
-
-		feedbackTable.setColumnWidth(StringConstants.AREA, 200);
-		feedbackTable.setColumnWidth(StringConstants.DESCRIPTION, 490);
-		feedbackTable.setColumnWidth(StringConstants.SATISFIED, 250);
-		feedbackTable.setColumnWidth(StringConstants.REASON, 400);
 
 		feedbackTable.setColumnAlignment(StringConstants.AREA, Align.CENTER);
 		feedbackTable.setColumnAlignment(StringConstants.DESCRIPTION, Align.CENTER);
 		feedbackTable.setColumnAlignment(StringConstants.SATISFIED, Align.CENTER);
 		feedbackTable.setColumnAlignment(StringConstants.REASON, Align.CENTER);
 
-		feedbackTable.setColumnExpandRatio(StringConstants.AREA, 15);
-		feedbackTable.setColumnExpandRatio(StringConstants.DESCRIPTION, 20);
-		feedbackTable.setColumnExpandRatio(StringConstants.SATISFIED,8);
+		feedbackTable.setColumnExpandRatio(StringConstants.AREA, 8);
+		feedbackTable.setColumnExpandRatio(StringConstants.DESCRIPTION, 25);
+		feedbackTable.setColumnExpandRatio(StringConstants.SATISFIED,4);
 		feedbackTable.setColumnExpandRatio(StringConstants.REASON, 20);
 		feedbackTable.setColumnReorderingAllowed(false);
 
@@ -484,7 +526,7 @@ public class FeedbackFormView extends VerticalLayout implements View {
 
 		fieldLayout.addComponents(nameTextField, employeeIdTextField, monthField, projectField);
 		//fieldLayout.setMargin(true);
-		fieldLayout.setSpacing(true);
+		//fieldLayout.setSpacing(true);
 
 		return fieldLayout;
 	}

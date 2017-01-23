@@ -17,6 +17,8 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
 import com.example.Helpers.PropertyUtils;
+import com.vaadin.ui.Notification;
+import com.vaadin.ui.Notification.Type;
 
 public class SendReports
 {
@@ -37,7 +39,7 @@ public class SendReports
 	SendReports.attachFile = attachingFile.toString();
 }
 
-  public  void sendReports()
+  public  boolean sendReports()
   {
 
     try
@@ -96,10 +98,11 @@ public class SendReports
       transport.close();
       File report = new File(attachFile);
       report.delete();
+      return true;
     }
     catch (Exception e) {
-      System.out.println(e);
-      e.printStackTrace();
+    	 Notification.show("ERROR", "cannot mail to "+toAddressFile+" "+e.getMessage(),Type.ERROR_MESSAGE);
+    	 return false;
     }
   }
 

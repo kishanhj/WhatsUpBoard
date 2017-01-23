@@ -102,4 +102,19 @@ public class LinkCodesDAO {
 		}
 
 	}
+	public static void deleteCode(String employeeId) {
+		Connection con = null;
+		try {
+			 con = ConnectionUtils.getConnection();
+			PreparedStatement stmt = con.prepareStatement(QueryConstant.DELETE_CODE_QUERY);
+			stmt.setString(1, employeeId);
+             stmt.executeUpdate();
+		} catch (SQLException e) {
+              e.printStackTrace();
+		} finally {
+			ConnectionUtils.closeConnection(con);
+		}
+
+
+	}
 }

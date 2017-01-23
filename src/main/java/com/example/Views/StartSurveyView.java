@@ -4,8 +4,10 @@ import java.net.URL;
 import java.util.List;
 import java.util.Properties;
 
+import com.example.DAO.AdminDAO;
 import com.example.DAO.EmployeeDAO;
 import com.example.DAO.FeedbackDAO;
+import com.example.DAO.LinkCodesDAO;
 import com.example.DAO.ProjectDAO;
 import com.example.Helpers.PropertyUtils;
 import com.example.Mailer.Encoding;
@@ -13,11 +15,16 @@ import com.example.Mailer.MailUtils;
 import com.example.Mailer.SendMail;
 import com.example.VO.AdminVO;
 import com.example.VO.EmployeeVO;
+import com.example.VO.ProjectVO;
 import com.example.WhatsUpApp.WhatsUpUI;
 import com.example.constants.StringConstants;
 import com.example.constants.ValidationConstants;
+import com.example.validators.EmployeeIdValidator;
 import com.example.validators.MonthValidator;
+import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.util.IndexedContainer;
+import com.vaadin.data.validator.EmailValidator;
+import com.vaadin.data.validator.NullValidator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FontAwesome;
@@ -26,7 +33,9 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
+import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
@@ -123,6 +132,7 @@ public class StartSurveyView extends HorizontalLayout implements View {
 		employees = EmployeeDAO.getEmployeeDetails();
 	    employeelListTable = new Table("Employee List");
 		employeelListTable.setWidth("800px");
+		employeelListTable.setSelectable(true);
 		employeelListTable.setPageLength(8);
 
 		IndexedContainer container = new IndexedContainer();
@@ -130,6 +140,7 @@ public class StartSurveyView extends HorizontalLayout implements View {
 		employeelListTable.addStyleName("SliderBar");
 		employeelListTable.setCaption("Employee List");
 
+		container.addContainerProperty("", Button.class, null);
 		container.addContainerProperty("Employee Name", String.class, null);
 		container.addContainerProperty("Employee Id", String.class, null);
 		container.addContainerProperty("Project", String.class, null);
@@ -153,17 +164,22 @@ public class StartSurveyView extends HorizontalLayout implements View {
 		Button startSurvey = new Button("Start Survey");
 
 		startSurvey.addClickListener(e -> {
-			feedbackMonth.validate();
+			if(!validateFields(feedbackMonth)){
+			return ;
+		}
 			for (EmployeeVO employee : employees) {
 				AdminVO user = (AdminVO) ui.getSession().getAttribute("user");
 				if (user.getTProject() == employee.getProjectId()) {
 					Encoding.generatecodes(employee.getEmployeeId(), (String) feedbackMonth.getValue());
-					FeedbackDAO.addFeedbackEntry(employee, (String) feedbackMonth.getValue());
 					URL url = MailUtils.getUrl(employee.getEmployeeId(), (String) feedbackMonth.getValue());
 					String mailBody = "Please complete the survey by clicking the below link<br><br>" + "<a href="
 							+ url.toString() + ">here</a>";
 					SendMail mailer = new SendMail(employee.getEmployeeEmailId(), mailBody);
-					mailer.sendMail();
+					if(mailer.sendMail()){
+						FeedbackDAO.addFeedbackEntry(employee, (String) feedbackMonth.getValue());
+					}else{
+						LinkCodesDAO.deleteCode(employee.getEmployeeId());
+					}
 				}
 			}
 		});
@@ -173,22 +189,87 @@ public class StartSurveyView extends HorizontalLayout implements View {
 		return content;
 	}
 
+	private boolean validateFields(ComboBox feedbackMonth) {
+		try{
+			if(feedbackMonth.getValue() == null)
+				throw new InvalidValueException("Please select a month");
+		    feedbackMonth.validate();
+		    return true;
+		}catch (InvalidValueException e) {
+			Notification.show(ValidationConstants.ERROR, e.getMessage(), Type.ERROR_MESSAGE);
+			return false;
+		}
+	}
+
 	/**
 	 * loads the employee table data
 	 */
 	private void loadEmployeeTable() {
 		employees = EmployeeDAO.getEmployeeDetails();
 		employeelListTable.removeAllItems();
+		Button delete;
 		int i = 1;
 		String projectName;
 		for (EmployeeVO employee : employees) {
 			if (user.getTProject() == employee.getProjectId()) {
+				delete = configureDeleteButton(employee);
 				projectName = ProjectDAO.getProjectName(employee.getProjectId());
-				employeelListTable.addItem(new Object[] { employee.getEmployeeName(), employee.getEmployeeId(),
+				employeelListTable.addItem(new Object[] { delete,employee.getEmployeeName(), employee.getEmployeeId(),
 						projectName, employee.getEmployeeEmailId() }, i++);
 			}
 		}
 
+	}
+
+	private Button configureDeleteButton(EmployeeVO employee) {
+		Button delete = new Button(FontAwesome.TRASH);
+		delete.addStyleName(ValoTheme.BUTTON_ICON_ONLY);
+		delete.addStyleName(ValoTheme.BUTTON_SMALL);
+		delete.setData(employee);
+		delete.addClickListener(e->{
+			EmployeeVO employeeDetails = (EmployeeVO) e.getButton().getData();
+			Window window = new Window("Delete Employee");
+			window.setResizable(false);
+			window.center();
+			window.setContent(buildConformationWindow(window, employeeDetails));
+			ui.addWindow(window);
+
+		});
+		return delete;
+	}
+
+	private Component buildConformationWindow(Window window,EmployeeVO employee) {
+		VerticalLayout confirmationLayout = new VerticalLayout();
+		HorizontalLayout buttons = new HorizontalLayout();
+		buttons.setSpacing(true);
+
+		Label msg = new Label(StringConstants.CONFORMATION);
+
+		Button yes = new Button(StringConstants.YES);
+		Button no = new Button(StringConstants.NO);
+
+		yes.addClickListener(e -> {
+			if(!EmployeeDAO.delete(employee.getEmployeeId()))
+				Notification.show(ValidationConstants.ERROR, "Failed to delete", Type.ERROR_MESSAGE);
+			else {
+				AdminDAO.deleteAdmin(employee.getEmployeeId());
+				loadEmployeeTable();
+			}
+			window.close();
+		});
+
+		no.addClickListener(e -> window.close());
+
+		buttons.addComponents(yes, no);
+		buttons.setSizeFull();
+		buttons.setComponentAlignment(yes, Alignment.TOP_CENTER);
+		buttons.setComponentAlignment(no, Alignment.TOP_CENTER);
+
+		confirmationLayout.addComponents(msg, buttons);
+
+		confirmationLayout.setMargin(true);
+		confirmationLayout.setSpacing(true);
+		return confirmationLayout;
 	}
 
 	/**
@@ -197,31 +278,70 @@ public class StartSurveyView extends HorizontalLayout implements View {
 	 * @return
 	 */
 	private Component addEmployeeLayout(Window window) {
-		VerticalLayout addProject = new VerticalLayout();
-		addProject.setSpacing(true);
-		addProject.setMargin(true);
+		VerticalLayout addEmployee = new VerticalLayout();
+		addEmployee.setSpacing(true);
+		addEmployee.setMargin(true);
 
 		TextField employeeName =new TextField("Employee Name");
 		employeeName.setRequired(true);
+		employeeName.setRequiredError("Name must be specified");
 		TextField emailId =new TextField("Email ID");
 		emailId.setRequired(true);
+		emailId.setRequiredError("email must be specified");
+		emailId.addValidator(new EmailValidator("Enter a Valid Email"));
 		TextField employeeId =new TextField("Employee ID");
-		employeeId.setRequired(true);
+		employeeId.addValidator(new EmployeeIdValidator("Enter a valid ID", employeeId, true));
+		employeeId.setValidationVisible(false);
+		employeeName.setValidationVisible(false);
+		emailId.setValidationVisible(false);
+
+		ComboBox project = new ComboBox(StringConstants.PROJECT);
+		List<String> projectList = ProjectDAO.getAllProjects();
+	    project.addItems(projectList);
+	    project.setNullSelectionAllowed(false);
+	    project.addValidator(new NullValidator("Please Specify the project", false));
+	    project.setValidationVisible(false);
+	    if(!user.getIsSuperAdmin()){
+	    	project.setValue(ProjectDAO.getProjectName(user.getTProject()));
+	    	project.setEnabled(false);
+	    }
+
 
 		Button ok_button = new Button();
-		ok_button.setCaption("OK");
+		ok_button.setCaption("ADD");
 		ok_button.addClickListener(e -> {
+			if(!validateFields(employeeName,emailId,employeeId,project)){
+				return ;
+			}
             if(!EmployeeDAO.exists(employeeId.getValue())){
-            	EmployeeDAO.addEmployee(employeeName.getValue(),employeeId.getValue(),emailId.getValue(),user.getTProject());
+            	ProjectVO projectId = ProjectDAO.getProject((String)project.getValue());
+            	EmployeeDAO.addEmployee(employeeName.getValue(),employeeId.getValue(),emailId.getValue(),projectId.getProjectId());
 			Notification.show("Succesfull added");
             }
             else
-            Notification.show("Employee with this ID already exist");
+            Notification.show(ValidationConstants.FAILED, "Employee with this ID alredy exist",Type.ERROR_MESSAGE);
             loadEmployeeTable();
 			window.close();
 	});
-		addProject.addComponents(employeeName,employeeId,emailId,ok_button);
-		return addProject;
+		addEmployee.addComponents(employeeName,employeeId,emailId,project,ok_button);
+		return addEmployee;
+	}
+
+	private boolean validateFields(TextField employeeName, TextField emailId, TextField employeeId,ComboBox project) {
+		try{
+			employeeId.validate();
+			employeeName.validate();
+			emailId.validate();
+			project.validate();
+		}catch (InvalidValueException e) {
+			employeeId.setValidationVisible(true);
+			employeeName.setValidationVisible(true);
+			emailId.setValidationVisible(true);
+			project.setValidationVisible(true);
+			Notification.show(ValidationConstants.ERROR, e.getMessage(), Type.ERROR_MESSAGE);
+			return false;
+		}
+		return true;
 	}
 
 	/**

@@ -255,4 +255,23 @@ public class FeedbackDAO {
 		}
 		return null;
 	}
+
+	public static int getFeedbackIdFromName(String employeeName, String feedback_month) {
+		try {
+			con = ConnectionUtils.getConnection();
+			PreparedStatement stmt = con.prepareStatement(QueryConstant.GET_FEEDBACK_ID_NAME_QUERY);
+			stmt.setString(1, feedback_month);
+			stmt.setString(2, employeeName);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				return rs.getInt(1);
+			} else
+				return 0;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			ConnectionUtils.closeConnection(con);
+		}
+		return 0;
+	}
 }

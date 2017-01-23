@@ -10,7 +10,10 @@ import com.example.VO.AdminVO;
 import com.example.VO.ProjectVO;
 import com.example.WhatsUpApp.WhatsUpUI;
 import com.example.constants.IntegerConstants;
+import com.example.constants.ValidationConstants;
 import com.example.validators.EmployeeIdValidator;
+import com.example.validators.PasswordValidator;
+import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.data.util.IndexedContainer;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
@@ -19,6 +22,7 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Notification;
+import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.OptionGroup;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TabSheet;
@@ -182,7 +186,6 @@ public class SuperAdminView extends VerticalLayout implements View {
 		container.addContainerProperty("Admin Name ", String.class, null);
 		container.addContainerProperty("Project", String.class, null);
 		container.addContainerProperty("Email Id", String.class, null);
-		container.addContainerProperty("Is Active", String.class, null);
 
 		adminListTable.setContainerDataSource(container);
 		adminListTable.setPageLength(Math.min(container.size(), 15));
@@ -227,8 +230,7 @@ public class SuperAdminView extends VerticalLayout implements View {
 		for (AdminVO admin : admins) {
 			projectName = ProjectDAO.getProjectName(admin.getTProject());
 			adminName = EmployeeDAO.getEmployeeName(admin.getAdminId());
-			adminListTable.addItem(new Object[] { admin.getAdminId(), adminName, projectName, admin.getAdminEmailId(),
-					Utils.booleanToStringConvertor(admin.getActiveStatus()) }, i++);
+			adminListTable.addItem(new Object[] { admin.getAdminId(), adminName, projectName, admin.getAdminEmailId() }, i++);
 		}
 	}
 
@@ -237,18 +239,18 @@ public class SuperAdminView extends VerticalLayout implements View {
 	 * @param window
 	 * @return
 	 */
-	@SuppressWarnings("deprecation")
 	public VerticalLayout addAdminLayout(Window window) {
-
 		VerticalLayout super_view = new VerticalLayout();
 		super_view.setMargin(true);
 		super_view.setSpacing(true);
 
 		TextField adminId = new TextField("Admin Id");
-		adminId.addValidator(new EmployeeIdValidator("Invalid ID", adminId));
+		adminId.addValidator(new EmployeeIdValidator("Please enter a valid ID", adminId));
+		adminId.setValidationVisible(false);
 
 		PasswordField password = new PasswordField("Password");
-		password.setRequired(true);
+        password.addValidator(new PasswordValidator(password, ValidationConstants.EMPTY_STRING_MSG));
+		password.setValidationVisible(false);
 
 		OptionGroup isSuperAdmin = new OptionGroup("Is Super Admin");
 		isSuperAdmin.addItem(1);
@@ -267,24 +269,14 @@ public class SuperAdminView extends VerticalLayout implements View {
 
 		Button ok_button = new Button("OK");
 		ok_button.addClickListener(e -> {
-			//password.validate();
-			if(!EmployeeDAO.exists(adminId.getValue()))
-			{
-				new Notification("ERROR", "Invalid ID",Notification.TYPE_ERROR_MESSAGE).show(ui.getPage());
-				//window.close();
-				return ;
-			}
-			if(password.getValue().equals("") || password.getValue() == null)
-			{
-				new Notification("ERROR", "PassWord cannot be empty",Notification.TYPE_ERROR_MESSAGE).show(ui.getPage());
-				//window.close();
+			if(!validateAllfields(adminId,password)){
 				return ;
 			}
 			AdminVO admin = getAdminVo(adminId, password, isSuperAdmin);
 			if(AdminDAO.addAdmin(admin) != IntegerConstants.ZERO)
 			Notification.show("Succesfull added");
 			else
-			new Notification("ERROR", "Admin with this ID alredy exist",Notification.TYPE_ERROR_MESSAGE).show(ui.getPage());
+			new Notification(ValidationConstants.ERROR, "Admin with this ID alredy exist",Type.ERROR_MESSAGE).show(ui.getPage());
 			window.close();
 			loadAdminTable(adminListTable);
 		});
@@ -305,6 +297,21 @@ public class SuperAdminView extends VerticalLayout implements View {
 		super_view.setComponentAlignment(buttons, Alignment.BOTTOM_CENTER);
 
 		return super_view;
+
+	}
+
+	private boolean validateAllfields(TextField adminId, PasswordField password) {
+		try{
+			adminId.validate();
+			password.validate();
+			return true;
+		}catch (InvalidValueException e) {
+			adminId.setValidationVisible(true);
+			password.setValidationVisible(true);
+			Notification.show(ValidationConstants.ERROR, e.getMessage(), Type.ERROR_MESSAGE);
+			return false;
+		}
+
 
 	}
 

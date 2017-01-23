@@ -5,6 +5,7 @@ import com.example.DAO.EmployeeDAO;
 import com.example.Helpers.Utils;
 import com.example.VO.AdminVO;
 import com.example.WhatsUpApp.WhatsUpUI;
+import com.example.constants.StringConstants;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.shared.ui.label.ContentMode;
@@ -12,6 +13,7 @@ import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.Notification;
@@ -78,18 +80,18 @@ public final class MenuView extends VerticalLayout {
 	 * @return
 	 */
 	private Component buildSuperAdminButton() {
-		Button generateReport = new Button();
+		Button superAdmin = new Button();
 
-		generateReport.setCaption("Super Admin function");
+		superAdmin.setCaption("Super Admin function");
 		VerticalLayout layout = new VerticalLayout();
-		layout.addComponent(generateReport);
-		generateReport.setSizeFull();
-		layout.setComponentAlignment(generateReport, Alignment.MIDDLE_CENTER);
-		generateReport.addClickListener(e -> {
+		layout.addComponent(superAdmin);
+		superAdmin.setSizeFull();
+		layout.setComponentAlignment(superAdmin, Alignment.MIDDLE_CENTER);
+		superAdmin.addClickListener(e -> {
 			Navigator nav = getUI().getNavigator();
 			nav.navigateTo(SuperAdminView.NAME);
 		});
-		return generateReport;
+		return superAdmin;
 	}
 
 	/**
@@ -150,11 +152,19 @@ public final class MenuView extends VerticalLayout {
 	}
 
 	private Component buildTitle() {
-		Label logo = new Label("WhatupBoard <strong>Feedback</strong>", ContentMode.HTML);
-		logo.setSizeUndefined();
-		HorizontalLayout logoWrapper = new HorizontalLayout(logo);
-		logoWrapper.setComponentAlignment(logo, Alignment.MIDDLE_CENTER);
-		logoWrapper.addStyleName("valo-menu-title");
+		Image brillioLogo = new Image(null, new ThemeResource(StringConstants.IMAGE_B1));
+		String adminDash = "<h3 style=\"color:white\"><center>ADMIN DASHBOARD</center></h3>";
+		Label logoLabel = new Label(adminDash, ContentMode.HTML);
+		logoLabel.setWidth("100%");
+
+
+		VerticalLayout logoWrapper=new VerticalLayout();
+		logoWrapper.setMargin(false);
+		logoWrapper.setSpacing(true);
+		logoWrapper.addComponents(brillioLogo,logoLabel);
+		logoWrapper.setComponentAlignment(logoLabel, Alignment.MIDDLE_CENTER);
+		logoWrapper.setComponentAlignment(brillioLogo, Alignment.MIDDLE_CENTER);
+		//logoWrapper.addStyleName("valo-menu-title");
 		return logoWrapper;
 	}
 
@@ -167,8 +177,8 @@ public final class MenuView extends VerticalLayout {
 		settings.addStyleName("user-menu");
 		settings.setCaptionAsHtml(true);
 		settings.setCaption(
-				"<center><strong>Welcome " + EmployeeDAO.getEmployeeName(user.getAdminId()) + "</strong></center>");
-		settingsItem = settings.addItem("", new ThemeResource("UserImage.png"), null);
+				"<h3 style=\"color:white\"><center><b>Welcome " + EmployeeDAO.getEmployeeName(user.getAdminId()) + "</b></center></h3>");
+		settingsItem = settings.addItem("", new ThemeResource("user.png"), null);
 		settingsItem.addItem("Sign Out", new Command() {
 			private static final long serialVersionUID = 1L;
 

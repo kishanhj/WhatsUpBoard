@@ -12,8 +12,11 @@ import com.example.VO.AdminVO;
 import com.example.VO.EmployeeVO;
 import com.example.constants.IntegerConstants;
 import com.example.constants.QueryConstant;
+import com.example.constants.ValidationConstants;
 import com.vaadin.server.Page;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextField;
+import com.vaadin.ui.Notification.Type;
 
 public class AdminDAO {
 
@@ -230,4 +233,20 @@ public class AdminDAO {
 
 	}
 
-}
+	public static void deleteAdmin(String adminId) {
+		Connection con = null;
+		try {
+			con = ConnectionUtils.getConnection();
+			PreparedStatement stmt = con.prepareStatement(QueryConstant.DELETE_ADMIN_QUERY);
+			stmt.setString(1, adminId);
+			stmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			Notification.show(ValidationConstants.ERROR,e.getMessage(), Type.ERROR_MESSAGE);
+		} finally {
+			ConnectionUtils.closeConnection(con);
+		}
+	}
+
+	}
+
