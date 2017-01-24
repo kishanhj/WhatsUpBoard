@@ -17,6 +17,18 @@ public class EmployeeVO implements Serializable{
 
 	private int projectId;
 
+	private boolean isactive;
+
+	public boolean isIsactive() {
+		return isactive;
+	}
+
+
+	public void setIsactive(boolean isactive) {
+		this.isactive = isactive;
+	}
+
+
 	public String getEmployeeEmailId() {
 		return employeeEmailId;
 	}

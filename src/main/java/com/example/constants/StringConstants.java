@@ -39,7 +39,7 @@ public interface StringConstants {
     String GENERATE_REPORT="Generate Report";
     String EMPLOYEE_NAME="Employee Name";
     String QUALITY_NAME="Quality Name";
-    String IS_SATISFIED="Satisfied or Not Satisfied";
+    String IS_SATISFIED="Feedback";
     String COMMENTS="Comments";
 	String YES = "YES";
 	String NO = "NO";

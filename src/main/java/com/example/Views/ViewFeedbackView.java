@@ -8,6 +8,7 @@ import com.example.DAO.FeedbackDAO;
 import com.example.DAO.LinkCodesDAO;
 import com.example.DAO.QualityDAO;
 import com.example.DAO.QualityFeedbackDAO;
+import com.example.Mailer.Encoding;
 import com.example.Mailer.MailUtils;
 import com.example.Mailer.SendMail;
 import com.example.VO.AdminVO;
@@ -20,11 +21,13 @@ import com.example.constants.ValidationConstants;
 import com.vaadin.data.util.IndexedContainer;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Image;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.ProgressBar;
@@ -42,8 +45,9 @@ public class ViewFeedbackView extends VerticalLayout implements View {
 	public static final String NAME = "ViewFeedbackView";
 	WhatsUpUI ui;
 	private AdminVO user;
+	private ComboBox feedbackMonth;
 
-	public enum status {
+	private enum status {
 		completed, link_sent, link_not_sent
 	};
 
@@ -61,15 +65,17 @@ public class ViewFeedbackView extends VerticalLayout implements View {
 	 */
 	private VerticalLayout init() {
 		VerticalLayout content = new VerticalLayout();
-		ComboBox feedbackMonth = new ComboBox();
+		feedbackMonth = new ComboBox();
 		feedbackMonth.setNullSelectionAllowed(false);
 		content.setMargin(true);
 		content.setSpacing(true);
 
 		feedbackMonth.setCaption("Month");
-		List<String> months = FeedbackDAO.getMonthList(user.getTProject());
-		for (String month : months)
-			feedbackMonth.addItem(month);
+
+		feedbackMonth.addFocusListener(e -> {
+			List<String> months = FeedbackDAO.getMonthList(user.getTProject());
+			feedbackMonth.addItems(months);
+		});
 
 		content.addComponent(feedbackMonth);
 		content.setComponentAlignment(feedbackMonth, Alignment.MIDDLE_LEFT);
@@ -98,42 +104,42 @@ public class ViewFeedbackView extends VerticalLayout implements View {
 			viewEmployeeStatusTable.removeAllItems();
 			showEmployeeTable(viewEmployeeStatusTable, feedbackMonth);
 			List<EmployeeVO> employees = EmployeeDAO.getEmployeeDetails(user.getTProject());
-			float leftcount=0;
+			float leftcount = 0;
 			for (EmployeeVO employee : employees) {
-					int feedbackId = FeedbackDAO.getFeedbackId(employee.getEmployeeId(), (String) feedbackMonth.getValue());
-					if (!QualityFeedbackDAO.exists(feedbackId)){
-						leftcount++;
-					}
+				int feedbackId = FeedbackDAO.getFeedbackId(employee.getEmployeeId(), (String) feedbackMonth.getValue());
+				if (!QualityFeedbackDAO.exists(feedbackId)) {
+					leftcount++;
+				}
 			}
 			viewEmployeeStatusTable.setPageLength(Math.min(feedbackContainer.size(), 10));
-			completedFeedbacks.setValue((float) 1-(leftcount/employees.size()));
+			completedFeedbacks.setValue((float) 1 - (leftcount / employees.size()));
 			if (completedFeedbacks.getValue() == IntegerConstants.ONE)
 				LinkCodesDAO.deleteCode(feedbackMonth);
 		});
 
-		Button resendLinks = new Button("Resend Links");
-		resendLinks.addClickListener(e ->{
-			if(feedbackMonth.getValue() == null){
-				Notification.show(ValidationConstants.ERROR,"Please select a month", Type.ERROR_MESSAGE);
-				return ;
+		Button resendLinks = new Button("FOLLOW UP ALL");
+		resendLinks.addClickListener(e -> {
+			if (feedbackMonth.getValue() == null) {
+				Notification.show(ValidationConstants.ERROR, "Please select a month", Type.ERROR_MESSAGE);
+				return;
 			}
 			List<EmployeeVO> employees = EmployeeDAO.getEmployeeDetails();
 			int feedbackId;
 			for (EmployeeVO employee : employees) {
 				if (user.getTProject() == employee.getProjectId()) {
 					feedbackId = FeedbackDAO.getFeedbackId(employee.getEmployeeId(), (String) feedbackMonth.getValue());
-					if (!QualityFeedbackDAO.exists(feedbackId)){
-						URL url=MailUtils.getUrl(employee.getEmployeeId(), (String)feedbackMonth.getValue());
+					if (!QualityFeedbackDAO.exists(feedbackId)) {
+						URL url = MailUtils.getUrl(employee.getEmployeeId(), (String) feedbackMonth.getValue());
 						String mailBody = "Please complete the survey by clicking the below link<br><br>" + "<a href="
 								+ url.toString() + ">here</a>";
 						SendMail mailer = new SendMail(employee.getEmployeeEmailId(), mailBody);
-						if(!mailer.sendMail()){
+						if (!mailer.sendMail()) {
 							LinkCodesDAO.deleteCode(employee.getEmployeeId());
 						}
 					}
 				}
 			}
-			Notification.show("Mails Sent",Type.TRAY_NOTIFICATION);
+			Notification.show("Mails Sent", Type.TRAY_NOTIFICATION);
 		});
 
 		feedbackContainer.addContainerProperty("Employee Name", String.class, null);
@@ -146,7 +152,7 @@ public class ViewFeedbackView extends VerticalLayout implements View {
 
 		viewEmployeeStatusTable.setPageLength(Math.min(feedbackContainer.size(), 10));
 		viewEmployeeStatusTable.setContainerDataSource(feedbackContainer);
-		content.addComponents(completedFeedbacks, viewEmployeeStatusTable,resendLinks);
+		content.addComponents(completedFeedbacks, viewEmployeeStatusTable, resendLinks);
 		return content;
 
 	}
@@ -174,7 +180,7 @@ public class ViewFeedbackView extends VerticalLayout implements View {
 					currentStatus = status.completed;
 				else
 					currentStatus = status.link_sent;
-				if(currentStatus != status.completed)
+				if (currentStatus != status.completed)
 					viewFeedback.getComponent(0).setEnabled(false);
 				else
 					viewFeedback.getComponent(1).setEnabled(false);
@@ -183,11 +189,18 @@ public class ViewFeedbackView extends VerticalLayout implements View {
 		}
 	}
 
+	/**
+	 * Creates the Button layout with viewFeedback and resend survey buttons
+	 *
+	 * @param employee
+	 * @param feedback_month
+	 * @return
+	 */
 	private HorizontalLayout generateViewButton(EmployeeVO employee, ComboBox feedback_month) {
 		HorizontalLayout layout = new HorizontalLayout();
 		layout.setSpacing(true);
 		Button viewFeedback = new Button("VIEW FEEDBACK");
-		Button resendLink = new Button("RESEND LINK");
+		Button resendLink = new Button("FOLLOW UP");
 		viewFeedback.setData(employee);
 		resendLink.setData(employee);
 
@@ -203,19 +216,38 @@ public class ViewFeedbackView extends VerticalLayout implements View {
 		});
 		resendLink.addClickListener(e -> {
 			EmployeeVO employeeVo = (EmployeeVO) e.getButton().getData();
-			URL url=MailUtils.getUrl(employeeVo.getEmployeeId(), (String)feedback_month.getValue());
+			if (Encoding.getCode(employeeVo.getEmployeeId()) == null) {
+				// Encoding.generatecodes(employeeVo.getEmployeeId(),
+				// (String)feedback_month.getValue());
+				Notification.show("FAILED",
+						"Cannot send survey as this employee was not a part of the survey when it was started",
+						Type.ERROR_MESSAGE);
+				return;
+			}
+			URL url = MailUtils.getUrl(employeeVo.getEmployeeId(), (String) feedback_month.getValue());
 			String mailBody = "Please complete the survey by clicking the below link<br><br>" + "<a href="
 					+ url.toString() + ">here</a>";
 			SendMail mailer = new SendMail(employee.getEmployeeEmailId(), mailBody);
-			if(!mailer.sendMail()){
+			if (!mailer.sendMail()) {
 				LinkCodesDAO.deleteCode(employee.getEmployeeId());
-			}else{
-            Notification.show("Mail Sent", Type.HUMANIZED_MESSAGE);
-			}});
+			} else {
+				// FeedbackDAO.addFeedbackEntry(employee, (String)
+				// feedbackMonth.getValue());
+				Notification.show("Mail Sent", Type.HUMANIZED_MESSAGE);
+			}
+		});
 		layout.addComponents(viewFeedback, resendLink);
 		return layout;
 	}
 
+	/**
+	 * Generates a window which shows the feedback
+	 *
+	 * @param window
+	 * @param employeeName
+	 * @param feedbackid
+	 * @return
+	 */
 	private Component showFeedbackLayout(Window window, String employeeName, int feedbackid) {
 		VerticalLayout mainLayout = new VerticalLayout();
 		mainLayout.setSpacing(true);
@@ -237,7 +269,7 @@ public class ViewFeedbackView extends VerticalLayout implements View {
 	private IndexedContainer buildContainer() {
 		IndexedContainer feedbackContainer = new IndexedContainer();
 		feedbackContainer.addContainerProperty(StringConstants.QUALITY_NAME, String.class, null);
-		feedbackContainer.addContainerProperty(StringConstants.IS_SATISFIED, String.class, null);
+		feedbackContainer.addContainerProperty(StringConstants.IS_SATISFIED, Image.class, null);
 		feedbackContainer.addContainerProperty(StringConstants.COMMENTS, String.class, null);
 		return feedbackContainer;
 	}
@@ -254,7 +286,7 @@ public class ViewFeedbackView extends VerticalLayout implements View {
 		viewFeedbackTable.setWidth(StringConstants.NINE_HUNDRED_PX);
 		viewFeedbackTable.setPageLength(15);
 		viewFeedbackTable.setColumnExpandRatio(StringConstants.QUALITY_NAME, 40);
-		viewFeedbackTable.setColumnExpandRatio(StringConstants.IS_SATISFIED, 50);
+		viewFeedbackTable.setColumnExpandRatio(StringConstants.IS_SATISFIED, 15);
 		viewFeedbackTable.setColumnExpandRatio(StringConstants.COMMENTS, 80);
 
 		viewFeedbackTable.setContainerDataSource(feedbackContainer);
@@ -272,12 +304,14 @@ public class ViewFeedbackView extends VerticalLayout implements View {
 	private void showFeedbacks(Table view_feedback, int feedbackId) {
 		List<QualityFeedbackVO> feedbacks = QualityFeedbackDAO.getFeedbacks(feedbackId);
 		String qualityName;
-		String feedbackType;
+		Image feedbackType;
 		int i = 1;
 		for (QualityFeedbackVO feedback : feedbacks) {
 			qualityName = QualityDAO.getQualityName(feedback.getQualityId());
-			feedbackType = feedback.getSatisfyIndicator() ? StringConstants.SATISFIED : StringConstants.NOT_SATISFIED;
-			view_feedback.addItem(new Object[] {qualityName, feedbackType, feedback.getComment() }, i++);
+			feedbackType = feedback.getSatisfyIndicator()
+					? new Image("", new ThemeResource(StringConstants.SATISFIED_IMAGE))
+					: new Image("", new ThemeResource(StringConstants.UNSATISFIED_IMAGE));
+			view_feedback.addItem(new Object[] { qualityName, feedbackType, feedback.getComment() }, i++);
 		}
 	}
 

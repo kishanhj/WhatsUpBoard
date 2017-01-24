@@ -7,7 +7,6 @@ import java.util.Properties;
 import com.example.DAO.AdminDAO;
 import com.example.DAO.EmployeeDAO;
 import com.example.DAO.FeedbackDAO;
-import com.example.DAO.LinkCodesDAO;
 import com.example.DAO.ProjectDAO;
 import com.example.Helpers.PropertyUtils;
 import com.example.Mailer.Encoding;
@@ -78,7 +77,7 @@ public class StartSurveyView extends HorizontalLayout implements View {
 	 * Constructor with ui instance as parameter
 	 *
 	 * @param ui
-	 *            WhatsUpUI
+	 *      WhatsUpUI
 	 */
 	public StartSurveyView(WhatsUpUI ui) {
 		this.ui = ui;
@@ -109,6 +108,7 @@ public class StartSurveyView extends HorizontalLayout implements View {
 		addEmployee.addStyleName(StringConstants.STYLE_BUTTON_ICON);
 		addEmployee.addStyleName(ValoTheme.BUTTON_ICON_ONLY);
 		addEmployee.addStyleName(ValoTheme.BUTTON_LARGE);
+		addEmployee.setDescription("Add New Employee");
 		addEmployee.addClickListener(e -> {
 			Window window = new Window("Add new Employee");
 			window.setResizable(false);
@@ -169,7 +169,7 @@ public class StartSurveyView extends HorizontalLayout implements View {
 		}
 			for (EmployeeVO employee : employees) {
 				AdminVO user = (AdminVO) ui.getSession().getAttribute("user");
-				if (user.getTProject() == employee.getProjectId()) {
+				if (user.getTProject() == employee.getProjectId() && employee.isIsactive()) {
 					Encoding.generatecodes(employee.getEmployeeId(), (String) feedbackMonth.getValue());
 					URL url = MailUtils.getUrl(employee.getEmployeeId(), (String) feedbackMonth.getValue());
 					String mailBody = "Please complete the survey by clicking the below link<br><br>" + "<a href="
@@ -178,7 +178,7 @@ public class StartSurveyView extends HorizontalLayout implements View {
 					if(mailer.sendMail()){
 						FeedbackDAO.addFeedbackEntry(employee, (String) feedbackMonth.getValue());
 					}else{
-						LinkCodesDAO.deleteCode(employee.getEmployeeId());
+						//LinkCodesDAO.deleteCode(employee.getEmployeeId());
 					}
 				}
 			}
@@ -205,13 +205,13 @@ public class StartSurveyView extends HorizontalLayout implements View {
 	 * loads the employee table data
 	 */
 	private void loadEmployeeTable() {
-		employees = EmployeeDAO.getEmployeeDetails();
+		employees = EmployeeDAO.getEmployeeDetails(user.getTProject());
 		employeelListTable.removeAllItems();
 		Button delete;
 		int i = 1;
 		String projectName;
 		for (EmployeeVO employee : employees) {
-			if (user.getTProject() == employee.getProjectId()) {
+			if (employee.isIsactive()) {
 				delete = configureDeleteButton(employee);
 				projectName = ProjectDAO.getProjectName(employee.getProjectId());
 				employeelListTable.addItem(new Object[] { delete,employee.getEmployeeName(), employee.getEmployeeId(),
@@ -225,6 +225,7 @@ public class StartSurveyView extends HorizontalLayout implements View {
 		Button delete = new Button(FontAwesome.TRASH);
 		delete.addStyleName(ValoTheme.BUTTON_ICON_ONLY);
 		delete.addStyleName(ValoTheme.BUTTON_SMALL);
+		delete.addStyleName(ValoTheme.BUTTON_BORDERLESS);
 		delete.setData(employee);
 		delete.addClickListener(e->{
 			EmployeeVO employeeDetails = (EmployeeVO) e.getButton().getData();

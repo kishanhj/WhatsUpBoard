@@ -41,6 +41,7 @@ public class EmployeeDAO {
 				empDetails.setEmployeeEmailId(rs.getString(2));
 				empDetails.setEmployeeName(rs.getString(3));
 				empDetails.setProjectId(rs.getInt(4));
+				empDetails.setIsactive(rs.getBoolean(5));
 				EmpList.add(empDetails);
 			}
 			return EmpList;
@@ -77,6 +78,7 @@ public class EmployeeDAO {
 				empDetails.setEmployeeEmailId(rs.getString(2));
 				empDetails.setEmployeeName(rs.getString(3));
 				empDetails.setProjectId(rs.getInt(4));
+				empDetails.setIsactive(rs.getBoolean(5));
 				EmpList.add(empDetails);
 			}
 			return EmpList;
@@ -114,6 +116,7 @@ public class EmployeeDAO {
 				empDetails.setEmployeeEmailId(rs.getString(2));
 				empDetails.setEmployeeName(rs.getString(3));
 				empDetails.setProjectId(rs.getInt(4));
+				empDetails.setIsactive(rs.getBoolean(5));
 				return empDetails;
 			}
 

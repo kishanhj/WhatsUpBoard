@@ -27,6 +27,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.themes.ValoTheme;
 
 public class LoginView extends VerticalLayout implements View {
@@ -100,7 +101,7 @@ public class LoginView extends VerticalLayout implements View {
 		TextField emailId =new TextField("Email ID");
 
 		Button ok_button = new Button();
-		ok_button.setCaption("OK");
+		ok_button.setCaption("RESET");
 		ok_button.addClickListener(e -> {
 			if(AdminDAO.exist(emailId)){
 			String newPassword = Encoding.randomCodeGenerator(6);
@@ -110,6 +111,8 @@ public class LoginView extends VerticalLayout implements View {
 			window.close();
 			Notification.show("Password has been mailed");
 			}
+			else
+			Notification.show("FAILED", "This EmailId is not registered", Type.ERROR_MESSAGE);
 		});
 
 		Button cancel = new Button();
@@ -141,7 +144,7 @@ public class LoginView extends VerticalLayout implements View {
 	        final TextField username = new TextField("Username");
 	        username.setIcon(FontAwesome.USER);
 	        username.addStyleName(ValoTheme.TEXTFIELD_INLINE_ICON);
-	        username.setValue("113157");
+	        username.setValue("113156");
 
 	        final PasswordField password = new PasswordField("Password");
 	        password.setIcon(FontAwesome.LOCK);
@@ -202,17 +205,6 @@ public class LoginView extends VerticalLayout implements View {
 	        return labels;
 	}
 
-	@SuppressWarnings("unused")
-	private void buildNotification() {
-		Notification notification = new Notification("Welcome to WHATSUP Board Survey ");
-		notification.setDescription("Please enter your Employee Id as Username and password1$ as password ");
-       notification.setHtmlContentAllowed(true);
-       notification.setStyleName("tray dark small closable login-help");
-       notification.setPosition(Position.BOTTOM_CENTER);
-       notification.setDelayMsec(20000);
-       notification.show(Page.getCurrent());
-
-	}
 
 	@Override
 	public void enter(ViewChangeEvent event) {

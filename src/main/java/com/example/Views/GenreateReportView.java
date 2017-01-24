@@ -80,10 +80,11 @@ public class GenreateReportView extends VerticalLayout implements View {
 
 		ComboBox feedbackMonth = new ComboBox();
         feedbackMonth.setCaption(StringConstants.MONTH);
+        feedbackMonth.addFocusListener( e->{
+            List<String> months = FeedbackDAO.getMonthList(user.getTProject());
+            feedbackMonth.addItems(months);
 
-        List<String> months = FeedbackDAO.getMonthList(user.getTProject());
-		for (String month : months)
-			feedbackMonth.addItem(month);
+        });
 
 		content.addComponent(feedbackMonth);
 		content.setComponentAlignment(feedbackMonth, Alignment.MIDDLE_LEFT);
