@@ -12,11 +12,7 @@ import com.example.VO.AdminVO;
 import com.example.VO.EmployeeVO;
 import com.example.constants.IntegerConstants;
 import com.example.constants.QueryConstant;
-import com.example.constants.ValidationConstants;
-import com.vaadin.server.Page;
-import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextField;
-import com.vaadin.ui.Notification.Type;
 
 public class AdminDAO {
 
@@ -46,7 +42,7 @@ public class AdminDAO {
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			//Notification.show(ValidationConstants.ERROR,e.getMessage(), Type.ERROR_MESSAGE);
 
 		} finally {
 			ConnectionUtils.closeConnection(con);
@@ -77,7 +73,7 @@ public class AdminDAO {
 
 		} catch (SQLException e) {
 
-			e.printStackTrace();
+			//Notification.show(ValidationConstants.ERROR,e.getMessage(), Type.ERROR_MESSAGE);
 		} finally {
 			ConnectionUtils.closeConnection(con);
 		}
@@ -106,7 +102,7 @@ public class AdminDAO {
 
 		} catch (SQLException e) {
 
-			Page.getCurrent().reload();
+			//Notification.show(ValidationConstants.ERROR,e.getMessage(), Type.ERROR_MESSAGE);
 		} finally {
 			ConnectionUtils.closeConnection(con);
 		}
@@ -139,7 +135,7 @@ public class AdminDAO {
 			return admins;
 
 		} catch (SQLException e) {
-
+			//Notification.show(ValidationConstants.ERROR,e.getMessage(), Type.ERROR_MESSAGE);
 		} finally {
 			ConnectionUtils.closeConnection(con);
 		}
@@ -165,7 +161,7 @@ public class AdminDAO {
 
 		} catch (SQLException e) {
 
-			Page.getCurrent().reload();
+			//Notification.show(ValidationConstants.ERROR,e.getMessage(), Type.ERROR_MESSAGE);
 		} finally {
 			ConnectionUtils.closeConnection(con);
 		}
@@ -193,7 +189,7 @@ public class AdminDAO {
 			return stmt.executeUpdate();
 
 		} catch (SQLException e) {
-			Page.getCurrent().reload();
+			//Notification.show(ValidationConstants.ERROR,e.getMessage(), Type.ERROR_MESSAGE);
 		} finally {
 			ConnectionUtils.closeConnection(con);
 		}
@@ -225,7 +221,7 @@ public class AdminDAO {
 			if (IntegerConstants.ZERO != stmt.executeUpdate())
 				return true;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			//Notification.show(ValidationConstants.ERROR,e.getMessage(), Type.ERROR_MESSAGE);
 		} finally {
 			ConnectionUtils.closeConnection(con);
 		}
@@ -233,6 +229,10 @@ public class AdminDAO {
 
 	}
 
+	/**
+	 * Deletes a admin
+	 * @param adminId
+	 */
 	public static void deleteAdmin(String adminId) {
 		Connection con = null;
 		try {
@@ -241,8 +241,7 @@ public class AdminDAO {
 			stmt.setString(1, adminId);
 			stmt.executeUpdate();
 		} catch (SQLException e) {
-			e.printStackTrace();
-			Notification.show(ValidationConstants.ERROR,e.getMessage(), Type.ERROR_MESSAGE);
+			//Notification.show(ValidationConstants.ERROR,e.getMessage(), Type.ERROR_MESSAGE);
 		} finally {
 			ConnectionUtils.closeConnection(con);
 		}

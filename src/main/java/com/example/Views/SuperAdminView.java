@@ -107,7 +107,7 @@ public class SuperAdminView extends VerticalLayout implements View {
 	 * @param window
 	 * @return
 	 */
-	@SuppressWarnings("deprecation")
+
 	private Component addProjectLayout(Window window) {
 		VerticalLayout addProject = new VerticalLayout();
 		addProject.setSpacing(true);
@@ -120,13 +120,13 @@ public class SuperAdminView extends VerticalLayout implements View {
 		ok_button.addClickListener(e -> {
 			if(project.getValue().equals("") || project.getValue() == null)
 			{
-				new Notification("ERROR", "Project name cannot be empty",Notification.TYPE_ERROR_MESSAGE).show(ui.getPage());
+				new Notification("ERROR", "Project name cannot be empty",Type.ERROR_MESSAGE).show(ui.getPage());
 				return ;
 			}
             if(ProjectDAO.addProject(project.getValue()) != IntegerConstants.ZERO)
 			Notification.show("Succesfull added");
             else
-            	new Notification("ERROR", "Project with this ID alredy exist",Notification.TYPE_ERROR_MESSAGE).show(ui.getPage());
+            	new Notification("ERROR", "Project with this ID alredy exist",Type.ERROR_MESSAGE).show(ui.getPage());
 			window.close();
 			loadProjectTable(projectListTable);
 		});

@@ -14,6 +14,7 @@ import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Page;
 import com.vaadin.server.Responsive;
 import com.vaadin.shared.Position;
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
@@ -44,6 +45,9 @@ public class LoginView extends VerticalLayout implements View {
 	public LoginView(WhatsUpUI ui) {
 		this.ui=ui;
 		Component loginForm = buildLoginForm();
+		setStyleName("background6");
+		//Component image1 = buildImage();
+		//addComponent(image1);
 
 		Panel mainPanel=new Panel();
 		mainPanel.setSizeUndefined();
@@ -54,6 +58,25 @@ public class LoginView extends VerticalLayout implements View {
 		setComponentAlignment(mainPanel, Alignment.MIDDLE_CENTER);
 
 	}
+
+//	private Component buildImage() {
+//
+//		HorizontalLayout header1 = new HorizontalLayout();
+//		// header1.setSizeUndefined();
+//		header1.setWidth("100%");
+//
+//		header1.setStyleName("backgroundimage");
+//		Resource res = new ThemeResource("brillio1.png");
+//		Image image = new Image(null, res);
+//		header1.addComponent(image);
+//		Resource res2 = new ThemeResource("header2.png");
+//		Image image3 = new Image(null, res2);
+//		header1.addComponents(image, image3);
+//		header1.setExpandRatio(image3, 2.0f);
+//		header1.setComponentAlignment(image3, Alignment.MIDDLE_CENTER);
+//		return header1;
+//
+//	}
 
 	/**
 	 * Builds the layout
@@ -144,12 +167,10 @@ public class LoginView extends VerticalLayout implements View {
 	        final TextField username = new TextField("Username");
 	        username.setIcon(FontAwesome.USER);
 	        username.addStyleName(ValoTheme.TEXTFIELD_INLINE_ICON);
-	        username.setValue("113156");
 
 	        final PasswordField password = new PasswordField("Password");
 	        password.setIcon(FontAwesome.LOCK);
 	        password.addStyleName(ValoTheme.TEXTFIELD_INLINE_ICON);
-	        password.setValue("password");
 
 	        final Button signin = new Button("Sign In");
 	        signin.addStyleName(ValoTheme.BUTTON_PRIMARY);
@@ -190,15 +211,17 @@ public class LoginView extends VerticalLayout implements View {
 	        labels.addStyleName("labels");
 	        labels.setSizeFull();
 
-	        Label welcome = new Label("Welcome");
+	        Label welcome = new Label("Brillio");
 	        welcome.setSizeFull();
-	        welcome.addStyleName(ValoTheme.LABEL_H4);
+	        welcome.addStyleName(ValoTheme.LABEL_H2);
 	        welcome.addStyleName(ValoTheme.LABEL_COLORED);
 	        labels.addComponent(welcome);
 
-	        Label title = new Label("WhatsUp Board Feedback");
+	        Label title = new Label("<b>WhatsUp Board Feedback</b>");
+	        title.setContentMode(ContentMode.HTML);
 	        title.setSizeUndefined();
 	        title.addStyleName(ValoTheme.LABEL_H3);
+	        title.addStyleName(ValoTheme.LABEL_BOLD);
 	        title.addStyleName(ValoTheme.LABEL_LIGHT);
 	        labels.addComponent(title);
 	        labels.setComponentAlignment(title, Alignment.TOP_RIGHT);

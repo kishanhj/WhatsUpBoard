@@ -11,6 +11,9 @@ import com.example.Helpers.ConnectionUtils;
 import com.example.VO.ProjectVO;
 import com.example.constants.IntegerConstants;
 import com.example.constants.QueryConstant;
+import com.example.constants.ValidationConstants;
+import com.vaadin.ui.Notification;
+import com.vaadin.ui.Notification.Type;
 
 public class ProjectDAO {
 
@@ -41,7 +44,7 @@ public class ProjectDAO {
 			return project_details;
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			Notification.show(ValidationConstants.ERROR,e.getMessage(), Type.ERROR_MESSAGE);
 		} finally {
 			ConnectionUtils.closeConnection(con);
 		}
@@ -69,7 +72,7 @@ public class ProjectDAO {
 			return project_names;
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			Notification.show(ValidationConstants.ERROR,e.getMessage(), Type.ERROR_MESSAGE);
 		} finally {
 			ConnectionUtils.closeConnection(con);
 		}
@@ -101,7 +104,7 @@ public class ProjectDAO {
 			return projectvo;
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			Notification.show(ValidationConstants.ERROR,e.getMessage(), Type.ERROR_MESSAGE);
 		} finally {
 			ConnectionUtils.closeConnection(con);
 		}
@@ -129,7 +132,7 @@ public class ProjectDAO {
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			Notification.show(ValidationConstants.ERROR,e.getMessage(), Type.ERROR_MESSAGE);
 		} finally {
 			ConnectionUtils.closeConnection(con);
 		}
@@ -160,7 +163,7 @@ public class ProjectDAO {
 			stmt.setString(2, projectName);
 			return stmt.executeUpdate();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			Notification.show(ValidationConstants.ERROR,e.getMessage(), Type.ERROR_MESSAGE);
 		} finally {
 			ConnectionUtils.closeConnection(con);
 		}

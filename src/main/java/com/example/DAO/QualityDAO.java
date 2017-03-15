@@ -11,8 +11,9 @@ import java.util.List;
 import com.example.Helpers.ConnectionUtils;
 import com.example.VO.QualityVO;
 import com.example.constants.QueryConstant;
-import com.vaadin.server.Page;
+import com.example.constants.ValidationConstants;
 import com.vaadin.ui.Notification;
+import com.vaadin.ui.Notification.Type;
 
 public class QualityDAO {
 
@@ -30,7 +31,7 @@ public class QualityDAO {
 			ArrayList<QualityVO> qualities;
 			con = ConnectionUtils.getConnection();
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("select * from t_quality");
+			ResultSet rs = stmt.executeQuery(QueryConstant.GET_ALL_QUALITIES);
 			qualities = new ArrayList<QualityVO>();
 			while (rs.next()) {
 				quality = new QualityVO();
@@ -42,8 +43,7 @@ public class QualityDAO {
 			return qualities;
 
 		} catch (SQLException e) {
-			Notification.show("Failed to close connection");
-			Page.getCurrent().reload();
+			Notification.show(ValidationConstants.ERROR,e.getMessage(), Type.ERROR_MESSAGE);
 		} finally {
 			ConnectionUtils.closeConnection(con);
 		}
@@ -69,7 +69,7 @@ public class QualityDAO {
 			if (rs.next())
 				return rs.getString(1);
 		} catch (SQLException e) {
-			Page.getCurrent().reload();
+			Notification.show(ValidationConstants.ERROR,e.getMessage(), Type.ERROR_MESSAGE);
 		} finally {
 			ConnectionUtils.closeConnection(con);
 		}
@@ -94,7 +94,7 @@ public class QualityDAO {
 			if (rs.next())
 				return rs.getInt(1);
 		} catch (SQLException e) {
-			Page.getCurrent().reload();
+			Notification.show(ValidationConstants.ERROR,e.getMessage(), Type.ERROR_MESSAGE);
 		} finally {
 			ConnectionUtils.closeConnection(con);
 		}

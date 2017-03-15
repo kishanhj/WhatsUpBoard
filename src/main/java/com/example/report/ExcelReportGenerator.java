@@ -18,7 +18,10 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTTable;
 
 import com.example.Helpers.PropertyUtils;
+import com.example.constants.ValidationConstants;
 import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.Notification;
+import com.vaadin.ui.Notification.Type;
 
 public class ExcelReportGenerator {
 	Workbook workbook;
@@ -248,9 +251,9 @@ public class ExcelReportGenerator {
 			workbook.write(outputStream);
 
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			Notification.show(ValidationConstants.ERROR,e.getMessage(), Type.ERROR_MESSAGE);
 		} catch (IOException e) {
-			e.printStackTrace();
+			Notification.show(ValidationConstants.ERROR,e.getMessage(), Type.ERROR_MESSAGE);
 		}
 
 	}

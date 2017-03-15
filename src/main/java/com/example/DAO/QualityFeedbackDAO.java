@@ -10,7 +10,10 @@ import java.util.List;
 import com.example.Helpers.ConnectionUtils;
 import com.example.VO.QualityFeedbackVO;
 import com.example.constants.QueryConstant;
+import com.example.constants.ValidationConstants;
 import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.Notification;
+import com.vaadin.ui.Notification.Type;
 
 public class QualityFeedbackDAO {
 
@@ -41,7 +44,7 @@ public class QualityFeedbackDAO {
 			if(successfulUpdateCount == 6)
 			   return true;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			Notification.show(ValidationConstants.ERROR,e.getMessage(), Type.ERROR_MESSAGE);
 		} finally {
 			ConnectionUtils.closeConnection(con);
 		}
@@ -69,7 +72,7 @@ public class QualityFeedbackDAO {
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			Notification.show(ValidationConstants.ERROR,e.getMessage(), Type.ERROR_MESSAGE);
 		}finally {
 			ConnectionUtils.closeConnection(con);
 		}
@@ -104,7 +107,7 @@ public class QualityFeedbackDAO {
 			}}
 			return feedbacks;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			Notification.show(ValidationConstants.ERROR,e.getMessage(), Type.ERROR_MESSAGE);
 		}finally {
 			ConnectionUtils.closeConnection(con);
 		}
@@ -144,7 +147,7 @@ public class QualityFeedbackDAO {
 			}}
 			return feedbacks;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			Notification.show(ValidationConstants.ERROR,e.getMessage(), Type.ERROR_MESSAGE);
 		}finally {
 			ConnectionUtils.closeConnection(con);
 		}
@@ -152,6 +155,11 @@ public class QualityFeedbackDAO {
 	}
 
 
+	/**
+	 * Gets the feedbacks based on feedbackID
+	 * @param feedbackId
+	 * @return
+	 */
 	public static List<QualityFeedbackVO> getFeedbacks(int feedbackId) {
 		List<QualityFeedbackVO> feedbacks = new ArrayList<QualityFeedbackVO>();
 		QualityFeedbackVO quality;
@@ -172,7 +180,7 @@ public class QualityFeedbackDAO {
 		}
 
 		catch (SQLException e) {
-			e.printStackTrace();
+			Notification.show(ValidationConstants.ERROR,e.getMessage(), Type.ERROR_MESSAGE);
 		} finally {
 			ConnectionUtils.closeConnection(con);
 		}

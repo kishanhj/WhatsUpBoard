@@ -12,7 +12,6 @@ import com.example.Helpers.ConnectionUtils;
 import com.example.VO.EmployeeVO;
 import com.example.constants.QueryConstant;
 import com.example.constants.ValidationConstants;
-import com.vaadin.server.Page;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
 
@@ -47,7 +46,7 @@ public class EmployeeDAO {
 			return EmpList;
 
 		} catch (SQLException e) {
-			Page.getCurrent().reload();
+			Notification.show(ValidationConstants.ERROR,e.getMessage(), Type.ERROR_MESSAGE);
 		} finally {
 			ConnectionUtils.closeConnection(con);
 		}
@@ -84,7 +83,7 @@ public class EmployeeDAO {
 			return EmpList;
 
 		} catch (SQLException e) {
-			Page.getCurrent().reload();
+			Notification.show(ValidationConstants.ERROR,e.getMessage(), Type.ERROR_MESSAGE);
 		} finally {
 			ConnectionUtils.closeConnection(con);
 		}
@@ -121,7 +120,7 @@ public class EmployeeDAO {
 			}
 
 		} catch (SQLException e) {
-			Page.getCurrent().reload();
+			Notification.show(ValidationConstants.ERROR,e.getMessage(), Type.ERROR_MESSAGE);
 		} finally {
 			ConnectionUtils.closeConnection(con);
 		}
@@ -148,7 +147,7 @@ public class EmployeeDAO {
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			Notification.show(ValidationConstants.ERROR,e.getMessage(), Type.ERROR_MESSAGE);
 		} finally {
 			ConnectionUtils.closeConnection(con);
 		}
@@ -169,16 +168,19 @@ public class EmployeeDAO {
 			if (rs.next()) {
 				return rs.getInt(1);
 			}
-
-
 		} catch (SQLException e) {
-			Notification.show("Failed to close connection");
+			Notification.show(ValidationConstants.ERROR,e.getMessage(), Type.ERROR_MESSAGE);
 		} finally {
 			ConnectionUtils.closeConnection(con);
 		}
 		return 0;
 	}
 
+	/**
+	 * Checks whether a employee exists
+	 * @param Id
+	 * @return
+	 */
 	public static boolean exists(String Id) {
 		try{
 		con = ConnectionUtils.getConnection();
@@ -189,13 +191,20 @@ public class EmployeeDAO {
 			return true;
 		}
 	} catch (SQLException e) {
-		Notification.show("Failed to close connection");
+		Notification.show(ValidationConstants.ERROR,e.getMessage(), Type.ERROR_MESSAGE);
 	} finally {
 		ConnectionUtils.closeConnection(con);
 	}
 	return false;
 	}
 
+	/**
+	 * Adds a new employee
+	 * @param name
+	 * @param Id
+	 * @param email
+	 * @param tProject
+	 */
 	public static void addEmployee(String name, String Id, String email, int tProject) {
 		try {
 			con = ConnectionUtils.getConnection();
@@ -206,12 +215,17 @@ public class EmployeeDAO {
 			stmt.setInt(4, tProject);
 		    stmt.executeUpdate();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			Notification.show(ValidationConstants.ERROR,e.getMessage(), Type.ERROR_MESSAGE);
 		} finally {
 			ConnectionUtils.closeConnection(con);
 		}
 	}
 
+	/**
+	 * Deletes a employee
+	 * @param employeeId
+	 * @return
+	 */
 	public static boolean delete(String employeeId) {
 		try {
 			con = ConnectionUtils.getConnection();

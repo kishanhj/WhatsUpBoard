@@ -215,6 +215,7 @@ public class FeedbackFormView extends VerticalLayout implements View {
 		 Table feedBackForm = generateTable();
 		 final VerticalSplitPanel HeaderPanel = new VerticalSplitPanel();
 		 HeaderPanel.setSizeFull();
+		 HeaderPanel.setLocked(true);
 		 HeaderPanel.setSplitPosition(18.6f,Unit.PERCENTAGE);
           HeaderPanel.setFirstComponent(vlayout);
           HeaderPanel.setSecondComponent(feedBackForm);
@@ -292,6 +293,7 @@ public class FeedbackFormView extends VerticalLayout implements View {
 				boolean flag = QualityFeedbackDAO.addFeedbacks(qualityWiseFeedbacks);
 				if (flag) {
 					LinkCodesDAO.deleteCode(employeeIdTextField);
+					System.out.println("Survey completed by: "+nameTextField.getValue());
 					ui.setContent(new SuccessView());
 				}
 			} catch (ClassNotFoundException e1) {

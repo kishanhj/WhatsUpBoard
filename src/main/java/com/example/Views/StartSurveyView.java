@@ -133,7 +133,7 @@ public class StartSurveyView extends HorizontalLayout implements View {
 	    employeelListTable = new Table("Employee List");
 		employeelListTable.setWidth("800px");
 		employeelListTable.setSelectable(true);
-		employeelListTable.setPageLength(8);
+		employeelListTable.setPageLength(Math.min(15, employeelListTable.size()));
 
 		IndexedContainer container = new IndexedContainer();
 
@@ -170,13 +170,16 @@ public class StartSurveyView extends HorizontalLayout implements View {
 			for (EmployeeVO employee : employees) {
 				AdminVO user = (AdminVO) ui.getSession().getAttribute("user");
 				if (user.getTProject() == employee.getProjectId() && employee.isIsactive()) {
-					Encoding.generatecodes(employee.getEmployeeId(), (String) feedbackMonth.getValue());
-					URL url = MailUtils.getUrl(employee.getEmployeeId(), (String) feedbackMonth.getValue());
+					String project = ProjectDAO.getProjectName(user.getTProject());
+					String coddedFeedbackMonth = (String) feedbackMonth.getValue()+"_"+project;
+					Encoding.generatecodes(employee.getEmployeeId(),coddedFeedbackMonth );
+					URL url = MailUtils.getUrl(employee.getEmployeeId(), coddedFeedbackMonth);
 					String mailBody = "Please complete the survey by clicking the below link<br><br>" + "<a href="
 							+ url.toString() + ">here</a>";
 					SendMail mailer = new SendMail(employee.getEmployeeEmailId(), mailBody);
 					if(mailer.sendMail()){
 						FeedbackDAO.addFeedbackEntry(employee, (String) feedbackMonth.getValue());
+						System.out.println("Mail sent to: "+employee.getEmployeeName());
 					}else{
 						//LinkCodesDAO.deleteCode(employee.getEmployeeId());
 					}
@@ -218,7 +221,7 @@ public class StartSurveyView extends HorizontalLayout implements View {
 						projectName, employee.getEmployeeEmailId() }, i++);
 			}
 		}
-
+		employeelListTable.setPageLength(Math.min(10, employeelListTable.size()));
 	}
 
 	private Button configureDeleteButton(EmployeeVO employee) {
@@ -319,8 +322,10 @@ public class StartSurveyView extends HorizontalLayout implements View {
             	EmployeeDAO.addEmployee(employeeName.getValue(),employeeId.getValue(),emailId.getValue(),projectId.getProjectId());
 			Notification.show("Succesfull added");
             }
-            else
+            else{
             Notification.show(ValidationConstants.FAILED, "Employee with this ID alredy exist",Type.ERROR_MESSAGE);
+            return ;
+            }
             loadEmployeeTable();
 			window.close();
 	});

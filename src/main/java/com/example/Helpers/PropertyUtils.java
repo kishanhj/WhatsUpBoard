@@ -5,6 +5,9 @@ import java.io.InputStream;
 import java.util.Properties;
 
 import com.example.constants.StringConstants;
+import com.example.constants.ValidationConstants;
+import com.vaadin.ui.Notification;
+import com.vaadin.ui.Notification.Type;
 
 public class PropertyUtils {
 
@@ -29,7 +32,7 @@ public class PropertyUtils {
 		try {
 			configProperties.load(input);
 		} catch (IOException e) {
-			e.printStackTrace();
+			Notification.show(ValidationConstants.ERROR,e.getMessage(), Type.ERROR_MESSAGE);
 		}
 
 	}

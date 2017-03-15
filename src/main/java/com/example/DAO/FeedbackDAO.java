@@ -10,8 +10,9 @@ import java.util.List;
 import com.example.Helpers.ConnectionUtils;
 import com.example.VO.EmployeeVO;
 import com.example.constants.QueryConstant;
-import com.vaadin.server.Page;
+import com.example.constants.ValidationConstants;
 import com.vaadin.ui.Notification;
+import com.vaadin.ui.Notification.Type;
 
 public class FeedbackDAO {
 
@@ -43,7 +44,7 @@ public class FeedbackDAO {
 			} else
 				return 0;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			Notification.show(ValidationConstants.ERROR,e.getMessage(), Type.ERROR_MESSAGE);
 		} finally {
 			ConnectionUtils.closeConnection(con);
 		}
@@ -71,7 +72,7 @@ public class FeedbackDAO {
 			} else
 				return 0;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			Notification.show(ValidationConstants.ERROR,e.getMessage(), Type.ERROR_MESSAGE);
 		} finally {
 			ConnectionUtils.closeConnection(con);
 		}
@@ -104,7 +105,7 @@ public class FeedbackDAO {
 			}
 			return feedbackIds;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			Notification.show(ValidationConstants.ERROR,e.getMessage(), Type.ERROR_MESSAGE);
 		} finally {
 			ConnectionUtils.closeConnection(con);
 		}
@@ -131,7 +132,7 @@ public class FeedbackDAO {
 			} else
 				return 0;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			Notification.show(ValidationConstants.ERROR,e.getMessage(), Type.ERROR_MESSAGE);
 		} finally {
 			ConnectionUtils.closeConnection(con);
 		}
@@ -168,8 +169,7 @@ public class FeedbackDAO {
 				return false;
 
 		} catch (SQLException e) {
-			Notification.show("Failed to Update");
-			Page.getCurrent().reload();
+			Notification.show(ValidationConstants.ERROR,e.getMessage(), Type.ERROR_MESSAGE);
 		} finally {
 			ConnectionUtils.closeConnection(con);
 		}
@@ -195,7 +195,7 @@ public class FeedbackDAO {
 			} else
 				return null;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			Notification.show(ValidationConstants.ERROR,e.getMessage(), Type.ERROR_MESSAGE);
 		} finally {
 			ConnectionUtils.closeConnection(con);
 		}
@@ -222,7 +222,7 @@ public class FeedbackDAO {
 			}
 			return monthList;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			Notification.show(ValidationConstants.ERROR,e.getMessage(), Type.ERROR_MESSAGE);
 		} finally {
 			ConnectionUtils.closeConnection(con);
 		}
@@ -249,13 +249,19 @@ public class FeedbackDAO {
 				return null;
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			Notification.show(ValidationConstants.ERROR,e.getMessage(), Type.ERROR_MESSAGE);
 		} finally {
 			ConnectionUtils.closeConnection(con);
 		}
 		return null;
 	}
 
+	/**
+	 * Gets feedbackId from name
+	 * @param employeeName
+	 * @param feedback_month
+	 * @return
+	 */
 	public static int getFeedbackIdFromName(String employeeName, String feedback_month) {
 		try {
 			con = ConnectionUtils.getConnection();
@@ -268,7 +274,7 @@ public class FeedbackDAO {
 			} else
 				return 0;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			Notification.show(ValidationConstants.ERROR,e.getMessage(), Type.ERROR_MESSAGE);
 		} finally {
 			ConnectionUtils.closeConnection(con);
 		}

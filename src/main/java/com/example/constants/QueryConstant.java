@@ -85,4 +85,6 @@ public interface QueryConstant {
     String GET_QUALITY_NAME="select quality_name from t_quality where quality_id=?";
 
     String GET_QUALITY_ID="select quality_id from t_quality where quality_name=?";
+
+	String GET_ALL_QUALITIES = "select * from t_quality";
 }

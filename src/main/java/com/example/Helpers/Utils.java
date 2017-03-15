@@ -9,6 +9,11 @@ import com.vaadin.ui.TextArea;
 
 public class Utils {
 
+	/**
+	 * Toggles the images
+	 * @param button
+	 * @param text
+	 */
 	public static void imageToggler(Button button, TextArea text) {
 
 		if (button.getCaption().equalsIgnoreCase(StringConstants.SATISFIED)) {
@@ -24,6 +29,11 @@ public class Utils {
 	}
 
 
+	/**
+	 * converts caption to boolean
+	 * @param qualityBtn
+	 * @return
+	 */
 	public static Boolean captionToBooleanConvertor(Button qualityBtn) {
 		if(qualityBtn.getCaption().equalsIgnoreCase(StringConstants.SATISFIED))
 			return true;
@@ -31,13 +41,11 @@ public class Utils {
 			return false;
 	}
 
-	public static String booleanToStringConvertor(boolean condition) {
-		if(condition)
-			return StringConstants.YES;
-		else
-			return StringConstants.NO;
-	}
-
+	/**
+	 * Encodes the password
+	 * @param password
+	 * @return
+	 */
 	public static String encode(String password) {
 		Integer passwordHash = password.hashCode();
 		passwordHash *= Integer.parseInt(StringConstants.PASSWORD_ENCODING_STRING);

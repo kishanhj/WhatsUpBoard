@@ -8,9 +8,11 @@ import java.util.HashMap;
 
 import com.example.Helpers.ConnectionUtils;
 import com.example.constants.QueryConstant;
-import com.vaadin.server.Page;
+import com.example.constants.ValidationConstants;
 import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextField;
+import com.vaadin.ui.Notification.Type;
 
 public class LinkCodesDAO {
 
@@ -35,8 +37,7 @@ public class LinkCodesDAO {
 				return false;
 
 		} catch (SQLException e) {
-
-			Page.getCurrent().reload();
+			Notification.show(ValidationConstants.ERROR,e.getMessage(), Type.ERROR_MESSAGE);
 		} finally {
 			ConnectionUtils.closeConnection(con);
 		}
@@ -60,7 +61,7 @@ public class LinkCodesDAO {
             }
           return codeList;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			Notification.show(ValidationConstants.ERROR,e.getMessage(), Type.ERROR_MESSAGE);
 		} finally {
 			ConnectionUtils.closeConnection(con);
 		}
@@ -73,7 +74,6 @@ public class LinkCodesDAO {
 	 * @param employeeIdTextField
 	 *
 	 */
-
 	public static void deleteCode(TextField employeeIdTextField) {
 		Connection con = null;
 		try {
@@ -82,26 +82,38 @@ public class LinkCodesDAO {
 			stmt.setString(1, employeeIdTextField.getValue());
              stmt.executeUpdate();
 		} catch (SQLException e) {
-              e.printStackTrace();
+			Notification.show(ValidationConstants.ERROR,e.getMessage(), Type.ERROR_MESSAGE);
 		} finally {
 			ConnectionUtils.closeConnection(con);
 		}
 
 	}
-	public static void deleteCode(ComboBox employeeIdTextField) {
+
+	/**
+	 *  delete a code based on month
+	 * @param employeeIdTextField
+	 *
+	 */
+	public static void deleteCode(ComboBox month) {
 		Connection con = null;
 		try {
 			 con = ConnectionUtils.getConnection();
 			PreparedStatement stmt = con.prepareStatement(QueryConstant.DELETE_CODE_QUERY);
-			stmt.setString(1, (String)employeeIdTextField.getValue());
+			stmt.setString(1, (String)month.getValue());
              stmt.executeUpdate();
 		} catch (SQLException e) {
-              e.printStackTrace();
+			Notification.show(ValidationConstants.ERROR,e.getMessage(), Type.ERROR_MESSAGE);
 		} finally {
 			ConnectionUtils.closeConnection(con);
 		}
 
 	}
+
+	/**
+	 *  delete a code based on employeeId
+	 * @param employeeIdTextField
+	 *
+	 */
 	public static void deleteCode(String employeeId) {
 		Connection con = null;
 		try {
@@ -110,7 +122,7 @@ public class LinkCodesDAO {
 			stmt.setString(1, employeeId);
              stmt.executeUpdate();
 		} catch (SQLException e) {
-              e.printStackTrace();
+			Notification.show(ValidationConstants.ERROR,e.getMessage(), Type.ERROR_MESSAGE);
 		} finally {
 			ConnectionUtils.closeConnection(con);
 		}

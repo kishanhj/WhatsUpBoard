@@ -23,15 +23,15 @@ public class WhatsUpUI extends UI {
 
 	@Override
 	protected void init(VaadinRequest vaadinRequest) {
-
 		VerticalLayout rootLayout = new VerticalLayout();
 		rootLayout.setSizeFull();
-
+     try{
 		String empIdCode = vaadinRequest.getParameter(StringConstants.A);
 		String monthCode = vaadinRequest.getParameter(StringConstants.B);
 		if (UrlValidator.validate(empIdCode, monthCode)) {
 			String employeeId = Encoding.getCodeValue(empIdCode);
-			String month = Encoding.getCodeValue(monthCode);
+			String month_project = Encoding.getCodeValue(monthCode);
+			String month = month_project.substring(0, month_project.indexOf("_"));
 			rootLayout.addComponent(new FeedbackFormView(this, employeeId, month));
 
 		}else if(empIdCode.equals(StringConstants.ADMIN)){
@@ -41,6 +41,10 @@ public class WhatsUpUI extends UI {
 			rootLayout.addComponent(new ErrorView());
 		}
 		setContent(rootLayout);
+     }catch (Exception e) {
+    	 rootLayout.addComponent(new ErrorView());
+    	 setContent(rootLayout);
+	}
 	}
 
 	@WebServlet(urlPatterns = "/*", name = "WhatsUpApp", asyncSupported = true)

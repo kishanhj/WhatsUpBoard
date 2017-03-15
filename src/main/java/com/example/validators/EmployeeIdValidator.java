@@ -43,7 +43,8 @@ public class EmployeeIdValidator implements Validator {
 	 */
 	private  boolean validityChecker(TextField employeeId) {
 		String empid = employeeId.getValue();
-		if (empid.matches(".*[A-Za-z].*") || empid.length() < minLength || empid.length() > maxLength)
+		int length = empid.length();
+		if (empid.matches(".*[A-Za-z].*") || length < minLength || length> maxLength)
 			return false;
 		if(!isNew){
 		if (EmployeeDAO.getEmployee(empid) == null)
